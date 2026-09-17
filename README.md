@@ -7,7 +7,7 @@
 [![MCP Native](https://img.shields.io/badge/MCP-2024--11--05-orange.svg)](https://modelcontextprotocol.io/)
 
 > **Cognitive neuroscience-inspired persistent memory daemon and MCP server for autonomous AI agents, swarms, and IDEs.**  
-> Features **Spike-Timing-Dependent Plasticity (STDP)**, **Hippocampal CA3/CA1 Pattern Completion**, **Ebbinghaus Forgetting Curves**, and an interactive **Google Material 3 Memory Studio**. Zero third-party runtime dependencies (100% Python standard library).
+> Features **Spike-Timing-Dependent Plasticity (STDP)**, **Hippocampal CA3/CA1 Pattern Completion**, **Ebbinghaus Forgetting Curves**, and an interactive **Memory Studio (design influenced by Material 3)**. Zero third-party runtime dependencies (100% Python standard library).
 
 ---
 
@@ -21,7 +21,7 @@
 3. [Architecture Diagram](#-architecture-diagram)
 4. [Quick Start & Installation](#-quick-start--installation)
 5. [CLI Reference Manual](#-cli-reference-manual)
-6. [Google Material 3 Memory Studio UI](#-google-material-3-memory-studio-ui)
+6. [Memory Studio Web UI](#-memory-studio-web-ui)
 7. [Model Context Protocol (MCP) Setup](#-model-context-protocol-mcp-setup)
    - [Claude Desktop](#claude-desktop)
    - [Cursor IDE](#cursor-ide)
@@ -39,7 +39,7 @@
 - 🧩 **Hippocampal CA3/CA1 Auto-Associative Recall**: Reconstructs complete memory engrams from partial, degraded query cues while preventing catastrophic interference via pattern separation.
 - 🧠 **DLPFC Working Memory Buffer**: High-speed bounded LRU buffer (Miller's Law capacity) for active conversational scratchpad tracking.
 - 📉 **Ebbinghaus Decay & Cognitive Sleep Consolidation**: Exponential forgetting dynamics that consolidate high-repetition short-term memories into stable long-term semantic knowledge while pruning ephemeral noise.
-- 🎨 **Google Material 3 Memory Studio Web UI**: Standalone interactive Light/Dark mode dashboard with live Canvas Force-Directed graph, stream feed, recall playground, and telemetry.
+- 🎨 **Memory Studio Web UI**: Standalone interactive Light/Dark mode dashboard (design influenced by Material 3) with live Canvas Force-Directed graph, stream feed, recall playground, and telemetry.
 - 🔌 **Native Model Context Protocol (MCP)**: Full JSON-RPC 2.0 stdio server ready for immediate plug-and-play with Claude Desktop, Cursor, Cline, and Hermes Agent.
 - 🛡️ **Zero External Runtime Dependencies**: 100% Python standard library (sqlite3, json, math, re, http.server, threading, dataclasses).
 
@@ -117,7 +117,7 @@ pip install -e .
 ```bash
 neuro-memory serve --port 8788 --open-browser
 ```
-Visit `http://localhost:8788` to explore the Google Material 3 Memory Studio!
+Visit `http://localhost:8788` to explore the Memory Studio (design influenced by Material 3)!
 
 ---
 
@@ -153,9 +153,9 @@ neuro-memory doctor
 
 ---
 
-## 🎨 Google Material 3 Memory Studio UI
+## 🎨 Memory Studio Web UI
 
-The Memory Studio Web UI delivers a Google Material 3 light/dark aesthetic:
+The Memory Studio Web UI delivers a clean light/dark aesthetic (design influenced by Google Material tokens):
 - **Interactive Force-Directed Canvas**: Visualize memory nodes, tag clusters, and weighted synaptic links in real time.
 - **Engram Feed Stream**: Filter by Category, Agent, or Tags, with Shannon entropy information density indicators.
 - **CA3/CA1 Recall Playground**: Test query cues and view real-time pattern completion confidence scores.

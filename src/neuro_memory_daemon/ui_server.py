@@ -1,7 +1,7 @@
-"""Google Neural Memory Studio UI Server for neuro-memory-daemon.
+"""Neural Memory Studio UI Server for neuro-memory-daemon.
 
 Pure Python standard library implementation serving:
-1. Google Material 3 Studio Web UI (`public/index.html`) with embedded fallback.
+1. Material 3 Studio Web UI (`public/index.html`, design influenced by Material 3) with embedded fallback.
 2. Complete REST API endpoints (/api/memories, /api/recall, /api/search,
    /api/graph, /api/consolidate, /api/stats, /api/health, /v1/memories/...).
 3. Full CORS support for local web applications and AI agent runtimes.
@@ -400,7 +400,7 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Google Neural Memory Studio — Fallback</title>
+  <title>Neural Memory Studio — Fallback</title>
   <style>
     body { font-family: -apple-system, sans-serif; background: #f1f3f4; color: #202124; padding: 40px; text-align: center; }
     .card { background: #fff; max-width: 600px; margin: 0 auto; padding: 30px; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
@@ -410,7 +410,7 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
 </head>
 <body>
   <div class="card">
-    <h1>🧠 Google Neural Memory Studio</h1>
+    <h1>🧠 Neural Memory Studio</h1>
     <p>Synaptic Daemon is running on <code>:8788</code></p>
     <p><a href="/api/stats">View Substrate Telemetry JSON</a></p>
   </div>
@@ -453,7 +453,7 @@ class MemoryUIServer:
     def start(self, in_thread: bool = False, open_browser: bool = False) -> None:
         """Start the HTTP server."""
         url = f"http://{self.host}:{self.port}"
-        print(f"🚀 Google Neural Memory Studio running at {url}")
+        print(f"🚀 Neural Memory Studio (Material 3 influenced) running at {url}")
 
         if open_browser:
             webbrowser.open(url)

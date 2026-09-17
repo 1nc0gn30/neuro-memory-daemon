@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "neuro-memory-daemon"
 version = "0.1.0"
-description = "Cognitive neuroscience-inspired persistent memory daemon with STDP synaptic plasticity, CA3/CA1 pattern completion, Ebbinghaus forgetting curves, Google Material 3 Studio UI, and native Model Context Protocol (MCP) server."
+description = "Cognitive neuroscience-inspired persistent memory daemon with STDP synaptic plasticity, CA3/CA1 pattern completion, Ebbinghaus forgetting curves, Material 3 Memory Studio UI (design influenced by Material 3), and native Model Context Protocol (MCP) server."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "Apache-2.0" }

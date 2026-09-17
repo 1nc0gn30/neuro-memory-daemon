@@ -349,7 +349,7 @@ _STUDIO_HTML = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neuro-Memory Studio | Google Material 3 Substrate</title>
+  <title>Neuro-Memory Studio | Material 3 Substrate</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -499,7 +499,7 @@ _STUDIO_HTML = """<!DOCTYPE html>
   <header>
     <div class="brand">
       <span>🧠 Neuro-Memory Studio</span>
-      <span class="badge">Google Material 3</span>
+      <span class="badge">Material 3 Influenced</span>
     </div>
     <div style="display:flex; gap:10px;">
       <button class="btn-secondary" onclick="triggerConsolidation()">⚡ Consolidate</button>
@@ -786,7 +786,7 @@ class MemoryStudioHTTPHandler(BaseHTTPRequestHandler):
 
 
 def handle_serve(args: argparse.Namespace) -> int:
-    """Handle `serve` subcommand: Launch Google Material 3 Memory Studio Web UI."""
+    """Handle `serve` subcommand: Launch Memory Studio Web UI (Material 3 influenced)."""
     host = args.host
     port = args.port
     daemon = get_default_daemon(db_path=args.db_path)
@@ -816,7 +816,7 @@ def handle_serve(args: argparse.Namespace) -> int:
 
     server = HTTPServer((host, port), handler_class)
     url = f"http://{host}:{port}"
-    print(c("🚀 Google Material 3 Memory Studio Running", Color.BRIGHT_GREEN + Color.BOLD))
+    print(c("🚀 Neuro-Memory Studio Running (Material 3 influenced)", Color.BRIGHT_GREEN + Color.BOLD))
     print(f"  {c('Local URL:', Color.CYAN)} {c(url, Color.UNDERLINE)}")
     print(f"  {c('Storage:', Color.DIM)} {daemon.db_path}")
     print(f"  {c('Press Ctrl+C to stop the server.', Color.DIM)}")
@@ -1055,7 +1055,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_stats.add_argument("--json", action="store_true", help="Output raw JSON.")
 
     # 7. serve
-    p_serve = subparsers.add_parser("serve", help="Launch the Google Material 3 Memory Studio Web UI.")
+    p_serve = subparsers.add_parser("serve", help="Launch the Memory Studio Web UI (design influenced by Material 3).")
     p_serve.add_argument("-H", "--host", default="127.0.0.1", help="HTTP host (default: 127.0.0.1).")
     p_serve.add_argument("-p", "--port", type=int, default=8765, help="HTTP port (default: 8765).")
     p_serve.add_argument("-b", "--open-browser", action="store_true", help="Automatically open browser.")
