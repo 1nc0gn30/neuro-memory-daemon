@@ -274,6 +274,32 @@ class MCPServer:
             handler=self._tool_memory_diagnostics,
         )
 
+        # 8. memory_metacognition / neuro_metacognitive_audit
+        self._register_tool(
+            name="memory_metacognition",
+            description=(
+                "Metacognitive audit of memory substrate: calculates Feeling-of-Knowing (FOK), "
+                "detects Tip-of-the-Tongue (TOT) states, assigns source provenance (empirical vs inferred), "
+                "and monitors Anterior Cingulate Cortex (ACC) cognitive dissonance / contradictions."
+            ),
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Retrieval cue or question to evaluate for epistemic certainty.",
+                        "default": "",
+                    },
+                    "top_k": {
+                        "type": "integer",
+                        "description": "Number of candidate memory traces to inspect (default: 5).",
+                        "default": 5,
+                    },
+                },
+            },
+            handler=self._tool_memory_metacognition,
+        )
+
     # -----------------------------------------------------------------------
     # Tool Handlers
     # -----------------------------------------------------------------------
@@ -379,6 +405,12 @@ class MCPServer:
         verbose = bool(args.get("verbose", False))
         diag = self.daemon.diagnostics(verbose=verbose)
         return json.dumps(diag, indent=2)
+
+    def _tool_memory_metacognition(self, args: Dict[str, Any]) -> str:
+        query = args.get("query", "")
+        top_k = int(args.get("top_k", 5))
+        res = self.daemon.audit_metacognition(query=query, top_k=top_k)
+        return json.dumps(res, indent=2)
 
     # -----------------------------------------------------------------------
     # JSON-RPC 2.0 Protocol Dispatcher

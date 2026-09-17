@@ -201,6 +201,13 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(raw_bytes)
             return
 
+        elif path == "/api/metacognition":
+            query = params.get("query", params.get("q", [""]))[0]
+            top_k = int(params.get("top_k", [5])[0])
+            res = daemon.audit_metacognition(query=query, top_k=top_k)
+            self._send_json(res)
+            return
+
         # Serve Static UI Files
         self._serve_static(path)
 
@@ -320,6 +327,14 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
                 stdp_window=stdp_window,
             )
             self._send_json({"status": "consolidated", **res})
+            return
+
+        # Metacognitive audit
+        if path in ("/api/metacognition", "/v1/metacognition"):
+            q = body.get("query", body.get("q", ""))
+            top_k = int(body.get("top_k", 5))
+            res = daemon.audit_metacognition(query=q, top_k=top_k)
+            self._send_json(res)
             return
 
         self.send_error(404, f"API route not found: {path}")

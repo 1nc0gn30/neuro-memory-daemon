@@ -47,6 +47,7 @@ def test_mcp_tools_list(mcp_server: MCPServer):
         "memory_consolidate",
         "memory_stats",
         "memory_diagnostics",
+        "memory_metacognition",
     ]
     for exp in expected:
         assert exp in tool_names
@@ -62,10 +63,8 @@ def test_mcp_tools_call_lifecycle(mcp_server: MCPServer):
         "params": {
             "name": "memory_store",
             "arguments": {
-                "text": "Autonomous agents require persistent episodic and semantic recall substrates",
-                "tags": ["agents", "mcp", "memory", "subagent"],
-                "category": "architecture",
-                "importance": 1.5,
+                "text": "The agent must follow zero-dependency pure Python rules.",
+                "tags": ["rule", "python"],
             },
         },
     }
@@ -75,7 +74,23 @@ def test_mcp_tools_call_lifecycle(mcp_server: MCPServer):
     content_text = store_resp["result"]["content"][0]["text"]
     assert "Stored successfully" in content_text or "id" in content_text.lower()
 
-    # 2. memory_recall
+    # 2. memory_metacognition
+    meta_req = {
+        "jsonrpc": "2.0",
+        "id": 11,
+        "method": "tools/call",
+        "params": {
+            "name": "memory_metacognition",
+            "arguments": {"query": "python rules"},
+        },
+    }
+    meta_resp = mcp_server.handle_request(meta_req)
+    assert meta_resp is not None
+    assert not meta_resp["result"].get("isError", False)
+    meta_content = json.loads(meta_resp["result"]["content"][0]["text"])
+    assert "epistemic_state" in meta_content
+
+    # 3. memory_recall
     recall_req = {
         "jsonrpc": "2.0",
         "id": 11,

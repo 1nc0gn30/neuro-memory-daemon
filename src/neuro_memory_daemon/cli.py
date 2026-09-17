@@ -306,6 +306,40 @@ def handle_stats(args: argparse.Namespace) -> int:
     return 0
 
 
+def handle_metacognition(args: argparse.Namespace) -> int:
+    """Evaluate Feeling-of-Knowing (FOK) and detect memory contradictions."""
+    daemon = get_default_daemon(db_path=args.db_path)
+    res = daemon.audit_metacognition(query=getattr(args, "query", "") or "", top_k=getattr(args, "top_k", 5))
+
+    if getattr(args, "json", False):
+        print(json.dumps(res, indent=2))
+        return 0
+
+    print(c("🧠 Metacognitive Memory Audit (ACC Conflict Monitor)", Color.BRIGHT_MAGENTA + Color.BOLD))
+    state_color = Color.BRIGHT_GREEN if res["epistemic_state"] == "CONFIDENT_RECALL" else (Color.BRIGHT_YELLOW if res["epistemic_state"] == "TIP_OF_THE_TONGUE" else Color.BRIGHT_RED)
+    query_str = getattr(args, "query", "") or "[Entire Memory Substrate]"
+    print(f"  • Query Cue:       {c(query_str, Color.CYAN)}")
+    print(f"  • Epistemic State: {c(res['epistemic_state'], state_color)}")
+    print(f"  • Certainty Score: {res['certainty_score']:.2f}")
+    print(f"  • Entropy:         {res['retrieval_entropy']:.3f}")
+    print(f"  • Recalled Traces: {res['recalled_count']}")
+    if res.get("bridging_cues"):
+        print(f"  • Bridging Cues:   {', '.join(res['bridging_cues'])}")
+
+    conflicts = res.get("conflicts_detected", [])
+    if conflicts:
+        print(f"\n{c('⚠️ Anterior Cingulate Cortex (ACC) Conflicts Detected:', Color.BRIGHT_RED)}")
+        for idx, conf in enumerate(conflicts, 1):
+            print(f"  [{idx}] Severity: {c(conf['conflict_severity'], Color.BRIGHT_YELLOW)} | Topic: {conf['conflict_topic']}")
+            print(f"      Thesis:     \"{conf['thesis_text'][:50]}...\"")
+            print(f"      Antithesis: \"{conf['antithesis_text'][:50]}...\"")
+            print(f"      Synthesis:  {conf['synthesis_recommendation']}")
+    else:
+        print(f"\n{c('✅ No Cognitive Dissonance / Contradictions Detected.', Color.GREEN)}")
+
+    return 0
+
+
 def handle_diagnostics(args: argparse.Namespace) -> int:
     """Handle `platform` / `doctor` / `diagnostics` subcommand."""
     daemon = get_default_daemon(db_path=args.db_path)
@@ -1060,16 +1094,23 @@ def build_parser() -> argparse.ArgumentParser:
     p_serve.add_argument("-p", "--port", type=int, default=8765, help="HTTP port (default: 8765).")
     p_serve.add_argument("-b", "--open-browser", action="store_true", help="Automatically open browser.")
 
-    # 8. mcp
+    # 8. metacognition
+    for meta_alias in ("metacognition", "meta"):
+        p_meta = subparsers.add_parser(meta_alias, help="Feeling-of-Knowing and cognitive conflict audit.")
+        p_meta.add_argument("query", nargs="?", default="", help="Query cue to audit for epistemic certainty.")
+        p_meta.add_argument("-k", "--top-k", type=int, default=5, help="Number of candidate traces to inspect (default: 5).")
+        p_meta.add_argument("--json", action="store_true", help="Output raw JSON.")
+
+    # 9. mcp
     p_mcp = subparsers.add_parser("mcp", help="Run Model Context Protocol (MCP) server over stdio.")
 
-    # 9. diagnostics / platform / doctor
+    # 10. diagnostics / platform / doctor
     for diag_alias in ("platform", "doctor", "diagnostics"):
         p_diag = subparsers.add_parser(diag_alias, help="System health check & diagnostics report.")
         p_diag.add_argument("-v", "--verbose", action="store_true", help="Detailed inspection.")
         p_diag.add_argument("--json", action="store_true", help="Output raw JSON.")
 
-    # 10. test
+    # 11. test
     p_test = subparsers.add_parser("test", help="Run internal self-verification test runner.")
 
     return parser
@@ -1094,6 +1135,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         "graph": handle_graph,
         "consolidate": handle_consolidate,
         "stats": handle_stats,
+        "metacognition": handle_metacognition,
+        "meta": handle_metacognition,
         "serve": handle_serve,
         "mcp": handle_mcp,
         "platform": handle_diagnostics,

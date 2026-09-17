@@ -34,14 +34,31 @@ __all__ = [
     "SemanticSchemaCluster",
     "SleepReplayReport",
     "run_sleep_replay_consolidation",
+    "SourceProvenance",
+    "DialecticConflict",
+    "MetacognitiveAuditResult",
+    "MetacognitiveEvaluator",
+    "audit_metacognition",
+    "audit_metacognitive_memory",
 ]
 
-# Optional re-exports from core sleep_replay
+# Optional re-exports from core sleep_replay and metacognition
 try:
     from .sleep_replay import (
         SemanticSchemaCluster,
         SleepReplayReport,
         run_sleep_replay_consolidation,
+    )
+except ImportError:
+    pass
+
+try:
+    from .metacognition import (
+        SourceProvenance,
+        DialecticConflict,
+        MetacognitiveAuditResult,
+        MetacognitiveEvaluator,
+        audit_metacognition,
     )
 except ImportError:
     pass
@@ -674,6 +691,15 @@ class MemoryDaemon:
         """Alias for consolidate()."""
         return self.consolidate(*args, **kwargs)
 
+    def audit_metacognition(
+        self,
+        query: str = "",
+        top_k: int = 5,
+    ) -> Dict[str, Any]:
+        """Perform metacognitive evaluation: Feeling-of-Knowing (FOK), Tip-of-the-Tongue, and ACC conflict detection."""
+        from .metacognition import audit_metacognition as _audit
+        return _audit(self, query=query, top_k=top_k)
+
     # -----------------------------------------------------------------------
     # Public API: Stats & Diagnostics
     # -----------------------------------------------------------------------
@@ -877,3 +903,12 @@ def consolidate_memories(
         prune_threshold=prune_threshold,
         stdp_window=stdp_window,
     )
+
+def audit_metacognitive_memory(
+    query: str = "",
+    top_k: int = 5,
+    db_path: Optional[Union[str, Path]] = None,
+) -> Dict[str, Any]:
+    """Audit metacognitive Feeling-of-Knowing and detect contradictions using default daemon."""
+    daemon = get_default_daemon(db_path)
+    return daemon.audit_metacognition(query=query, top_k=top_k)
