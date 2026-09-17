@@ -31,7 +31,20 @@ __all__ = [
     "get_memory_graph",
     "consolidate_memories",
     "get_default_daemon",
+    "SemanticSchemaCluster",
+    "SleepReplayReport",
+    "run_sleep_replay_consolidation",
 ]
+
+# Optional re-exports from core sleep_replay
+try:
+    from .sleep_replay import (
+        SemanticSchemaCluster,
+        SleepReplayReport,
+        run_sleep_replay_consolidation,
+    )
+except ImportError:
+    pass
 
 # ---------------------------------------------------------------------------
 # Data Models
