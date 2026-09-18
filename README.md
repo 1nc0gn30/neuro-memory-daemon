@@ -99,6 +99,18 @@ where Stability $S = S_0 \cdot \text{decay\_factor} \cdot (1 + \ln(1 + \text{acc
 
 During sleep consolidation passes, memories with $\ge 5$ accesses are promoted to semantic insights with elevated decay resistance, while sub-threshold dead traces are pruned.
 
+### 5. Locus Coeruleus Neuromodulation & Yerkes-Dodson Arousal Curve
+Models biological neurotransmitter dynamics to modulate cognitive execution:
+- **Norepinephrine (NE, $[0.0, 1.0]$)**: Arousal and vigilance. At high arousal ($\text{NE} \ge 0.85$), emotional/cognitive salience triggers **Flashbulb Consolidation**, locking $\text{decay\_factor} = 0.05$ and $\text{immutable} = \text{True}$.
+- **Dopamine (DA, $[-1.0, 1.0]$)**: Reward Prediction Error (RPE) gating 3-factor STDP:
+  $$\Delta W = \eta \cdot \text{DA} \cdot \exp\left(-\frac{|\Delta t|}{\tau}\right)$$
+  Positive RPE induces Long-Term Potentiation (LTP); negative RPE triggers Long-Term Depression (LTD).
+- **Acetylcholine (ACh, $[0.0, 1.0]$)**: Sensory encoding vs. internal consolidation switch:
+  - High $\text{ACh} > 0.6 \implies$ `ENCODING` (sensory intake).
+  - Low $\text{ACh} < 0.4 \implies$ `CONSOLIDATION` (hippocampal sharp-wave ripples / memory replay).
+- **Serotonin (5-HT, $[0.0, 1.0]$)**: Cognitive patience and temporal discounting horizon.
+- **Yerkes-Dodson Inverted-U Law**: Computes cognitive efficiency $\eta(A, c) = \exp\left(-\frac{(A - A^*(c))^2}{2 \sigma(c)^2}\right)$ given arousal $A$ and task complexity $c$. Optimal arousal is high ($~0.80$) for simple tasks and lower ($~0.35$) for complex reasoning tasks.
+
 ---
 
 ## 🚀 Quick Start & Installation
@@ -149,6 +161,13 @@ neuro-memory consolidate --decay-rate 0.05 --prune-threshold 0.05
 # Telemetry & Diagnostics
 neuro-memory stats --detailed
 neuro-memory doctor
+
+# Neuromodulation & Yerkes-Dodson Arousal
+neuro-memory neuromodulate --complexity 0.7
+neuro-memory neuromodulate --pulse --ne 0.25 --da 0.30
+
+# Flashbulb Permanent Engram Tagging
+neuro-memory flashbulb <memory-id> --salience 1.5 --reason "Critical failover recovery"
 ```
 
 ---
@@ -159,6 +178,7 @@ The Memory Studio Web UI delivers a clean light/dark aesthetic (design influence
 - **Interactive Force-Directed Canvas**: Visualize memory nodes, tag clusters, and weighted synaptic links in real time.
 - **Engram Feed Stream**: Filter by Category, Agent, or Tags, with Shannon entropy information density indicators.
 - **CA3/CA1 Recall Playground**: Test query cues and view real-time pattern completion confidence scores.
+- **Neuromodulation & Flashbulb Lab**: Real-time gauges for Norepinephrine, Dopamine, Acetylcholine, Serotonin, 1-click neurochemical pulse injection, interactive Yerkes-Dodson curve simulator, 3-factor STDP playground, and flashbulb consolidation lock.
 - **Consolidation Telemetry**: Visual before/after diff of pruned and reinforced synaptic pathways.
 - **Quick Ingest Drawer**: Rapid memory encoding with tag auto-suggestions.
 
@@ -176,6 +196,10 @@ The Memory Studio Web UI delivers a clean light/dark aesthetic (design influence
 5. `memory_consolidate`: Trigger sleep cycle consolidation (STDP reinforcement & decay pruning).
 6. `memory_stats`: Telemetry and substrate statistics.
 7. `memory_diagnostics`: System health and diagnostics.
+8. `memory_metacognition`: Feeling-of-Knowing (FOK), Tip-of-the-Tongue (TOT), and ACC conflict audit.
+9. `neuro_neuromodulator_status`: Query Norepinephrine, Dopamine, Acetylcholine, Serotonin concentrations, and Yerkes-Dodson efficiency.
+10. `neuro_neuromodulate_pulse`: Inject chemical pulse to shift arousal, reward error, or encoding mode.
+11. `neuro_flashbulb_tag`: Lock high-salience memory trace into permanent flashbulb engram (decay_factor=0.05, immutable=True).
 
 ### Claude Desktop
 Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
@@ -232,6 +256,10 @@ The UI server exposes clean REST endpoints on port `8788`:
 | `GET` | `/api/graph` | Synaptic adjacency graph (`format=json\|mermaid\|ascii`) |
 | `POST` | `/api/consolidate`| Trigger cognitive sleep consolidation |
 | `GET` | `/api/stats` | Cognitive telemetry & substrate statistics |
+| `GET` | `/api/neuromodulators` | Neuromodulator concentrations, cognitive mode & Yerkes-Dodson curve |
+| `POST` | `/api/neuromodulators/pulse` | Inject neurochemical pulse (`ne_delta`, `da_delta`, `ach_delta`, `serotonin_delta`) |
+| `POST` | `/api/neuromodulators/levels` | Explicitly set neurotransmitter levels |
+| `POST` | `/api/neuromodulators/flashbulb` | Tag memory as permanent flashbulb engram |
 | `POST` | `/api/memories/<id>/trigger` | Rehearse & stimulate synaptic node |
 | `DELETE`| `/api/memories/<id>` | Delete memory engram |
 

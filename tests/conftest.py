@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import socket
 import tempfile
 import time
 from pathlib import Path
@@ -130,3 +131,36 @@ def sample_records() -> list[MemoryRecord]:
             immutable=False,
         ),
     ]
+
+
+def get_free_port() -> int:
+    """Find an available TCP port for local test server binding."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("", 0))
+        return s.getsockname()[1]
+
+
+@pytest.fixture
+def live_server(temp_dir: Path) -> Generator[tuple[MemoryUIServer, str, MemoryDaemon], None, None]:
+    """Start a live test UI server on an ephemeral port."""
+    port = get_free_port()
+    db_file = temp_dir / "ui_test_db.json"
+    daemon = MemoryDaemon(db_path=db_file)
+
+    # Seed initial test memories
+    daemon.store("Seed memory 1: WebSocket streaming architecture", tags=["websocket", "streaming"], category="architecture")
+    daemon.store("Seed memory 2: SQLite WAL concurrent locks fixed", tags=["sqlite", "wal", "fix"], category="debug")
+
+    pub_dir = Path(__file__).resolve().parent.parent / "public"
+    server = start_server_in_thread(
+        host="127.0.0.1",
+        port=port,
+        daemon=daemon,
+        public_dir=pub_dir,
+    )
+    base_url = f"http://127.0.0.1:{port}"
+
+    yield server, base_url, daemon
+
+    server.stop()
+

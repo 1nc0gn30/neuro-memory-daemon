@@ -792,6 +792,9 @@
     <button class="nav-tab" onclick="switchTab('mcp')">
       <span>🔌</span> MCP & AI Agent Hub
     </button>
+    <button class="nav-tab" onclick="switchTab('neuromod')">
+      <span>⚡</span> Neuromodulation & Flashbulb
+    </button>
   </nav>
 
   <!-- Studio Content -->
@@ -1061,6 +1064,214 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       </div>
     </section>
 
+    <!-- Tab 6: Neuromodulation & Flashbulb Lab -->
+    <section class="tab-pane" id="tab-neuromod">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin-bottom:20px;">
+        <!-- Card 1: Norepinephrine & Flashbulb -->
+        <div class="content-card" style="padding:16px; border-left: 4px solid var(--md-red);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-weight:700; font-size:14px;">Norepinephrine (NE)</span>
+            <span id="nm-ne-chip" class="chip-accent" style="background:var(--md-red-container); color:var(--md-red);">Arousal</span>
+          </div>
+          <div style="font-size:24px; font-weight:700; font-family:var(--font-mono);" id="nm-ne-val">0.50</div>
+          <div style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;">
+            Locus Coeruleus vigilance set-point. Threshold &ge; 0.85 triggers permanent flashbulb memory locking.
+          </div>
+          <div style="margin-top:10px; background:var(--md-outline-variant); height:8px; border-radius:4px; overflow:hidden;">
+            <div id="nm-ne-bar" style="background:var(--md-red); width:50%; height:100%; transition:width 0.3s;"></div>
+          </div>
+        </div>
+
+        <!-- Card 2: Dopamine RPE -->
+        <div class="content-card" style="padding:16px; border-left: 4px solid var(--md-green);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-weight:700; font-size:14px;">Dopamine (DA)</span>
+            <span id="nm-da-chip" class="chip-accent" style="background:var(--md-green-container); color:var(--md-green);">Reward Error</span>
+          </div>
+          <div style="font-size:24px; font-weight:700; font-family:var(--font-mono);" id="nm-da-val">+0.00</div>
+          <div style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;">
+            Reward Prediction Error gating 3-factor STDP. Positive reinforces LTP; negative triggers LTD depression.
+          </div>
+          <div style="margin-top:10px; background:var(--md-outline-variant); height:8px; border-radius:4px; overflow:hidden;">
+            <div id="nm-da-bar" style="background:var(--md-green); width:50%; height:100%; transition:width 0.3s;"></div>
+          </div>
+        </div>
+
+        <!-- Card 3: Acetylcholine & Mode -->
+        <div class="content-card" style="padding:16px; border-left: 4px solid var(--md-yellow);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-weight:700; font-size:14px;">Acetylcholine (ACh)</span>
+            <span id="nm-mode-chip" class="chip-accent" style="background:var(--md-yellow-container); color:var(--md-yellow);">BALANCED</span>
+          </div>
+          <div style="font-size:24px; font-weight:700; font-family:var(--font-mono);" id="nm-ach-val">0.50</div>
+          <div style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;">
+            Basal Forebrain switch: High (&gt;0.6) = Sensory Encoding; Low (&lt;0.4) = Hippocampal SWR Replay.
+          </div>
+          <div style="margin-top:10px; background:var(--md-outline-variant); height:8px; border-radius:4px; overflow:hidden;">
+            <div id="nm-ach-bar" style="background:var(--md-yellow); width:50%; height:100%; transition:width 0.3s;"></div>
+          </div>
+        </div>
+
+        <!-- Card 4: Serotonin & Patience -->
+        <div class="content-card" style="padding:16px; border-left: 4px solid var(--md-purple);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-weight:700; font-size:14px;">Serotonin (5-HT)</span>
+            <span id="nm-5ht-chip" class="chip-accent" style="background:var(--md-purple-container); color:var(--md-purple);">Patience</span>
+          </div>
+          <div style="font-size:24px; font-weight:700; font-family:var(--font-mono);" id="nm-5ht-val">0.50</div>
+          <div style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;">
+            Dorsal raphe nucleus modulation. Sets temporal discounting horizon and impulse stability.
+          </div>
+          <div style="margin-top:10px; background:var(--md-outline-variant); height:8px; border-radius:4px; overflow:hidden;">
+            <div id="nm-5ht-bar" style="background:var(--md-purple); width:50%; height:100%; transition:width 0.3s;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Columns: Controls & Simulators -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+        <!-- Left Column: Neuromodulatory Pulse & Yerkes-Dodson -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <!-- Neurochemical Pulse Deck -->
+          <div class="content-card" style="padding:20px;">
+            <h3 style="font-size:16px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+              <span>💉</span> Neurochemical Pulse Injection
+            </h3>
+            <p style="font-size:13px; color:var(--md-on-surface-variant); margin-bottom:16px;">
+              Inject acute neurotransmitter release into the cognitive substrate to shift vigilance, reward response, or encoding modes.
+            </p>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+              <button class="btn btn-outlined" onclick="injectPulse(0.25, 0, 0, 0)" style="border-color:var(--md-red); color:var(--md-red);">⚡ Acute Stress (+0.25 NE)</button>
+              <button class="btn btn-outlined" onclick="injectPulse(0.40, 0, 0, 0)" style="border-color:var(--md-red); color:var(--md-red);">🔥 Flashbulb Trigger (+0.40 NE)</button>
+              <button class="btn btn-outlined" onclick="injectPulse(0, 0.30, 0, 0)" style="border-color:var(--md-green); color:var(--md-green);">🎯 Reward Surprise (+0.30 DA)</button>
+              <button class="btn btn-outlined" onclick="injectPulse(0, -0.30, 0, 0)" style="border-color:var(--md-red); color:var(--md-red);">🔻 Expectation Loss (-0.30 DA)</button>
+              <button class="btn btn-outlined" onclick="injectPulse(0, 0, 0.25, 0)" style="border-color:var(--md-yellow); color:var(--md-yellow);">📥 Ingest Mode (+0.25 ACh)</button>
+              <button class="btn btn-outlined" onclick="injectPulse(0, 0, -0.30, 0)" style="border-color:var(--md-yellow); color:var(--md-yellow);">🌙 Replay Mode (-0.30 ACh)</button>
+              <button class="btn btn-outlined" onclick="injectPulse(0, 0, 0, 0.20)" style="border-color:var(--md-purple); color:var(--md-purple);">🧘 Serotonin Zen (+0.20 5-HT)</button>
+              <button class="btn btn-tonal" onclick="resetHomeostaticBaselines()">⚖️ Homeostatic Reset</button>
+            </div>
+          </div>
+
+          <!-- Yerkes-Dodson Law of Arousal -->
+          <div class="content-card" style="padding:20px;">
+            <h3 style="font-size:16px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+              <span>📈</span> Yerkes-Dodson Law of Arousal
+            </h3>
+            <p style="font-size:13px; color:var(--md-on-surface-variant); margin-bottom:12px;">
+              Calculates task performance efficiency as an inverted-U curve governed by Norepinephrine arousal vs task complexity.
+            </p>
+            <div class="filter-group" style="margin-bottom:14px;">
+              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                <label class="filter-label">Task Complexity:</label>
+                <span id="yd-complexity-display" style="font-family:var(--font-mono); font-weight:600;">0.50 (Moderate)</span>
+              </div>
+              <input type="range" id="yd-complexity-slider" min="0.0" max="1.0" step="0.05" value="0.5" oninput="onComplexityChange(this.value)" style="width:100%;">
+            </div>
+
+            <div style="background:var(--md-surface-variant); padding:12px; border-radius:var(--radius-sm); margin-bottom:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:13px; font-weight:600;">Cognitive Efficiency Score:</span>
+                <span id="yd-efficiency-badge" style="font-size:14px; font-weight:700; font-family:var(--font-mono);">--%</span>
+              </div>
+              <div style="background:var(--md-outline-variant); height:10px; border-radius:5px; overflow:hidden; margin-bottom:8px;">
+                <div id="yd-efficiency-bar" style="background:var(--md-green); width:0%; height:100%; transition:width 0.3s;"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:12px;">
+                <span>Optimal Arousal: <strong id="yd-optimal-arousal" style="font-family:var(--font-mono);">--</strong></span>
+                <span>Current Zone: <span id="yd-zone-chip" class="chip-accent" style="background:var(--md-green-container); color:var(--md-green);">FLOW</span></span>
+              </div>
+            </div>
+
+            <div id="yd-recommendation-box" style="font-size:12px; font-style:italic; padding:8px 12px; background:var(--md-primary-container); border-radius:6px; color:var(--md-on-primary-container);">
+              Loading recommendations...
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Flashbulb Engram Console & 3-Factor STDP -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <!-- Flashbulb Memory Consolidation Card -->
+          <div class="content-card" style="padding:20px;">
+            <h3 style="font-size:16px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+              <span>⚡</span> Flashbulb Memory Consolidation
+            </h3>
+            <p style="font-size:13px; color:var(--md-on-surface-variant); margin-bottom:16px;">
+              Locks a critical memory trace into permanent long-term storage. Immune to Ebbinghaus decay (<code style="font-family:var(--font-mono);">decay_factor = 0.05</code>) and eviction (<code style="font-family:var(--font-mono);">immutable = True</code>).
+            </p>
+
+            <form onsubmit="handleFlashbulbSubmit(event)" style="display:flex; flex-direction:column; gap:12px;">
+              <div class="filter-group">
+                <label class="filter-label">Target Memory ID *</label>
+                <input type="text" id="fb-memory-id" class="input-field" placeholder="e.g. 82c78b11-0c78-49d4-8cc0-1e20146fa1c9" required>
+              </div>
+
+              <div class="filter-group">
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                  <label class="filter-label">Emotional / Cognitive Salience:</label>
+                  <span id="fb-salience-val" style="font-family:var(--font-mono); font-weight:600;">1.00</span>
+                </div>
+                <input type="range" id="fb-salience-slider" min="0.1" max="2.0" step="0.05" value="1.0" oninput="document.getElementById('fb-salience-val').innerText = parseFloat(this.value).toFixed(2)" style="width:100%;">
+              </div>
+
+              <div class="filter-group">
+                <label class="filter-label">Consolidation Reason / Justification</label>
+                <input type="text" id="fb-reason" class="input-field" placeholder="e.g. Critical security decision / fatal outage postmortem" value="High-salience cognitive anchor">
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="margin-top:6px; background:var(--md-yellow); color:#000;">
+                ⚡ Lock Indelible Flashbulb Engram
+              </button>
+            </form>
+
+            <div id="fb-result-card" style="display:none; margin-top:14px; padding:12px; background:var(--md-surface-variant); border-radius:var(--radius-sm); border:1px solid var(--md-outline);">
+              <div style="font-weight:700; font-size:13px; color:var(--md-green); margin-bottom:4px;" id="fb-res-title">Engram Consolidated!</div>
+              <div style="font-size:12px; color:var(--md-on-surface-variant);" id="fb-res-details">Decay factor locked to 0.05. Memory tagged as #flashbulb.</div>
+            </div>
+          </div>
+
+          <!-- 3-Factor STDP Plasticity Simulator -->
+          <div class="content-card" style="padding:20px;">
+            <h3 style="font-size:16px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+              <span>🔬</span> 3-Factor STDP Plasticity Simulator
+            </h3>
+            <p style="font-size:13px; color:var(--md-on-surface-variant); margin-bottom:12px;">
+              Spike-Timing-Dependent Plasticity modulated by Dopamine Reward Prediction Error:
+              <br><code style="font-family:var(--font-mono); font-size:11px;">&Delta;W = &eta; &times; DA &times; exp(-|&Delta;t| / &tau;)</code>
+            </p>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+              <div class="filter-group">
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:2px;">
+                  <label class="filter-label">Pre/Post &Delta;t (ms):</label>
+                  <span id="stdp-dt-val" style="font-family:var(--font-mono);">15 ms</span>
+                </div>
+                <input type="range" id="stdp-dt-slider" min="-80" max="80" step="5" value="15" oninput="updateSTDPPreview()" style="width:100%;">
+              </div>
+
+              <div class="filter-group">
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:2px;">
+                  <label class="filter-label">Initial Weight:</label>
+                  <span id="stdp-w-val" style="font-family:var(--font-mono);">0.40</span>
+                </div>
+                <input type="range" id="stdp-w-slider" min="0.05" max="0.95" step="0.05" value="0.40" oninput="updateSTDPPreview()" style="width:100%;">
+              </div>
+            </div>
+
+            <div style="background:var(--md-surface-variant); padding:12px; border-radius:var(--radius-sm);">
+              <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                <span>Plasticity Outcome:</span>
+                <span id="stdp-type-badge" class="chip-accent" style="background:var(--md-green-container); color:var(--md-green);">LTP POTENTIATED</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; font-family:var(--font-mono);">
+                <span>Weight Update:</span>
+                <span id="stdp-calc-result">0.40 &rarr; 0.54 (&Delta;W: +0.14)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- Ingest Engram Modal -->
@@ -1181,10 +1392,12 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       fetchStats();
       fetchMemories();
       fetchGraphData();
+      fetchNeuromodulators();
 
       // Polling for live status
       setInterval(() => {
         fetchStats(true);
+        fetchNeuromodulators(true);
       }, 8000);
     });
 
@@ -1929,6 +2142,238 @@ curl -X POST http://127.0.0.1:8788/api/recall \
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
+    }
+
+    // -----------------------------------------------------------------------
+    // Neuromodulation, Yerkes-Dodson & Flashbulb Consolidation
+    // -----------------------------------------------------------------------
+    let currentNeuromod = {
+      levels: { norepinephrine: 0.5, dopamine: 0.0, acetylcholine: 0.5, serotonin: 0.5 },
+      cognitive_mode: 'BALANCED',
+      flashbulb_ready: false,
+      complexity: 0.5
+    };
+
+    async function fetchNeuromodulators(silent = false) {
+      try {
+        const comp = document.getElementById('yd-complexity-slider')?.value || 0.5;
+        const res = await fetch(`${API_BASE}/api/neuromodulators?complexity=${comp}`);
+        if (res.ok) {
+          const data = await res.json();
+          currentNeuromod = data;
+          updateNeuromodulatorUI(data);
+        }
+      } catch (err) {
+        if (!silent) console.warn('Neuromodulators API offline; using local state');
+        updateNeuromodulatorUI(currentNeuromod);
+      }
+    }
+
+    function updateNeuromodulatorUI(data) {
+      if (!data || !data.levels) return;
+      const l = data.levels;
+      
+      const neElem = document.getElementById('nm-ne-val');
+      if (neElem) neElem.innerText = (l.norepinephrine || 0.5).toFixed(2);
+      const neBar = document.getElementById('nm-ne-bar');
+      if (neBar) neBar.style.width = `${Math.min(100, Math.max(0, (l.norepinephrine || 0.5) * 100))}%`;
+
+      const daElem = document.getElementById('nm-da-val');
+      if (daElem) {
+        const da = l.dopamine || 0.0;
+        daElem.innerText = (da >= 0 ? '+' : '') + da.toFixed(2);
+      }
+      const daBar = document.getElementById('nm-da-bar');
+      if (daBar) {
+        const daNormalized = ((l.dopamine || 0.0) + 1.0) / 2.0;
+        daBar.style.width = `${Math.min(100, Math.max(0, daNormalized * 100))}%`;
+      }
+
+      const achElem = document.getElementById('nm-ach-val');
+      if (achElem) achElem.innerText = (l.acetylcholine || 0.5).toFixed(2);
+      const achBar = document.getElementById('nm-ach-bar');
+      if (achBar) achBar.style.width = `${Math.min(100, Math.max(0, (l.acetylcholine || 0.5) * 100))}%`;
+
+      const serElem = document.getElementById('nm-5ht-val');
+      if (serElem) serElem.innerText = (l.serotonin || 0.5).toFixed(2);
+      const serBar = document.getElementById('nm-5ht-bar');
+      if (serBar) serBar.style.width = `${Math.min(100, Math.max(0, (l.serotonin || 0.5) * 100))}%`;
+
+      const modeChip = document.getElementById('nm-mode-chip');
+      if (modeChip) {
+        modeChip.innerText = data.cognitive_mode || 'BALANCED';
+        if (data.cognitive_mode === 'ENCODING') {
+          modeChip.style.background = 'var(--md-yellow-container)';
+          modeChip.style.color = 'var(--md-yellow)';
+        } else if (data.cognitive_mode === 'CONSOLIDATION') {
+          modeChip.style.background = 'var(--md-primary-container)';
+          modeChip.style.color = 'var(--md-primary)';
+        } else {
+          modeChip.style.background = 'var(--md-green-container)';
+          modeChip.style.color = 'var(--md-green)';
+        }
+      }
+
+      if (data.yerkes_dodson) {
+        const yd = data.yerkes_dodson;
+        const effBadge = document.getElementById('yd-efficiency-badge');
+        if (effBadge) effBadge.innerText = `${(yd.efficiency * 100).toFixed(1)}%`;
+
+        const effBar = document.getElementById('yd-efficiency-bar');
+        if (effBar) {
+          effBar.style.width = `${Math.min(100, yd.efficiency * 100)}%`;
+          effBar.style.background = yd.zone === 'OPTIMAL_FLOW' ? 'var(--md-green)' : (yd.zone === 'UNDER_AROUSED' ? 'var(--md-yellow)' : 'var(--md-red)');
+        }
+
+        const optAr = document.getElementById('yd-optimal-arousal');
+        if (optAr) optAr.innerText = (yd.optimal_arousal || 0.5).toFixed(2);
+
+        const zoneChip = document.getElementById('yd-zone-chip');
+        if (zoneChip) {
+          zoneChip.innerText = yd.zone || 'FLOW';
+          zoneChip.style.background = yd.zone === 'OPTIMAL_FLOW' ? 'var(--md-green-container)' : (yd.zone === 'UNDER_AROUSED' ? 'var(--md-yellow-container)' : 'var(--md-red-container)');
+          zoneChip.style.color = yd.zone === 'OPTIMAL_FLOW' ? 'var(--md-green)' : (yd.zone === 'UNDER_AROUSED' ? 'var(--md-yellow)' : 'var(--md-red)');
+        }
+
+        const recBox = document.getElementById('yd-recommendation-box');
+        if (recBox) recBox.innerText = yd.recommendation || '';
+      }
+
+      updateSTDPPreview();
+    }
+
+    async function injectPulse(ne, da, ach, ser) {
+      try {
+        const res = await fetch(`${API_BASE}/api/neuromodulators/pulse`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ne_delta: ne, da_delta: da, ach_delta: ach, serotonin_delta: ser }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          currentNeuromod = data;
+          updateNeuromodulatorUI(data);
+          showToast(`Pulse injected: NE ${ne >= 0 ? '+' : ''}${ne}, DA ${da >= 0 ? '+' : ''}${da}`, 'success');
+        }
+      } catch (err) {
+        showToast('Pulse simulation offline', 'info');
+      }
+    }
+
+    async function resetHomeostaticBaselines() {
+      try {
+        const res = await fetch(`${API_BASE}/api/neuromodulators/levels`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ norepinephrine: 0.5, dopamine: 0.0, acetylcholine: 0.5, serotonin: 0.5 }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          currentNeuromod = data;
+          updateNeuromodulatorUI(data);
+          showToast('Neuromodulatory baselines restored to homeostatic equilibrium.', 'success');
+        }
+      } catch (err) {
+        showToast('Reset offline', 'info');
+      }
+    }
+
+    function onComplexityChange(val) {
+      const c = parseFloat(val);
+      const label = c < 0.3 ? 'Simple / Motor' : (c > 0.7 ? 'Complex / Deep Reasoning' : 'Moderate');
+      const disp = document.getElementById('yd-complexity-display');
+      if (disp) disp.innerText = `${c.toFixed(2)} (${label})`;
+      fetchNeuromodulators(true);
+    }
+
+    async function handleFlashbulbSubmit(e) {
+      e.preventDefault();
+      const memId = document.getElementById('fb-memory-id').value.trim();
+      const salience = parseFloat(document.getElementById('fb-salience-slider').value);
+      const reason = document.getElementById('fb-reason').value.trim();
+
+      if (!memId) {
+        showToast('Memory ID is required', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/neuromodulators/flashbulb`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ memory_id: memId, salience: salience, reason: reason }),
+        });
+        const data = await res.json();
+        const resCard = document.getElementById('fb-result-card');
+        const resTitle = document.getElementById('fb-res-title');
+        const resDetails = document.getElementById('fb-res-details');
+
+        if (res.ok && data.success) {
+          if (resCard) resCard.style.display = 'block';
+          if (resTitle) {
+            resTitle.innerText = `⚡ Engram Consolidated: ${memId.slice(0, 8)}...`;
+            resTitle.style.color = 'var(--md-green)';
+          }
+          if (resDetails) {
+            resDetails.innerText = `Decay locked: ${data.previous_decay} → ${data.new_decay}. Immune to Ebbinghaus pruning. Tags: ${data.tags_added.join(', ')}`;
+          }
+          showToast('Memory locked as permanent Flashbulb Engram!', 'success');
+          fetchStats(true);
+          fetchMemories();
+        } else {
+          if (resCard) resCard.style.display = 'block';
+          if (resTitle) {
+            resTitle.innerText = 'Flashbulb Tagging Failed';
+            resTitle.style.color = 'var(--md-red)';
+          }
+          if (resDetails) resDetails.innerText = data.error || 'Memory trace not found.';
+          showToast(data.error || 'Flashbulb tagging failed', 'error');
+        }
+      } catch (err) {
+        showToast('Flashbulb request failed: ' + err.message, 'error');
+      }
+    }
+
+    function updateSTDPPreview() {
+      const dtSlider = document.getElementById('stdp-dt-slider');
+      const wSlider = document.getElementById('stdp-w-slider');
+      if (!dtSlider || !wSlider) return;
+
+      const dt = parseFloat(dtSlider.value);
+      const w = parseFloat(wSlider.value);
+      const da = currentNeuromod?.levels?.dopamine ?? 0.0;
+
+      const dtElem = document.getElementById('stdp-dt-val');
+      if (dtElem) dtElem.innerText = `${dt > 0 ? '+' : ''}${dt} ms`;
+      const wElem = document.getElementById('stdp-w-val');
+      if (wElem) wElem.innerText = w.toFixed(2);
+
+      const eta = 0.25;
+      const tau = 60.0;
+      const trace = Math.exp(-Math.abs(dt) / tau);
+      const dw = eta * da * trace;
+
+      let newW = w;
+      let ptype = 'NEUTRAL';
+      if (da > 0.001) {
+        newW = Math.min(1.0, w + dw * (1.0 - w));
+        ptype = 'LTP POTENTIATED';
+      } else if (da < -0.001) {
+        newW = Math.max(0.01, w + dw * w);
+        ptype = 'LTD DEPRESSED';
+      }
+
+      const badge = document.getElementById('stdp-type-badge');
+      if (badge) {
+        badge.innerText = ptype;
+        badge.style.background = ptype === 'LTP POTENTIATED' ? 'var(--md-green-container)' : (ptype === 'LTD DEPRESSED' ? 'var(--md-red-container)' : 'var(--md-outline-variant)');
+        badge.style.color = ptype === 'LTP POTENTIATED' ? 'var(--md-green)' : (ptype === 'LTD DEPRESSED' ? 'var(--md-red)' : 'var(--md-on-surface)');
+      }
+
+      const calcResult = document.getElementById('stdp-calc-result');
+      if (calcResult) {
+        calcResult.innerText = `${w.toFixed(2)} → ${newW.toFixed(2)} (ΔW: ${dw >= 0 ? '+' : ''}${dw.toFixed(3)})`;
+      }
     }
   </script>
 </body>

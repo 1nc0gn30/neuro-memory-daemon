@@ -40,9 +40,23 @@ __all__ = [
     "MetacognitiveEvaluator",
     "audit_metacognition",
     "audit_metacognitive_memory",
+    "CognitiveMode",
+    "ArousalZone",
+    "NeuromodulatorLevels",
+    "YerkesDodsonResult",
+    "ThreeFactorSTDPResult",
+    "FlashbulbTagResult",
+    "calculate_yerkes_dodson_efficiency",
+    "calculate_three_factor_stdp",
+    "flashbulb_tag_memory",
+    "NeuromodulatorySystem",
+    "get_default_neuromodulatory_system",
+    "tag_flashbulb",
+    "neuromodulate_pulse",
+    "get_neuromodulators",
 ]
 
-# Optional re-exports from core sleep_replay and metacognition
+# Optional re-exports from core sleep_replay, metacognition, and neuromodulation
 try:
     from .sleep_replay import (
         SemanticSchemaCluster,
@@ -59,6 +73,23 @@ try:
         MetacognitiveAuditResult,
         MetacognitiveEvaluator,
         audit_metacognition,
+    )
+except ImportError:
+    pass
+
+try:
+    from .neuromodulation import (
+        CognitiveMode,
+        ArousalZone,
+        NeuromodulatorLevels,
+        YerkesDodsonResult,
+        ThreeFactorSTDPResult,
+        FlashbulbTagResult,
+        calculate_yerkes_dodson_efficiency,
+        calculate_three_factor_stdp,
+        flashbulb_tag_memory,
+        NeuromodulatorySystem,
+        get_default_neuromodulatory_system,
     )
 except ImportError:
     pass
@@ -700,6 +731,46 @@ class MemoryDaemon:
         from .metacognition import audit_metacognition as _audit
         return _audit(self, query=query, top_k=top_k)
 
+    def tag_flashbulb(
+        self,
+        memory_id: str,
+        salience: float = 1.0,
+        reason: str = "High-arousal flashbulb tag",
+    ) -> Dict[str, Any]:
+        """Tag a memory trace as an indelible, zero-decay flashbulb engram."""
+        from .neuromodulation import flashbulb_tag_memory
+        res = flashbulb_tag_memory(
+            storage_or_daemon=self,
+            memory_id=memory_id,
+            salience=salience,
+            reason=reason,
+        )
+        return res.to_dict()
+
+    def neuromodulate_pulse(
+        self,
+        ne_delta: float = 0.0,
+        da_delta: float = 0.0,
+        ach_delta: float = 0.0,
+        serotonin_delta: float = 0.0,
+    ) -> Dict[str, Any]:
+        """Inject a chemical pulse into the neuromodulatory system."""
+        from .neuromodulation import get_default_neuromodulatory_system
+        ns = get_default_neuromodulatory_system()
+        ns.pulse(
+            ne_delta=ne_delta,
+            da_delta=da_delta,
+            ach_delta=ach_delta,
+            serotonin_delta=serotonin_delta,
+        )
+        return ns.get_status()
+
+    def get_neuromodulators(self) -> Dict[str, Any]:
+        """Retrieve current neuromodulator status and Yerkes-Dodson efficiency."""
+        from .neuromodulation import get_default_neuromodulatory_system
+        ns = get_default_neuromodulatory_system()
+        return ns.get_status()
+
     # -----------------------------------------------------------------------
     # Public API: Stats & Diagnostics
     # -----------------------------------------------------------------------
@@ -912,3 +983,34 @@ def audit_metacognitive_memory(
     """Audit metacognitive Feeling-of-Knowing and detect contradictions using default daemon."""
     daemon = get_default_daemon(db_path)
     return daemon.audit_metacognition(query=query, top_k=top_k)
+
+def tag_flashbulb(
+    memory_id: str,
+    salience: float = 1.0,
+    reason: str = "High-arousal flashbulb tag",
+    db_path: Optional[Union[str, Path]] = None,
+) -> Dict[str, Any]:
+    """Tag a memory trace as permanent flashbulb engram using the default daemon."""
+    daemon = get_default_daemon(db_path)
+    return daemon.tag_flashbulb(memory_id=memory_id, salience=salience, reason=reason)
+
+def neuromodulate_pulse(
+    ne_delta: float = 0.0,
+    da_delta: float = 0.0,
+    ach_delta: float = 0.0,
+    serotonin_delta: float = 0.0,
+    db_path: Optional[Union[str, Path]] = None,
+) -> Dict[str, Any]:
+    """Inject a chemical pulse into the neuromodulatory system using the default daemon."""
+    daemon = get_default_daemon(db_path)
+    return daemon.neuromodulate_pulse(
+        ne_delta=ne_delta,
+        da_delta=da_delta,
+        ach_delta=ach_delta,
+        serotonin_delta=serotonin_delta,
+    )
+
+def get_neuromodulators(db_path: Optional[Union[str, Path]] = None) -> Dict[str, Any]:
+    """Retrieve neuromodulator levels and Yerkes-Dodson state using the default daemon."""
+    daemon = get_default_daemon(db_path)
+    return daemon.get_neuromodulators()

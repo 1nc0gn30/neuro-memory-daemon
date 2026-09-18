@@ -340,6 +340,95 @@ def handle_metacognition(args: argparse.Namespace) -> int:
     return 0
 
 
+def handle_neuromodulate(args: argparse.Namespace) -> int:
+    """Inspect or modulate neuromodulatory chemical levels and Yerkes-Dodson state."""
+    try:
+        from .neuromodulation import get_default_neuromodulatory_system
+    except ImportError:
+        from neuro_memory_daemon.neuromodulation import get_default_neuromodulatory_system
+
+    ns = get_default_neuromodulatory_system()
+    ne = getattr(args, "ne", None)
+    da = getattr(args, "da", None)
+    ach = getattr(args, "ach", None)
+    serotonin = getattr(args, "serotonin", None)
+    pulse = getattr(args, "pulse", False)
+
+    if pulse:
+        ns.pulse(
+            ne_delta=ne or 0.0,
+            da_delta=da or 0.0,
+            ach_delta=ach or 0.0,
+            serotonin_delta=serotonin or 0.0,
+        )
+    elif any(v is not None for v in (ne, da, ach, serotonin)):
+        ns.set_levels(ne=ne, da=da, ach=ach, serotonin=serotonin)
+
+    status = ns.get_status()
+    complexity = getattr(args, "complexity", 0.5)
+    yd = ns.evaluate_yerkes_dodson(task_complexity=complexity)
+    status["yerkes_dodson"] = yd.to_dict()
+
+    if getattr(args, "json", False):
+        print(json.dumps(status, indent=2))
+        return 0
+
+    print(c("🧪 Locus Coeruleus Neuromodulation & Arousal Monitor", Color.BRIGHT_CYAN + Color.BOLD))
+    levels = status["levels"]
+    ne_val = levels.get("norepinephrine", 0.5)
+    da_val = levels.get("dopamine", 0.0)
+    ach_val = levels.get("acetylcholine", 0.5)
+    ser_val = levels.get("serotonin", 0.5)
+    print(f"  • Norepinephrine (NE): {c(f'{ne_val:.2f}', Color.BRIGHT_RED)} (Arousal & Flashbulb trigger: >=0.85)")
+    print(f"  • Dopamine (DA):       {c(f'{da_val:+.2f}', Color.BRIGHT_GREEN)} (Reward Prediction Error STDP gating)")
+    print(f"  • Acetylcholine (ACh): {c(f'{ach_val:.2f}', Color.BRIGHT_YELLOW)} (Sensory Encoding vs Replay Switch)")
+    print(f"  • Serotonin (5-HT):    {c(f'{ser_val:.2f}', Color.BRIGHT_MAGENTA)} (Cognitive Patience / Delay Discounting)")
+    print(f"  • Cognitive Mode:      {c(status['cognitive_mode'], Color.BOLD)}")
+    print(f"  • Flashbulb Ready:     {'⚡ YES' if status['flashbulb_ready'] else 'No'}")
+
+    print(c("\n📈 Yerkes-Dodson Arousal Curve Efficiency:", Color.BOLD))
+    zone_val = yd.zone.value if hasattr(yd.zone, "value") else str(yd.zone)
+    zone_color = Color.BRIGHT_GREEN if zone_val == "OPTIMAL_FLOW" else (Color.BRIGHT_YELLOW if zone_val == "UNDER_AROUSED" else Color.BRIGHT_RED)
+    print(f"  • Task Complexity:     {complexity:.2f}")
+    print(f"  • Optimal Arousal:     {yd.optimal_arousal:.2f}")
+    print(f"  • Efficiency Score:    {c(f'{yd.efficiency * 100:.1f}%', zone_color)}")
+    print(f"  • Arousal Zone:        {c(zone_val, zone_color)}")
+    print(f"  • Recommendation:      {yd.recommendation}")
+
+    return 0
+
+
+def handle_flashbulb(args: argparse.Namespace) -> int:
+    """Tag memory trace as permanent flashbulb engram."""
+    daemon = get_default_daemon(db_path=args.db_path)
+    mem_id = getattr(args, "memory_id", "")
+    if not mem_id:
+        print(c("Error: memory_id argument is required.", Color.BRIGHT_RED))
+        return 1
+
+    salience = float(getattr(args, "salience", 1.0))
+    reason = str(getattr(args, "reason", "High-salience critical event"))
+    res = daemon.tag_flashbulb(memory_id=mem_id, salience=salience, reason=reason)
+
+    if getattr(args, "json", False):
+        print(json.dumps(res, indent=2))
+        return 0
+
+    if res.get("success"):
+        print(c("⚡ Flashbulb Memory Engram Consolidated!", Color.BRIGHT_YELLOW + Color.BOLD))
+        print(f"  • Memory ID:       {res['memory_id']}")
+        print(f"  • Salience:        {res['salience']}")
+        print(f"  • Decay Factor:    {res['previous_decay']} -> {c(str(res['new_decay']), Color.BRIGHT_GREEN)} (Locked)")
+        print(f"  • Immutable:       {c('True', Color.BRIGHT_GREEN)} (Protected against Ebbinghaus pruning)")
+        print(f"  • Tags Added:      {', '.join(res.get('tags_added', []))}")
+        print(f"  • Reason:          {res.get('reason')}")
+    else:
+        print(c(f"❌ Flashbulb Tagging Failed: {res.get('error', 'Unknown error')}", Color.BRIGHT_RED))
+        return 1
+
+    return 0
+
+
 def handle_diagnostics(args: argparse.Namespace) -> int:
     """Handle `platform` / `doctor` / `diagnostics` subcommand."""
     daemon = get_default_daemon(db_path=args.db_path)
@@ -1110,7 +1199,26 @@ def build_parser() -> argparse.ArgumentParser:
         p_diag.add_argument("-v", "--verbose", action="store_true", help="Detailed inspection.")
         p_diag.add_argument("--json", action="store_true", help="Output raw JSON.")
 
-    # 11. test
+    # 11. neuromodulate / modulate / neuro
+    for neuro_alias in ("neuromodulate", "modulate", "neuro"):
+        p_neuro = subparsers.add_parser(neuro_alias, help="Inspect or modulate chemical levels and Yerkes-Dodson curve.")
+        p_neuro.add_argument("--ne", type=float, default=None, help="Norepinephrine level/delta (0.0 to 1.0).")
+        p_neuro.add_argument("--da", type=float, default=None, help="Dopamine level/delta (-1.0 to 1.0).")
+        p_neuro.add_argument("--ach", type=float, default=None, help="Acetylcholine level/delta (0.0 to 1.0).")
+        p_neuro.add_argument("--serotonin", "--5ht", dest="serotonin", type=float, default=None, help="Serotonin level/delta (0.0 to 1.0).")
+        p_neuro.add_argument("-p", "--pulse", action="store_true", help="Treat values as relative deltas (pulse) rather than absolute levels.")
+        p_neuro.add_argument("-c", "--complexity", type=float, default=0.5, help="Task complexity for Yerkes-Dodson evaluation (0.0 to 1.0, default: 0.5).")
+        p_neuro.add_argument("--json", action="store_true", help="Output raw JSON.")
+
+    # 12. flashbulb / flashbulb-tag
+    for fb_alias in ("flashbulb", "flashbulb-tag"):
+        p_fb = subparsers.add_parser(fb_alias, help="Tag memory trace as indelible zero-decay flashbulb engram.")
+        p_fb.add_argument("memory_id", help="Memory trace identifier.")
+        p_fb.add_argument("-s", "--salience", type=float, default=1.0, help="Salience score (default: 1.0).")
+        p_fb.add_argument("-r", "--reason", default="High-salience critical event", help="Reason for flashbulb consolidation.")
+        p_fb.add_argument("--json", action="store_true", help="Output raw JSON.")
+
+    # 13. test
     p_test = subparsers.add_parser("test", help="Run internal self-verification test runner.")
 
     return parser
@@ -1137,6 +1245,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         "stats": handle_stats,
         "metacognition": handle_metacognition,
         "meta": handle_metacognition,
+        "neuromodulate": handle_neuromodulate,
+        "modulate": handle_neuromodulate,
+        "neuro": handle_neuromodulate,
+        "flashbulb": handle_flashbulb,
+        "flashbulb-tag": handle_flashbulb,
         "serve": handle_serve,
         "mcp": handle_mcp,
         "platform": handle_diagnostics,

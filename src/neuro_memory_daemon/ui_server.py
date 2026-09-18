@@ -201,11 +201,29 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(raw_bytes)
             return
 
-        elif path == "/api/metacognition":
+        elif path in ("/api/metacognition", "/v1/metacognition"):
             query = params.get("query", params.get("q", [""]))[0]
             top_k = int(params.get("top_k", [5])[0])
             res = daemon.audit_metacognition(query=query, top_k=top_k)
             self._send_json(res)
+            return
+
+        # Neuromodulatory Status & Yerkes-Dodson Curve
+        elif path in ("/api/neuromodulators", "/v1/neuromodulators", "/api/neuromodulator/status"):
+            try:
+                from .neuromodulation import get_default_neuromodulatory_system
+            except ImportError:
+                from neuro_memory_daemon.neuromodulation import get_default_neuromodulatory_system
+            ns = get_default_neuromodulatory_system()
+            comp_str = params.get("complexity", ["0.5"])[0]
+            try:
+                complexity = float(comp_str)
+            except ValueError:
+                complexity = 0.5
+            status = ns.get_status()
+            yd = ns.evaluate_yerkes_dodson(task_complexity=complexity)
+            status["yerkes_dodson"] = yd.to_dict()
+            self._send_json(status)
             return
 
         # Serve Static UI Files
@@ -335,6 +353,50 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
             top_k = int(body.get("top_k", 5))
             res = daemon.audit_metacognition(query=q, top_k=top_k)
             self._send_json(res)
+            return
+
+        # Neuromodulatory Pulse Injection
+        if path in ("/api/neuromodulators/pulse", "/v1/neuromodulators/pulse"):
+            try:
+                from .neuromodulation import get_default_neuromodulatory_system
+            except ImportError:
+                from neuro_memory_daemon.neuromodulation import get_default_neuromodulatory_system
+            ns = get_default_neuromodulatory_system()
+            ne_d = float(body.get("ne_delta", 0.0))
+            da_d = float(body.get("da_delta", 0.0))
+            ach_d = float(body.get("ach_delta", 0.0))
+            ser_d = float(body.get("serotonin_delta", 0.0))
+            ns.pulse(ne_delta=ne_d, da_delta=da_d, ach_delta=ach_d, serotonin_delta=ser_d)
+            self._send_json(ns.get_status())
+            return
+
+        # Explicit Neuromodulator Levels Override
+        if path in ("/api/neuromodulators/levels", "/v1/neuromodulators/levels"):
+            try:
+                from .neuromodulation import get_default_neuromodulatory_system
+            except ImportError:
+                from neuro_memory_daemon.neuromodulation import get_default_neuromodulatory_system
+            ns = get_default_neuromodulatory_system()
+            ns.set_levels(
+                ne=body.get("norepinephrine"),
+                da=body.get("dopamine"),
+                ach=body.get("acetylcholine"),
+                serotonin=body.get("serotonin"),
+            )
+            self._send_json(ns.get_status())
+            return
+
+        # Flashbulb Engram Permanent Consolidation
+        if path in ("/api/neuromodulators/flashbulb", "/v1/neuromodulators/flashbulb", "/api/flashbulb"):
+            mem_id = body.get("memory_id", "")
+            if not mem_id:
+                self._send_json({"error": "Field 'memory_id' is required for flashbulb tagging."}, status=400)
+                return
+            salience = float(body.get("salience", 1.0))
+            reason = str(body.get("reason", "High-salience critical event"))
+            res = daemon.tag_flashbulb(memory_id=mem_id, salience=salience, reason=reason)
+            status_code = 200 if res.get("success") else 404
+            self._send_json(res, status=status_code)
             return
 
         self.send_error(404, f"API route not found: {path}")

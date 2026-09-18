@@ -300,6 +300,97 @@ class MCPServer:
             handler=self._tool_memory_metacognition,
         )
 
+        # 9. neuro_neuromodulator_status / memory_neuromodulators
+        self._register_tool(
+            name="neuro_neuromodulator_status",
+            description=(
+                "Retrieve chemical levels of Norepinephrine (arousal), Dopamine (RPE), "
+                "Acetylcholine (encoding vs consolidation), and Serotonin (patience), "
+                "plus Yerkes-Dodson cognitive efficiency curve analysis."
+            ),
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "task_complexity": {
+                        "type": "number",
+                        "description": "Estimated complexity of cognitive task (0.0=simple, 1.0=complex/reasoning).",
+                        "default": 0.5,
+                        "minimum": 0.0,
+                        "maximum": 1.0,
+                    },
+                },
+            },
+            handler=self._tool_neuromodulator_status,
+        )
+        self.handlers["memory_neuromodulators"] = self._tool_neuromodulator_status
+
+        # 10. neuro_neuromodulate_pulse / neuromodulate_pulse
+        self._register_tool(
+            name="neuro_neuromodulate_pulse",
+            description=(
+                "Inject a chemical pulse into the neuromodulatory system to shift arousal (NE), "
+                "reward expectation (DA), encoding/consolidation bias (ACh), or patience (5-HT)."
+            ),
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "ne_delta": {
+                        "type": "number",
+                        "description": "Norepinephrine delta (-1.0 to 1.0, increases vigilance/arousal).",
+                        "default": 0.0,
+                    },
+                    "da_delta": {
+                        "type": "number",
+                        "description": "Dopamine RPE delta (-1.0 to 1.0, positive=reward, negative=punishment).",
+                        "default": 0.0,
+                    },
+                    "ach_delta": {
+                        "type": "number",
+                        "description": "Acetylcholine delta (-1.0 to 1.0, positive=sensory encoding, negative=consolidation replay).",
+                        "default": 0.0,
+                    },
+                    "serotonin_delta": {
+                        "type": "number",
+                        "description": "Serotonin delta (-1.0 to 1.0, positive=patience / behavioral inhibition).",
+                        "default": 0.0,
+                    },
+                },
+            },
+            handler=self._tool_neuromodulate_pulse,
+        )
+        self.handlers["neuromodulate_pulse"] = self._tool_neuromodulate_pulse
+
+        # 11. neuro_flashbulb_tag / flashbulb_tag
+        self._register_tool(
+            name="neuro_flashbulb_tag",
+            description=(
+                "Tag a memory trace as a permanent flashbulb engram: locks decay_factor=0.05, "
+                "sets immutable=True, making it permanently immune to Ebbinghaus forgetting curves."
+            ),
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "memory_id": {
+                        "type": "string",
+                        "description": "Target memory ID to lock as flashbulb engram.",
+                    },
+                    "salience": {
+                        "type": "number",
+                        "description": "Emotional or cognitive salience score (default: 1.0).",
+                        "default": 1.0,
+                    },
+                    "reason": {
+                        "type": "string",
+                        "description": "Justification for flashbulb consolidation (default: 'High-salience critical event').",
+                        "default": "High-salience critical event",
+                    },
+                },
+                "required": ["memory_id"],
+            },
+            handler=self._tool_flashbulb_tag,
+        )
+        self.handlers["flashbulb_tag"] = self._tool_flashbulb_tag
+
     # -----------------------------------------------------------------------
     # Tool Handlers
     # -----------------------------------------------------------------------
@@ -410,6 +501,40 @@ class MCPServer:
         query = args.get("query", "")
         top_k = int(args.get("top_k", 5))
         res = self.daemon.audit_metacognition(query=query, top_k=top_k)
+        return json.dumps(res, indent=2)
+
+    def _tool_neuromodulator_status(self, args: Dict[str, Any]) -> str:
+        task_complexity = float(args.get("task_complexity", 0.5))
+        try:
+            from .neuromodulation import get_default_neuromodulatory_system
+        except ImportError:
+            from neuro_memory_daemon.neuromodulation import get_default_neuromodulatory_system
+        ns = get_default_neuromodulatory_system()
+        status = ns.get_status()
+        yd = ns.evaluate_yerkes_dodson(task_complexity=task_complexity)
+        status["yerkes_dodson"] = yd.to_dict()
+        return json.dumps(status, indent=2)
+
+    def _tool_neuromodulate_pulse(self, args: Dict[str, Any]) -> str:
+        ne = float(args.get("ne_delta", 0.0))
+        da = float(args.get("da_delta", 0.0))
+        ach = float(args.get("ach_delta", 0.0))
+        serotonin = float(args.get("serotonin_delta", 0.0))
+        try:
+            from .neuromodulation import get_default_neuromodulatory_system
+        except ImportError:
+            from neuro_memory_daemon.neuromodulation import get_default_neuromodulatory_system
+        ns = get_default_neuromodulatory_system()
+        ns.pulse(ne_delta=ne, da_delta=da, ach_delta=ach, serotonin_delta=serotonin)
+        return json.dumps(ns.get_status(), indent=2)
+
+    def _tool_flashbulb_tag(self, args: Dict[str, Any]) -> str:
+        memory_id = args.get("memory_id")
+        if not memory_id:
+            raise ValueError("Parameter 'memory_id' is required for flashbulb tagging.")
+        salience = float(args.get("salience", 1.0))
+        reason = str(args.get("reason", "High-arousal flashbulb tag"))
+        res = self.daemon.tag_flashbulb(memory_id=memory_id, salience=salience, reason=reason)
         return json.dumps(res, indent=2)
 
     # -----------------------------------------------------------------------

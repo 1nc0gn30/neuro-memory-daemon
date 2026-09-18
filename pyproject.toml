@@ -20,7 +20,12 @@ keywords = [
     "mcp",
     "model-context-protocol",
     "ai-agents",
-    "cognitive-architecture"
+    "cognitive-architecture",
+    "neuromodulation",
+    "yerkes-dodson",
+    "dopamine-stdp",
+    "flashbulb-memory",
+    "norepinephrine"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
