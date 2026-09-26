@@ -9,10 +9,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;600&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --md-primary: #1a73e8;
-      --md-primary-hover: #1557b0;
-      --md-primary-container: #e8f0fe;
-      --md-on-primary-container: #174ea6;
+      --md-primary: #B8860B;
+      --md-primary-hover: #8A6A09;
+      --md-primary-container: #FEF9E7;
+      --md-on-primary-container: #6B5308;
       --md-surface: #ffffff;
       --md-surface-variant: #f8f9fa;
       --md-background: #f1f3f4;
@@ -44,10 +44,10 @@
     }
 
     [data-theme="dark"] {
-      --md-primary: #8ab4f8;
+      --md-primary: #D4AF37;
       --md-primary-hover: #aecbfa;
-      --md-primary-container: #174ea6;
-      --md-on-primary-container: #d2e3fc;
+      --md-primary-container: #6B5308;
+      --md-on-primary-container: #F5E6AB;
       --md-surface: #202124;
       --md-surface-variant: #292a2d;
       --md-background: #121212;
@@ -114,7 +114,7 @@
       width: 40px;
       height: 40px;
       border-radius: var(--radius-md);
-      background: linear-gradient(135deg, #1a73e8, #8ab4f8);
+      background: linear-gradient(135deg, #B8860B, #D4AF37);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -214,7 +214,7 @@
       color: var(--md-on-primary-container);
     }
     .btn-tonal:hover {
-      background-color: #d2e3fc;
+      background-color: #F5E6AB;
     }
 
     .btn-outlined {
@@ -634,7 +634,7 @@
     }
     .entropy-fill {
       height: 100%;
-      background: linear-gradient(90deg, #1e8e3e, #1a73e8, #9334e6);
+      background: linear-gradient(90deg, #1e8e3e, #B8860B, #9334e6);
       border-radius: var(--radius-full);
     }
 
@@ -738,6 +738,7 @@
       color: var(--md-on-surface);
     }
   </style>
+  <link rel="stylesheet" href="atelier.css">
 </head>
 <body data-theme="light">
 
@@ -878,7 +879,7 @@
 
         <div class="graph-legend">
           <div style="font-weight:700; margin-bottom:2px;">Nodes & Modalities</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#1a73e8;"></span> Memory Engram</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#B8860B;"></span> Memory Engram</div>
           <div class="legend-item"><span class="legend-dot" style="background:#1e8e3e;"></span> Semantic Tag Node</div>
           <div class="legend-item"><span class="legend-dot" style="background:#9334e6;"></span> High-Plasticity Synapse (STDP)</div>
           <div class="legend-item"><span class="legend-dot" style="background:#ea4335;"></span> Working Memory (DLPFC)</div>
@@ -2070,7 +2071,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
         } else if (node.agent === 'hermes') {
           ctx.fillStyle = '#9334e6';
         } else {
-          ctx.fillStyle = isDark ? '#8ab4f8' : '#1a73e8';
+          ctx.fillStyle = isDark ? '#D4AF37' : '#B8860B';
         }
 
         ctx.fill();

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 neuro_memory_daemon.cli
 ~~~~~~~~~~~~~~~~~~~~~~~
