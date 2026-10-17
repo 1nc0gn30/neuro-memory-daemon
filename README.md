@@ -1,5 +1,9 @@
 # 🧠 Neuro-Memory Daemon (`neuro-memory-daemon`)
 
+> ⚡ **Live Web Application**: [https://neuro-memory-daemon.netlify.app](https://neuro-memory-daemon.netlify.app)  
+> 💳 **Unlock Pro Lifetime License ($19 One-Time, $0/mo)**: **[Instant Pro Unlock via Stripe](https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L)** *(Use promo code `FOUNDER25` for 25% off)*  
+> 🏆 **All-Access Sovereign Pro Bundle (All 44 Tools — $49 Lifetime)**: **[Get All 44 Studios via Stripe](https://buy.stripe.com/eVq14m5k16hW4Le0xWfw40M)**
+
 [![CI](https://github.com/1nc0gn30/neuro-memory-daemon/actions/workflows/ci.yml/badge.svg)](https://github.com/1nc0gn30/neuro-memory-daemon/actions/workflows/ci.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
