@@ -171,6 +171,7 @@ def atomic_write(
 
     mode = "w" if isinstance(content, str) else "wb"
     file_encoding = encoding if isinstance(content, str) else None
+    file_newline = "\n" if isinstance(content, str) else None
 
     # Write to a temporary file in the same directory to guarantee same filesystem
     temp_file = tempfile.NamedTemporaryFile(
@@ -179,6 +180,7 @@ def atomic_write(
         prefix=f".{dest.name}.tmp_",
         delete=False,
         encoding=file_encoding,
+        newline=file_newline,
     )
 
     temp_path = Path(temp_file.name)
@@ -260,7 +262,7 @@ def safe_write_text(
 
     dest = normalize_path(file_path)
     dest.parent.mkdir(parents=True, exist_ok=True)
-    with open(dest, "w", encoding=encoding) as f:
+    with open(dest, "w", encoding=encoding, newline="\n") as f:
         f.write(text)
     return dest
 
