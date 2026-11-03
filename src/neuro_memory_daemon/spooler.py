@@ -32,7 +32,7 @@ class AgentSpooler:
     def __init__(
         self,
         daemon: Optional[MemoryDaemon] = None,
-        poll_interval: float = 20.0,
+        poll_interval: float = 120.0,
         max_tail_bytes: int = 16384,
     ) -> None:
         self.daemon = daemon or get_default_daemon()
@@ -268,12 +268,13 @@ class AgentSpooler:
                 data = json.load(f)
 
             if isinstance(data, dict):
-                # Process latest subconscious thoughts of agents
-                for agent_name, thought_data in list(data.items())[:5]:
+                # Process latest subconscious thoughts of agents (ignore metadata keys like lastDistillation)
+                agents_map = data.get("agents") if isinstance(data.get("agents"), dict) else data
+                for agent_name, thought_data in list(agents_map.items())[:5]:
+                    if agent_name in ("lastDistillation", "updatedAt", "version", "timestamp", "status"):
+                        continue
                     thought_text = ""
-                    if isinstance(thought_data, str):
-                        thought_text = thought_data
-                    elif isinstance(thought_data, dict):
+                    if isinstance(thought_data, dict):
                         thought_text = thought_data.get("thought") or thought_data.get("reflection") or ""
 
                     if thought_text:
