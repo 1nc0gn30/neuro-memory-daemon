@@ -46,11 +46,13 @@ STOP_WORDS: Set[str] = {
 }
 
 
-def tokenize(text: str) -> List[str]:
+def tokenize(text: str, *, split_snake_case: bool = True) -> List[str]:
     """Tokenize text into lowercase alphanumeric words, splitting camelCase and snake_case.
 
     Args:
         text: Input string.
+        split_snake_case: Split underscores for lexical matching. Disable when
+            generating graph cues to preserve existing underscore-containing tags.
 
     Returns:
         List of cleaned, non-stopword tokens.
@@ -60,6 +62,8 @@ def tokenize(text: str) -> List[str]:
 
     # Split camelCase words: "neuroMemory" -> "neuro Memory"
     s1 = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", text)
+    if split_snake_case:
+        s1 = s1.replace("_", " ")
     # Replace non-alphanumeric characters with spaces
     s2 = re.sub(r"[^\w\s]", " ", s1)
     # Extract words
@@ -841,9 +845,11 @@ class SynapseEngine:
         # 1. Extract query tokens and tags
         query_tokens = tokenize(query)
         query_tf = compute_tf(query_tokens)
+        # Graph nodes retain their original tag identity, including underscores.
+        query_cues = tokenize(query, split_snake_case=False)
 
         # 2. CA3 Pattern Completion on query cues
-        completion = self.pattern_completion(query_tokens, max_expansions=5)
+        completion = self.pattern_completion(query_cues, max_expansions=5)
         completed_tags = set(completion.get("completed_tags", []))
         activation_scores = completion.get("activation_scores", {})
 
@@ -896,7 +902,7 @@ class SynapseEngine:
             final_score = base_score * imp_multiplier
 
             # Bonus for tag overlap
-            if any(t in query_tokens for t in mem.tags):
+            if any(t in query_cues for t in mem.tags):
                 final_score += 0.15
 
             if final_score >= min_score or (sim_score > 0.2):
@@ -932,7 +938,7 @@ class SynapseEngine:
 
             # Reinforce STDP co-activation
             if auto_reinforce_stdp and recalled_tags:
-                all_active_tags = list(recalled_tags.union(query_tokens))
+                all_active_tags = list(recalled_tags.union(query_cues))
                 self.record_coactivation(all_active_tags, timestamp=now)
 
         return top_results

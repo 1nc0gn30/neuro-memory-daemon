@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import time
 
+import pytest
+
 from neuro_memory_daemon.storage import MemoryRecord, StorageEngine
 from neuro_memory_daemon.synapse_engine import (
     DLPFCWorkingMemory,
@@ -26,6 +28,89 @@ def test_tokenize_and_tf():
     tf = compute_tf(tokens)
     assert len(tf) > 0
     assert all(v > 0 for v in tf.values())
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("database_cache", ["database", "cache"]),
+        ("__database__cache__", ["database", "cache"]),
+        ("neuroMemory_cache", ["neuro", "memory", "cache"]),
+        ("the_cache_123_x", ["cache"]),
+        ("café_記憶", ["café", "記憶"]),
+    ],
+)
+def test_tokenize_splits_snake_case(text, expected):
+    assert tokenize(text) == expected
+
+
+@pytest.mark.parametrize(
+    ("text", "query"),
+    [("database_cache", "database cache"), ("database cache", "database_cache")],
+)
+def test_recall_matches_snake_case_and_plain_words(synapse_engine, text, query):
+    se = synapse_engine
+    se.storage.save_memory(MemoryRecord(id="target", text=text))
+    se.storage.save_memory(MemoryRecord(id="unrelated", text="orchard harvest"))
+
+    result = se.recall(
+        query, top_k=1, auto_activate_working_memory=False, auto_reinforce_stdp=False
+    )[0]
+
+    assert result.memory.id == "target"
+    assert result.similarity_score == pytest.approx(1.0)
+
+
+def test_recall_preserves_snake_case_graph_cues(synapse_engine):
+    se = synapse_engine
+    se.storage.save_memory(
+        MemoryRecord(id="linked", text="Evict stale entries", tags=["invalidation"])
+    )
+    se.reinforce_synapse("database_cache", "invalidation", delta_t=0.0)
+
+    assert tokenize("database_cache", split_snake_case=False) == ["database_cache"]
+    result = se.recall(
+        "database_cache", auto_activate_working_memory=False, auto_reinforce_stdp=False
+    )[0]
+
+    assert result.synaptic_score > 0.0
+    assert result.association_path == ["invalidation"]
+
+
+def test_recall_preserves_exact_snake_case_tag_bonus(synapse_engine):
+    se = synapse_engine
+    se.storage.save_memory(
+        MemoryRecord(id="tagged", text="Cache settings", tags=["database_cache"])
+    )
+
+    result = se.recall(
+        "database_cache", auto_activate_working_memory=False, auto_reinforce_stdp=False
+    )[0]
+
+    assert result.synaptic_score == 1.0
+    assert result.association_path == ["database_cache"]
+    assert result.score == pytest.approx(
+        0.45 * result.similarity_score
+        + 0.20 * result.retention_score
+        + 0.20 * result.synaptic_score
+        + 0.15
+    )
+
+
+def test_recall_reinforces_original_snake_case_graph_node(synapse_engine):
+    se = synapse_engine
+    se.storage.save_memory(
+        MemoryRecord(id="linked", text="Evict stale entries", tags=["invalidation"])
+    )
+    initial_weight = se.reinforce_synapse("database_cache", "invalidation", delta_t=0.0)
+
+    se.recall("database_cache", auto_activate_working_memory=False)
+
+    synapse = se.storage.get_synapse("database_cache", "invalidation")
+    assert synapse is not None
+    assert synapse.weight > initial_weight
+    assert se.storage.get_synapse("database", "invalidation") is None
+    assert se.storage.get_synapse("cache", "invalidation") is None
 
 
 def test_sparse_cosine_similarity():
