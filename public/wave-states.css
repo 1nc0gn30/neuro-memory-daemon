@@ -1,0 +1,410 @@
+/* ============================================================
+   NEURO-MEMORY STUDIO — Wave States Layer (public/wave-states.css)
+   Anchor concept: Substrate Synaptic Luminescence.
+   State refinements:
+   - Visible, accessible focus system (:focus-visible with 2px gold rings)
+   - Micro-tactile hover feedback (140ms expo-out lifts & gold-glow boundaries)
+   - Diagnostic empty state presentation for dynamic ledgers and feeds
+   - High-salience crimson presentation for error and invalid states
+   - Complete prefers-reduced-motion safety invariant
+   - Strictly applies only to selectors existing in public/index.html
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. ACCESSIBLE :focus-visible SYSTEM
+   Crisp 2px gold focus indicators with 2px offsets.
+   ------------------------------------------------------------ */
+
+:focus-visible {
+  outline: 2px solid var(--zoth-gold, #D4AF37) !important;
+  outline-offset: 2px !important;
+}
+
+/* Form input, select & textarea focus-visible */
+.input-field:focus-visible,
+.select-field:focus-visible,
+.textarea-field:focus-visible,
+.quick-input-text:focus-visible,
+.quick-input-tags:focus-visible,
+.quick-select-cat:focus-visible,
+.pro-key-input:focus-visible {
+  outline: 2px solid var(--zoth-gold, #D4AF37) !important;
+  outline-offset: 1px !important;
+  border-color: var(--zoth-gold, #D4AF37) !important;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.22), 0 0 12px rgba(212, 175, 55, 0.15) !important;
+}
+
+/* Button & Action controls focus-visible */
+.btn:focus-visible,
+.btn-primary:focus-visible,
+.btn-tonal:focus-visible,
+.btn-outlined:focus-visible,
+.btn-icon:focus-visible,
+.btn-fire-pulse:focus-visible,
+.funnel-btn:focus-visible,
+.pro-stripe-btn:focus-visible,
+.pro-solana-btn:focus-visible,
+.pro-key-btn:focus-visible,
+.galaxy-nav-btn:focus-visible,
+.segmented-btn:focus-visible,
+.inspector-close-btn:focus-visible {
+  outline: 2px solid var(--zoth-gold-light, #F5E6AB) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.35), 0 0 14px rgba(212, 175, 55, 0.2) !important;
+}
+
+/* Tab bar focus-visible */
+.nav-tab:focus-visible {
+  outline: 2px solid var(--zoth-gold, #D4AF37) !important;
+  outline-offset: -2px !important;
+  color: var(--zoth-gold-light, #F5E6AB) !important;
+}
+
+/* Filter chips, tag badges & pro badge focus-visible */
+.filter-chip:focus-visible,
+.tag-badge:focus-visible,
+#pro-status-badge:focus-visible {
+  outline: 2px solid var(--zoth-gold-light, #F5E6AB) !important;
+  outline-offset: 1px !important;
+}
+
+/* ------------------------------------------------------------
+   2. REFINED TACTILE HOVER PRESENTATION
+   Micro-lifts (translateY -1px) and warm amber luminescence (140ms).
+   ------------------------------------------------------------ */
+
+/* Tactile transition timings */
+.btn,
+.btn-primary,
+.btn-tonal,
+.btn-outlined,
+.btn-icon,
+.btn-fire-pulse,
+.funnel-btn,
+.pro-stripe-btn,
+.pro-solana-btn,
+.pro-key-btn,
+.galaxy-nav-btn,
+.segmented-btn,
+.inspector-close-btn,
+.nav-tab,
+.filter-chip,
+.tag-badge,
+#pro-status-badge,
+.telemetry-card,
+.memory-card {
+  transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 140ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 140ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 140ms cubic-bezier(0.22, 1, 0.36, 1),
+              color 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Action button hovers */
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+}
+
+.btn-tonal:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  transform: translateY(-1px);
+}
+
+.btn-outlined:hover {
+  background-color: rgba(212, 175, 55, 0.08) !important;
+  border-color: var(--zoth-gold, #D4AF37) !important;
+  color: var(--zoth-gold-light, #F5E6AB) !important;
+  transform: translateY(-1px);
+}
+
+.btn-icon:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(212, 175, 55, 0.4) !important;
+  color: var(--zoth-gold-light, #F5E6AB) !important;
+  transform: translateY(-1px);
+}
+
+.btn-fire-pulse:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255, 170, 0, 0.45);
+}
+
+/* Sales Funnel Banner & Pro Modal button hovers */
+.funnel-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 12px rgba(212, 175, 55, 0.25);
+}
+
+.funnel-btn-stripe:hover {
+  box-shadow: 0 4px 18px rgba(99, 91, 255, 0.45);
+}
+
+.funnel-btn-solana:hover {
+  box-shadow: 0 4px 18px rgba(20, 241, 149, 0.35);
+}
+
+.funnel-btn-key:hover {
+  box-shadow: 0 4px 18px rgba(212, 175, 55, 0.35);
+}
+
+.pro-stripe-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(99, 91, 255, 0.4);
+}
+
+.pro-solana-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(20, 241, 149, 0.35);
+}
+
+.pro-key-btn:hover {
+  transform: translateY(-1px);
+  background-color: var(--zoth-gold-light, #F5E6AB) !important;
+  color: #08080B !important;
+}
+
+/* Nav & Filter Tabs / Chips Hovers */
+.nav-tab:hover {
+  color: var(--zoth-gold-light, #F5E6AB) !important;
+}
+
+.galaxy-nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(212, 175, 55, 0.4) !important;
+  color: #EDEFF2 !important;
+}
+
+.filter-chip:hover {
+  background-color: rgba(212, 175, 55, 0.12) !important;
+  border-color: rgba(212, 175, 55, 0.5) !important;
+  color: var(--zoth-gold-light, #F5E6AB) !important;
+}
+
+.tag-badge:hover {
+  cursor: pointer;
+  background-color: rgba(212, 175, 55, 0.14) !important;
+  border-color: var(--zoth-gold, #D4AF37) !important;
+  transform: translateY(-1px);
+}
+
+#pro-status-badge:hover {
+  background-color: rgba(212, 175, 55, 0.25) !important;
+  border-color: var(--zoth-gold, #D4AF37) !important;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Card Hovers */
+.telemetry-card:hover {
+  border-color: rgba(212, 175, 55, 0.35) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(212, 175, 55, 0.1) !important;
+  transform: translateY(-1px);
+}
+
+.memory-card:hover {
+  border-color: rgba(212, 175, 55, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(212, 175, 55, 0.08) !important;
+  transform: translateY(-1px);
+}
+
+.segmented-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #EDEFF2 !important;
+}
+
+.inspector-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(212, 175, 55, 0.4) !important;
+  color: var(--zoth-gold-light, #F5E6AB) !important;
+}
+
+/* ------------------------------------------------------------
+   3. EMPTY STATE PRESENTATION
+   Diagnostic dashed borders and monospaced empty state frames.
+   ------------------------------------------------------------ */
+
+#memory-stream-container:empty,
+#everywhere-feed:empty,
+#recall-results-container:empty {
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(212, 175, 55, 0.25);
+  border-radius: var(--radius-md, 12px);
+  background: rgba(18, 18, 26, 0.5);
+  color: var(--zoth-muted, #9AA0A6);
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  padding: 32px 20px;
+}
+
+#memory-stream-container:empty::before {
+  content: "◈ NO ENGRAMS IN STREAM";
+}
+
+#everywhere-feed:empty::before {
+  content: "◈ NO LEDGER RECORDS FOUND";
+}
+
+#recall-results-container:empty::before {
+  content: "⌕ AWAITING RECALL QUERY CUE";
+}
+
+#tag-cloud-container:empty {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--zoth-muted, #9AA0A6);
+}
+
+#tag-cloud-container:empty::before {
+  content: "No tags available";
+}
+
+#inspector-synapses-list:empty {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--zoth-muted, #9AA0A6);
+}
+
+#inspector-synapses-list:empty::before {
+  content: "No active synaptic projections";
+}
+
+#consolidation-report-content:empty {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  color: var(--zoth-muted, #9AA0A6);
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+}
+
+#consolidation-report-content:empty::before {
+  content: "Consolidation cycle pending trigger";
+}
+
+/* Empty message cards rendered dynamically inside containers */
+.stream-feed > div:only-child,
+#recall-results-container > div:only-child {
+  border: 1px dashed rgba(212, 175, 55, 0.25) !important;
+  background: rgba(18, 18, 26, 0.6) !important;
+  color: var(--zoth-muted, #9AA0A6) !important;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-md, 12px);
+  padding: 32px 20px !important;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------
+   4. ERROR & INVALID STATE PRESENTATION
+   High-contrast crimson indicators and validated form borders.
+   ------------------------------------------------------------ */
+
+/* Invalid form controls */
+.input-field:invalid:not(:placeholder-shown),
+.textarea-field:invalid:not(:placeholder-shown),
+.select-field:invalid:not(:placeholder-shown),
+.quick-input-text:invalid:not(:placeholder-shown),
+.quick-input-tags:invalid:not(:placeholder-shown),
+.pro-key-input:invalid:not(:placeholder-shown) {
+  border-color: #E24A4A !important;
+  box-shadow: 0 0 0 2px rgba(226, 74, 74, 0.25) !important;
+}
+
+.input-field:invalid:not(:placeholder-shown):focus-visible,
+.textarea-field:invalid:not(:placeholder-shown):focus-visible,
+.select-field:invalid:not(:placeholder-shown):focus-visible,
+.quick-input-text:invalid:not(:placeholder-shown):focus-visible,
+.quick-input-tags:invalid:not(:placeholder-shown):focus-visible,
+.pro-key-input:invalid:not(:placeholder-shown):focus-visible {
+  outline: 2px solid #E24A4A !important;
+  outline-offset: 1px !important;
+  border-color: #E24A4A !important;
+  box-shadow: 0 0 0 3px rgba(226, 74, 74, 0.35) !important;
+}
+
+/* Toast message baseline polish */
+.toast-msg {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Result cards with error status */
+#fb-result-card[data-status="error"] {
+  border-color: rgba(226, 74, 74, 0.5) !important;
+  background: rgba(226, 74, 74, 0.08) !important;
+}
+
+/* Offline / error status indicators */
+.status-pill.offline,
+.status-pill.error {
+  background-color: rgba(226, 74, 74, 0.15) !important;
+  color: #F28B82 !important;
+  border-color: rgba(226, 74, 74, 0.35) !important;
+}
+
+.status-indicator-dot.offline,
+.status-indicator-dot.error {
+  background-color: #E24A4A !important;
+  box-shadow: 0 0 8px rgba(226, 74, 74, 0.6) !important;
+}
+
+/* Error chip presentation */
+.chip-accent.error {
+  background-color: rgba(226, 74, 74, 0.18) !important;
+  color: #F28B82 !important;
+  border: 1px solid rgba(226, 74, 74, 0.35) !important;
+}
+
+/* ------------------------------------------------------------
+   5. PREFERS-REDUCED-MOTION SAFEGUARD
+   WCAG 2.2.2 / Motion-choreography compliance.
+   ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-tonal,
+  .btn-outlined,
+  .btn-icon,
+  .btn-fire-pulse,
+  .funnel-btn,
+  .pro-stripe-btn,
+  .pro-solana-btn,
+  .pro-key-btn,
+  .galaxy-nav-btn,
+  .segmented-btn,
+  .inspector-close-btn,
+  .nav-tab,
+  .filter-chip,
+  .tag-badge,
+  #pro-status-badge,
+  .telemetry-card,
+  .memory-card,
+  .toast-msg {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

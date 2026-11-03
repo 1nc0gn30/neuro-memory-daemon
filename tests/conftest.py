@@ -22,7 +22,7 @@ from neuro_memory_daemon.ui_server import start_server_in_thread, MemoryUIServer
 def temp_dir() -> Generator[Path, None, None]:
     """Provide a temporary directory that is automatically cleaned up."""
     with tempfile.TemporaryDirectory() as td:
-        yield Path(td)
+        yield Path(td).resolve()
 
 
 @pytest.fixture

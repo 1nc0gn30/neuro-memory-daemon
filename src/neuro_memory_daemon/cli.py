@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 neuro_memory_daemon.cli
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -77,8 +76,15 @@ class Color:
 _COLOR_ENABLED = True
 
 def _init_colors(no_color: bool = False) -> None:
-    """Configure terminal color output state."""
+    """Configure terminal color output state and ensure UTF-8 stdout/stderr."""
     global _COLOR_ENABLED
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if callable(reconfigure):
+            try:
+                reconfigure(encoding="utf-8", errors="replace")
+            except Exception:
+                pass
     if no_color or "NO_COLOR" in os.environ or not hasattr(sys.stdout, "isatty") or not sys.stdout.isatty():
         _COLOR_ENABLED = False
     else:

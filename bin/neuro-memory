@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# ZothOS Neuro-Memory Biological Substrate & Daemon CLI Wrapper
+# Engineered by 1nc0gn30 (@1nc0gn30) • NullAI Platform
+# ==============================================================================
+set -e
+
+REPO_DIR="/home/zoth/NullAITech/neuro-memory-daemon"
+[[ ! -d "$REPO_DIR" ]] && REPO_DIR="/opt/neuro-memory-daemon"
+PRIMARY_BIN="$REPO_DIR/bin/neuro-memory.js"
+
+if [[ -d "$REPO_DIR/src/neuro_memory_daemon" ]]; then
+    export PYTHONPATH="$REPO_DIR/src:${PYTHONPATH:-}"
+    exec python3 -m neuro_memory_daemon.cli "$@"
+elif [[ -x "$PRIMARY_BIN" ]]; then
+    exec "$PRIMARY_BIN" "$@"
+else
+    echo "Error: neuro-memory not found in $REPO_DIR" >&2
+    exit 1
+fi

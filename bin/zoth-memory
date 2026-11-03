@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Open the federated Zoth Memory ledger (Neuro-Memory Studio Everywhere tab).
+set -u
+URL="${ZOTH_MEMORY_URL:-http://127.0.0.1:8094/#everywhere}"
+HEALTH="http://127.0.0.1:8094/api/health"
+
+if command -v curl >/dev/null 2>&1; then
+  if ! curl -fsS --max-time 1 "$HEALTH" >/dev/null 2>&1; then
+    echo "Neuro-Memory daemon is not answering on 127.0.0.1:8094." >&2
+    echo "Start it with: sudo systemctl start neuro-memory" >&2
+  fi
+fi
+
+if command -v xdg-open >/dev/null 2>&1; then
+  exec xdg-open "$URL"
+fi
+
+echo "Open ${URL} in a browser."
+exit 0

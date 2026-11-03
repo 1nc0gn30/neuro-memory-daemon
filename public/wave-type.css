@@ -1,0 +1,142 @@
+/* ============================================================
+   NEURO-MEMORY STUDIO — Wave Typography Layer (public/wave-type.css)
+   Design Director Typography Polish:
+   1. Readable Measure: 48-72ch optimal reading line length on the
+      main cognitive work surfaces, inspection drawers, and narrative traces.
+   2. Tabular Numbers: font-variant-numeric: tabular-nums on all existing
+      scores, telemetry readouts, metrics, and price anchors ($19).
+   3. Clearer Heading Tracking: Crisp proportional tracking on display
+      headings and open tracking on monospaced uppercase eyebrows.
+   Strictly uses selectors that already exist in public/index.html.
+   Zero color changes, zero motion, zero JavaScript modifications.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. READABLE MEASURE ON THE MAIN WORK SURFACE
+   Prevents uncomfortably stretched line lengths on ultra-wide viewports
+   while maintaining fluid responsiveness.
+   ------------------------------------------------------------ */
+
+.memory-text {
+  max-width: 68ch;
+  line-height: 1.62;
+  letter-spacing: 0.005em;
+  text-rendering: optimizeLegibility;
+}
+
+.inspector-text-card {
+  max-width: 68ch;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+.sidebar-panel p {
+  max-width: 65ch;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+.content-card p {
+  max-width: 65ch;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+.brand-text p {
+  max-width: 58ch;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+}
+
+.funnel-headline {
+  max-width: 62ch;
+  line-height: 1.45;
+}
+
+.pro-card p {
+  max-width: 52ch;
+  line-height: 1.5;
+}
+
+.modal-dialog p {
+  max-width: 60ch;
+  line-height: 1.55;
+}
+
+/* ------------------------------------------------------------
+   2. TABULAR NUMBERS ON EXISTING SCORES AND PRICES
+   Ensures numeric glyphs align cleanly across columns, cards,
+   and dynamic real-time telemetry feeds.
+   ------------------------------------------------------------ */
+
+.price-strikethrough,
+.price-deal,
+.funnel-pricing,
+.pro-stripe-btn,
+.pro-solana-btn,
+.card-value,
+.telemetry-card .card-value,
+.hud-stat-val,
+.source-count,
+.memory-meta-row,
+#stat-category-count,
+#stat-synapse-density,
+#nm-ne-val,
+#nm-da-val,
+#nm-ach-val,
+#nm-5ht-val,
+#yd-complexity-display,
+#yd-efficiency-badge,
+#yd-optimal-arousal,
+#fb-salience-val,
+#stdp-dt-val,
+#stdp-w-val,
+#stdp-calc-result,
+#inspector-access,
+#inspector-importance,
+#importance-val,
+.badge,
+.status-pill {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* ------------------------------------------------------------
+   3. SLIGHTLY CLEARER HEADING TRACKING
+   Tighter tracking for large display headings to improve visual
+   cohesion; balanced letter-spacing for subheadings; open
+   tracking for uppercase label eyebrows.
+   ------------------------------------------------------------ */
+
+h1,
+.brand-text h1 {
+  letter-spacing: -0.022em;
+  font-weight: 700;
+}
+
+h2,
+.modal-title,
+.pro-card h2 {
+  letter-spacing: -0.018em;
+  font-weight: 600;
+}
+
+h3,
+.content-card h3,
+.panel-title,
+.inspector-title {
+  letter-spacing: -0.012em;
+  font-weight: 600;
+}
+
+.funnel-headline {
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+/* Eyebrows & uppercase metadata labels */
+.card-header-sub,
+.funnel-badge,
+.filter-label {
+  letter-spacing: 0.1em;
+}

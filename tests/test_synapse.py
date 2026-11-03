@@ -160,3 +160,20 @@ def test_unified_cognitive_recall(synapse_engine: SynapseEngine, sample_records:
     assert top_result.memory.id == "mem-1"
     assert top_result.score > 0.1
     assert "sqlite" in top_result.memory.tags
+
+
+def test_simulate_spreading_activation(synapse_engine: SynapseEngine, sample_records: list[MemoryRecord]):
+    """Test spreading activation cascade across synaptic graph."""
+    se = synapse_engine
+    for r in sample_records:
+        se.storage.save_memory(r)
+
+    se.reinforce_synapse("sqlite", "wal", delta_t=0.0)
+    se.reinforce_synapse("wal", "concurrency", delta_t=0.0)
+
+    cascade = se.simulate_spreading_activation("sqlite", decay=0.8, threshold=0.05, max_hops=3)
+    assert cascade["seed"] == "sqlite"
+    assert cascade["total_activated_nodes"] >= 2
+    assert len(cascade["activated_edges"]) >= 1
+    assert len(cascade["cascade_sequence"]) >= 1
+

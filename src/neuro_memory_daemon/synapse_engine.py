@@ -397,6 +397,133 @@ class SynapseEngine:
         results.sort(key=lambda x: x[1], reverse=True)
         return results
 
+    def simulate_spreading_activation(
+        self,
+        seed: str,
+        decay: float = 0.75,
+        threshold: float = 0.1,
+        max_hops: int = 3,
+        auto_reinforce: bool = True,
+    ) -> Dict[str, Any]:
+        """Simulate biological spreading activation cascade originating from a seed memory or concept tag.
+
+        Models action potential propagation across synaptic filaments with exponential decay,
+        STDP plasticity reinforcement, and cascade sequence capture.
+
+        Args:
+            seed: Memory ID (e.g. 'mem_...' or UUID) or concept tag (e.g. 'sqlite').
+            decay: Hop-wise energy attenuation factor (0.0 to 1.0, default 0.75).
+            threshold: Minimum activation energy required to propagate further (default 0.1).
+            max_hops: Maximum synaptic graph traversal depth (default 3).
+            auto_reinforce: Whether to reinforce traversed synapses via STDP.
+
+        Returns:
+            Dictionary containing seed, activated nodes, activated edges, cascade sequence,
+            and aggregate metrics for 3D visualization.
+        """
+        raw_seed = str(seed).strip()
+        clean_seed = raw_seed.lower()
+
+        # Check if seed is a memory record in storage
+        clean_id = raw_seed[4:] if raw_seed.startswith("mem_") else raw_seed
+        mem = self.storage.get_memory(clean_id) or self.storage.get_memory(raw_seed)
+
+        start_nodes: List[Tuple[str, str, float]] = []
+        if mem:
+            start_nodes.append((f"mem_{mem.id}", mem.text[:50], 1.0))
+            for t in mem.tags:
+                start_nodes.append((f"tag_{t.lower()}", f"#{t}", 0.95))
+        else:
+            tag_name = clean_seed.lstrip("#")
+            start_nodes.append((f"tag_{tag_name}", f"#{tag_name}", 1.0))
+
+        activated_nodes: Dict[str, Dict[str, Any]] = {}
+        activated_edges: List[Dict[str, Any]] = []
+        cascade_sequence: List[Dict[str, Any]] = []
+        seen_edge_pairs: Set[Tuple[str, str]] = set()
+
+        frontier: List[Tuple[str, float, int]] = []
+        for n_id, n_label, n_act in start_nodes:
+            activated_nodes[n_id] = {
+                "id": n_id,
+                "label": n_label,
+                "type": "memory" if n_id.startswith("mem_") else "tag",
+                "activation": round(n_act, 4),
+                "hop": 0,
+            }
+            frontier.append((n_id, n_act, 0))
+
+        while frontier:
+            curr_id, curr_act, hop = frontier.pop(0)
+            if hop >= max_hops:
+                continue
+
+            raw_node = curr_id.replace("tag_", "").replace("mem_", "")
+            synapses = self.storage.get_synapses_for_node(raw_node, min_weight=0.01)
+
+            for syn in synapses:
+                tgt_raw = syn.target if syn.source.lower() == raw_node.lower() else syn.source
+                neighbor_id = f"tag_{tgt_raw}" if syn.synapse_type == "tag_tag" else tgt_raw
+                if not neighbor_id.startswith("tag_") and not neighbor_id.startswith("mem_"):
+                    neighbor_id = f"tag_{neighbor_id}"
+
+                if neighbor_id == curr_id:
+                    continue
+
+                transmitted_energy = curr_act * float(syn.weight) * decay
+                if transmitted_energy >= threshold:
+                    edge_key = (min(curr_id, neighbor_id), max(curr_id, neighbor_id))
+                    if edge_key not in seen_edge_pairs:
+                        seen_edge_pairs.add(edge_key)
+                        edge_info = {
+                            "source": curr_id,
+                            "target": neighbor_id,
+                            "weight": round(float(syn.weight), 4),
+                            "pulse_intensity": round(min(1.0, transmitted_energy * 1.5), 4),
+                            "hop": hop + 1,
+                        }
+                        activated_edges.append(edge_info)
+
+                    cascade_sequence.append({
+                        "hop": hop + 1,
+                        "source": curr_id,
+                        "target": neighbor_id,
+                        "energy": round(transmitted_energy, 4),
+                        "weight": round(float(syn.weight), 4),
+                    })
+
+                    if neighbor_id not in activated_nodes or transmitted_energy > activated_nodes[neighbor_id]["activation"]:
+                        label = f"#{tgt_raw}"
+                        activated_nodes[neighbor_id] = {
+                            "id": neighbor_id,
+                            "label": label,
+                            "type": "tag" if neighbor_id.startswith("tag_") else "memory",
+                            "activation": round(transmitted_energy, 4),
+                            "hop": hop + 1,
+                        }
+                        frontier.append((neighbor_id, transmitted_energy, hop + 1))
+
+                    if auto_reinforce:
+                        self.reinforce_synapse(
+                            node_a=syn.source,
+                            node_b=syn.target,
+                            delta_t=0.0,
+                            synapse_type=syn.synapse_type,
+                        )
+
+        return {
+            "seed": raw_seed,
+            "max_hops": max_hops,
+            "decay": decay,
+            "threshold": threshold,
+            "activated_nodes": list(activated_nodes.values()),
+            "activated_edges": activated_edges,
+            "cascade_sequence": cascade_sequence,
+            "total_activated_nodes": len(activated_nodes),
+            "total_activated_edges": len(activated_edges),
+            "timestamp": time.time(),
+        }
+
     def decay_synapses(
         self,
         current_time: Optional[float] = None,

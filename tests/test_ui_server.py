@@ -142,6 +142,22 @@ def test_ui_server_crud_and_recall(live_server: tuple[MemoryUIServer, str, Memor
     # 5. Trigger synapse (POST /api/memories/<id>/trigger)
     status_trig, _, body_trig = _http_post(f"{base_url}/api/memories/{mem_id}/trigger", {})
     assert status_trig == 200
+    trig_resp = json.loads(body_trig.decode("utf-8"))
+    assert trig_resp["status"] == "triggered"
+    assert "cascade" in trig_resp
+
+    # 5b. Direct /api/trigger with memory ingestion and spreading activation
+    status_trig2, _, body_trig2 = _http_post(f"{base_url}/api/trigger", {
+        "text": "Antigravity subagent triggered neural pulse in CA3 network",
+        "tags": ["antigravity", "ca3", "pulse"],
+        "max_hops": 2,
+    })
+    assert status_trig2 == 200
+    trig2_resp = json.loads(body_trig2.decode("utf-8"))
+    assert trig2_resp["status"] == "triggered"
+    assert "cascade" in trig2_resp
+    assert trig2_resp["cascade"]["total_activated_nodes"] >= 1
+
 
     # 6. Graph (GET /api/graph)
     status_g, _, body_g = _http_get(f"{base_url}/api/graph?format=json")
