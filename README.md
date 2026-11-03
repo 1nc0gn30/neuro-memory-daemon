@@ -259,12 +259,12 @@ Add to `claude_desktop_config.json`:
       "command": "/opt/zothos-ai-env/bin/python",
       "args": ["-m", "neuro_memory_daemon.mcp_server"],
       "env": {
-        "PYTHONPATH": "/home/zoth/NullAITech/neuro-memory-daemon/src"
+        "PYTHONPATH": "~/NullAITech/neuro-memory-daemon/src"
       }
     },
     "vaelor-l1": {
       "command": "node",
-      "args": ["/home/zoth/NullAITech/vaelor-network/src/mcp/vaelor_mcp.js"]
+      "args": ["~/NullAITech/vaelor-network/src/mcp/vaelor_mcp.js"]
     }
   }
 }
@@ -279,12 +279,12 @@ Add to `.cursor/mcp.json`:
       "command": "/opt/zothos-ai-env/bin/python",
       "args": ["-m", "neuro_memory_daemon.mcp_server"],
       "env": {
-        "PYTHONPATH": "/home/zoth/NullAITech/neuro-memory-daemon/src"
+        "PYTHONPATH": "~/NullAITech/neuro-memory-daemon/src"
       }
     },
     "vaelor-l1": {
       "command": "node",
-      "args": ["/home/zoth/NullAITech/vaelor-network/src/mcp/vaelor_mcp.js"]
+      "args": ["~/NullAITech/vaelor-network/src/mcp/vaelor_mcp.js"]
     }
   }
 }
@@ -308,7 +308,7 @@ Add to `~/.hermes/config.yaml`:
 ```yaml
 mcp_servers:
   - name: neuro-memory
-    command: /home/zoth/.local/bin/neuro-memory
+    command: ~/.local/bin/neuro-memory
     args: ["mcp"]
 ```
 
@@ -316,7 +316,7 @@ mcp_servers:
 
 ## 💎 Obsidian Second Brain Integration
 
-The daemon serves as the real-time cognitive coprocessor for 1nc0gn30's Obsidian Second Brain vault (`/home/zoth/Documents/Obsidian Vault/`), enforcing strict adherence to official `@kepano` Obsidian specifications:
+The daemon serves as the real-time cognitive coprocessor for 1nc0gn30's Obsidian Second Brain vault (`~/Documents/Obsidian Vault/`), enforcing strict adherence to official `@kepano` Obsidian specifications:
 - **Obsidian Flavored Markdown (OFM)**: Native wikilinks (`[[Note Name]]`), section anchors (`[[Note#Heading]]`), callouts (`> [!NOTE]`), and frontmatter properties (1,733 indexed notes).
 - **JSON Canvas 1.0 (`.canvas`)**: Strict JSON node and edge coordinate schemas (18 verified canvases in vault).
 - **Obsidian Bases (`.base`)**: Structured database schemas with YAML frontmatter, custom filters, and computed formulas (20 verified bases in vault).

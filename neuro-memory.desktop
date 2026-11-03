@@ -4,8 +4,8 @@ Type=Application
 Name=Zoth Memory
 GenericName=Everywhere memory ledger
 Comment=See Grok, Hermes, Zoth Bot, AGY, and Neuro substrate memories on this laptop
-Exec=/home/zoth/.local/bin/zoth-memory
-Icon=/home/zoth/NullAITech/neuro-memory-daemon/assets/icon.png
+Exec=~/.local/bin/zoth-memory
+Icon=~/NullAITech/neuro-memory-daemon/assets/icon.png
 Terminal=false
 Categories=Utility;X-ZothOS-AI;
 Keywords=memory;everywhere;neuro;grok;hermes;zoth;agy;
@@ -14,7 +14,7 @@ Actions=Everywhere;Stream;Graph;
 
 [Desktop Action Everywhere]
 Name=Everywhere ledger
-Exec=/home/zoth/.local/bin/zoth-memory
+Exec=~/.local/bin/zoth-memory
 
 [Desktop Action Stream]
 Name=Memory Stream

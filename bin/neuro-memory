@@ -5,7 +5,7 @@
 # ==============================================================================
 set -e
 
-REPO_DIR="/home/zoth/NullAITech/neuro-memory-daemon"
+REPO_DIR="~/NullAITech/neuro-memory-daemon"
 [[ ! -d "$REPO_DIR" ]] && REPO_DIR="/opt/neuro-memory-daemon"
 PRIMARY_BIN="$REPO_DIR/bin/neuro-memory.js"
 

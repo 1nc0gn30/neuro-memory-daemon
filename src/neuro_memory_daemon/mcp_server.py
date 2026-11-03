@@ -422,7 +422,7 @@ class MCPServer:
             name="obsidian_wiki_synthesize",
             description=(
                 "Synthesizes or retrieves a canonical Karpathy LLM Wiki article in "
-                "/home/zoth/Documents/Obsidian Vault/06-Wiki/<Topic>.md, formatted with Obsidian Flavored "
+                "~/Documents/Obsidian Vault/06-Wiki/<Topic>.md, formatted with Obsidian Flavored "
                 "Markdown, YAML frontmatter, executive callouts, and bidirectional wikilinks."
             ),
             input_schema={
@@ -443,7 +443,7 @@ class MCPServer:
             name="obsidian_canvas_generate",
             description=(
                 "Procedurally generates a JSON Canvas 1.0 (.canvas) visual knowledge map in "
-                "/home/zoth/Documents/Obsidian Vault/ and returns its nodes/edges summary."
+                "~/Documents/Obsidian Vault/ and returns its nodes/edges summary."
             ),
             input_schema={
                 "type": "object",
@@ -1328,7 +1328,7 @@ health_score: 100
         # If bundle doesn't exist or re-compile is requested
         if not bundle_file.exists() or args.get("refresh", True) is False:
             try:
-                script_path = Path("/home/zoth/NullAITech/zoth-os/bin/zoth-second-brain")
+                script_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain")
                 if script_path.exists() and os.access(script_path, os.X_OK):
                     subprocess.run([str(script_path), "bundle"], capture_output=True, timeout=15)
             except Exception:
@@ -1572,7 +1572,7 @@ health_score: 100
                     "task": task_type,
                     "miner": miner,
                     "timestamp": datetime.now(timezone.utc).isoformat(),
-                    "vaultStratum": "/home/zoth/Documents/Obsidian Vault",
+                    "vaultStratum": "~/Documents/Obsidian Vault",
                     "stdpState": "VERIFIED_ACTIVE"
                 })
             }

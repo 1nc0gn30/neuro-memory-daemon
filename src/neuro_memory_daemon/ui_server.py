@@ -1530,7 +1530,7 @@ health_score: 100
             bundle_file = vault_dir / "05-Telemetry" / "second_brain_bundle.json"
             if not bundle_file.exists():
                 try:
-                    script_path = Path("/home/zoth/NullAITech/zoth-os/bin/zoth-second-brain")
+                    script_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain")
                     if script_path.exists() and os.access(script_path, os.X_OK):
                         subprocess.run([str(script_path), "bundle"], capture_output=True, timeout=10)
                 except Exception:
@@ -1993,7 +1993,7 @@ health_score: 100
                 self._send_json({"error": "Topic is required in JSON body: {\"topic\": \"...\"}"}, status=400)
                 return
 
-            cli_path = Path("/home/zoth/NullAITech/zoth-os/bin/zoth-second-brain")
+            cli_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain")
             vault_dir = Path.home() / "Documents" / "Obsidian Vault"
             wiki_dir = vault_dir / "06-Wiki"
             wiki_dir.mkdir(parents=True, exist_ok=True)
@@ -2039,7 +2039,7 @@ health_score: 100
                 self._send_json({"error": "Topic is required in JSON body: {\"topic\": \"...\"}"}, status=400)
                 return
 
-            cli_path = Path("/home/zoth/NullAITech/zoth-os/bin/zoth-second-brain")
+            cli_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain")
             vault_dir = Path.home() / "Documents" / "Obsidian Vault"
             vault_dir.mkdir(parents=True, exist_ok=True)
 
@@ -2181,7 +2181,7 @@ health_score: 100
             telemetry_dir.mkdir(parents=True, exist_ok=True)
 
             cmd_output = ""
-            script_path = Path("/home/zoth/NullAITech/zoth-os/bin/zoth-second-brain")
+            script_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain")
             if script_path.exists() and os.access(script_path, os.X_OK):
                 try:
                     proc = subprocess.run(
@@ -2422,7 +2422,7 @@ health_score: 100
                     "task": task_type,
                     "miner": miner,
                     "timestamp": datetime.now(timezone.utc).isoformat(),
-                    "vaultStratum": "/home/zoth/Documents/Obsidian Vault",
+                    "vaultStratum": "~/Documents/Obsidian Vault",
                     "stdpState": "VERIFIED_ACTIVE"
                 })
             }
