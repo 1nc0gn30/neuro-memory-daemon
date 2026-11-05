@@ -7370,7 +7370,23 @@ curl -X POST http://127.0.0.1:8788/api/recall \
   <footer class="zoth-brand-footer" style="padding:24px; text-align:center; font-size:12px; color:var(--zoth-muted, #9AA0A6); border-top:1px solid var(--zoth-border, #2A2A33); background:var(--zoth-void, #08080B);">
     <div>Engineered by 1nc0gn30 • NullAI (<a href="https://github.com/1nc0gn30/neuro-memory-daemon" target="_blank" rel="noopener" style="color:var(--zoth-gold, #D4AF37); text-decoration:none;">@1nc0gn30</a>) &bull; <a href="https://nullai.tech" target="_blank" rel="noopener" style="color:var(--zoth-gold, #D4AF37); text-decoration:none;">NullAI Platform</a></div>
   </footer>
-  <script src="/assets/sovereign-upgrade.js" defer></script>
+  
+
+  <script src="/sovereign_tutorial.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function() {
+      if (window.createSovereignTutorial) {
+        window.createSovereignTutorial({
+          toolId: "neuro-memory-daemon",
+          toolName: "Neuro-Memory Daemon",
+          tagline: "Brain-inspired memory vector engine with synaptic learning for AI agents!",
+          accentColor: "#6366F1",
+          steps: [{"icon": "\ud83e\udde0", "title": "How Human Memory Works", "desc": "Our brains strengthen memories that are useful (LTP) and forget things we don't need (LTD). This tool gives AI agents that exact same superpower!"}, {"icon": "\ud83c\udf0c", "title": "3D Cosmic Memory Nebula", "desc": "Fly through a 3D galaxy of memories to see how thoughts cluster and link together."}, {"icon": "\ud83d\udd04", "title": "Cross-Session Recall", "desc": "Lets your coding agents remember your project rules tomorrow without starting over from scratch."}]
+        });
+      }
+    });
+  </script>
+
 </body>
 </html>
 
