@@ -2039,7 +2039,7 @@ health_score: 100
                 self._send_json({"error": "Topic is required in JSON body: {\"topic\": \"...\"}"}, status=400)
                 return
 
-            cli_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain")
+            cli_path = Path.home() / "NullAITech" / "zoth-os" / "bin" / "zoth-second-brain"
             vault_dir = Path.home() / "Documents" / "Obsidian Vault"
             vault_dir.mkdir(parents=True, exist_ok=True)
 
@@ -2058,6 +2058,63 @@ health_score: 100
                     if clean_name.lower() in p.stem.lower():
                         target_file = p
                         break
+
+            if not target_file.exists():
+                now_ts = int(time.time())
+                fallback_canvas = {
+                    "nodes": [
+                        {
+                            "id": f"node_{now_ts}_0",
+                            "type": "text",
+                            "text": f"# ▣ {clean_name} Knowledge Map\n\nProcedurally synthesized by Neuro-Memory Engine.\nConnected to [[00 Home]] · [[Zoth Memory]].",
+                            "x": 0,
+                            "y": 0,
+                            "width": 380,
+                            "height": 220,
+                            "color": "1"
+                        },
+                        {
+                            "id": f"node_{now_ts}_1",
+                            "type": "text",
+                            "text": f"## ⚡ Primary Substrate\n- **Domain:** {clean_name}\n- **Engine:** STDP Synaptic Substrate (:8094)\n- **Consensus:** Quorum Attested",
+                            "x": 480,
+                            "y": -120,
+                            "width": 320,
+                            "height": 180,
+                            "color": "4"
+                        },
+                        {
+                            "id": f"node_{now_ts}_2",
+                            "type": "text",
+                            "text": f"## 📚 Second Brain References\n- [[00 Home]]\n- [[Zoth Memory]]\n- [[06-Wiki/{clean_name}]]",
+                            "x": 480,
+                            "y": 140,
+                            "width": 320,
+                            "height": 180,
+                            "color": "6"
+                        }
+                    ],
+                    "edges": [
+                        {
+                            "id": f"edge_{now_ts}_0",
+                            "fromNode": f"node_{now_ts}_0",
+                            "fromSide": "right",
+                            "toNode": f"node_{now_ts}_1",
+                            "toSide": "left",
+                            "label": "subsystems"
+                        },
+                        {
+                            "id": f"edge_{now_ts}_1",
+                            "fromNode": f"node_{now_ts}_0",
+                            "fromSide": "right",
+                            "toNode": f"node_{now_ts}_2",
+                            "toSide": "left",
+                            "label": "cross-references"
+                        }
+                    ]
+                }
+                target_file = vault_dir / f"{clean_name} Knowledge Map.canvas"
+                target_file.write_text(json.dumps(fallback_canvas, indent=2), encoding="utf-8")
 
             if target_file.exists():
                 try:
@@ -2238,7 +2295,23 @@ health_score: 100
                     if end > start:
                         existing_second_brain_nodes[node.text[start:end]] = node
 
-            for moc_name in ("00 Home.md", "Zoth Memory.md", "Zoth Studio.md", "Zoth OS.md", "Vaelor Network.md", "MOC Skills.md", "MOC Daemons.md", "Zoth Trust & Supply Chain.md"):
+            for moc_name in (
+                "00 Home.md",
+                "Zoth Memory.md",
+                "Zoth Studio.md",
+                "Zoth OS.md",
+                "ZothOS-Lite Web Desktop.md",
+                "Zoth Civilization & Pantheon 21.md",
+                "Adytum 22 Tarot 3D Engine.md",
+                "1nc0gn30 Sovereign Hub.md",
+                "30 Days of Linux Fundamentals.md",
+                "Public Surfaces.md",
+                "Repo vs Live OS.md",
+                "Vaelor Network.md",
+                "MOC Skills.md",
+                "MOC Daemons.md",
+                "Zoth Trust & Supply Chain.md",
+            ):
                 moc_file = vault_dir / moc_name
                 if moc_file.exists():
                     snippet = safe_read_text(moc_file)[:280].replace("\n", " ").strip()
