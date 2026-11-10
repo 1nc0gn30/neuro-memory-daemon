@@ -4,7 +4,7 @@
    1. Readable Measure: 48-72ch optimal reading line length on the
       main cognitive work surfaces, inspection drawers, and narrative traces.
    2. Tabular Numbers: font-variant-numeric: tabular-nums on all existing
-      scores, telemetry readouts, metrics, and price anchors ($19).
+      scores, telemetry readouts, metrics, and metric anchors.
    3. Clearer Heading Tracking: Crisp proportional tracking on display
       headings and open tracking on monospaced uppercase eyebrows.
    Strictly uses selectors that already exist in public/index.html.

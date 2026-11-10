@@ -448,7 +448,7 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
                     if fname == "pillar_label":
                         val = row_props.get("pillar") or "Pillar IV: AST Verification"
                     elif fname == "monetized_badge":
-                        val = "💎 Monetized ($19/$79)" if row_props.get("monetized") is True else "⚡ Free / Open"
+                        val = "☕ Voluntary Tips" if row_props.get("monetized") is True else "⚡ Free / Open"
                     elif fname == "runs_badge":
                         r = row_props.get("runs")
                         val = "🌐 Pure In-Browser" if r == "browser" else ("🟢 Node / Local" if r == "node" else "💻 System CLI")
@@ -456,7 +456,7 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
                         st = str(row_props.get("status", "")).lower()
                         val = "🟢 Active" if st in ("active", "canonical") else ("🟡 Standby" if st == "standby" else "⚪ Autonomous")
                     elif fname == "price_label":
-                        val = str(row_props.get("price") or "$19")
+                        val = str(row_props.get("price") or "Free")
                     elif fname == "live_link":
                         val = row_props.get("live") or row_props.get("github") or ""
                     elif fname == "confidence_pct":
