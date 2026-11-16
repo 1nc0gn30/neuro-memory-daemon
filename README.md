@@ -124,3 +124,24 @@ gitleaks detect --source . --no-banner --redact
 - **Solana Tip Address**: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK` (`solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`)
 
 Engineered by **Neal Frazier Tech** ([@1nc0gn30](https://github.com/1nc0gn30) · [https://github.com/1nc0gn30/neuro-memory-daemon](https://github.com/1nc0gn30/neuro-memory-daemon)) · [NullAI Platform](https://nullai.tech) · [Zoth Studio](https://zoth.nullai.tech)
+
+## Sovereign Surfaces
+
+_Machine-generated surface inventory (docs/tools/layerD_probe.py). Do not hand-edit; re-run the probe instead.
+
+**What it does.** Neuro-Memory Daemon — 🧠 Neuro-Memory Daemon: Cognitive Associative Substrate & MCP Protocol Bridge
+
+**Category.** Memory & Brain  ·  **Version.** 2.8.0  ·  **Execution type.** `local_cli`
+
+**Architecture & port.** Canonical source: `~/NullAITech/neuro-memory-daemon`. Assigned `localPort` **8094** (`http://127.0.0.1:8094`).
+
+**ZothOS CLI usage.**
+
+```bash
+neuro-memory-daemon --help     # exit 0
+neuro-memory-daemon --json     # exit 0
+```
+
+**Zoth Studio route.** https://zoth.nullai.tech/tools/neuro-memory-daemon
+
+_Verified 2026-11-15 across the three install surfaces (`/usr/local/bin`, `~/.local/bin`, `zoth-os/config/includes.chroot/usr/local/bin`)._
