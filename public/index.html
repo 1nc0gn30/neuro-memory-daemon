@@ -26,7 +26,7 @@
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebApplication",
+        "@type": ["WebApplication", "SoftwareApplication"],
         "@id": "https://neuro-memory.nullai.tech/#app",
         "name": "Neuro-Memory Daemon — 3D Cosmic Neural Substrate",
         "url": "https://neuro-memory.nullai.tech",
@@ -1499,124 +1499,6 @@
       color: #9AA0A6;
     }
 
-    /* Pro Paywall Modal */
-    .pro-modal-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-    .pro-modal-backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .pro-card {
-      background: linear-gradient(135deg, #12121A, #08080B);
-      border: 1px solid rgba(212, 175, 55, 0.45);
-      border-radius: var(--radius-xl);
-      padding: 32px;
-      max-width: 520px;
-      width: 90%;
-      box-shadow: 0 12px 48px rgba(0,0,0,0.8), 0 0 24px rgba(212, 175, 55, 0.15);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    .pro-card h2 {
-      font-family: var(--zoth-font-display, Georgia, serif);
-      color: #D4AF37;
-      font-size: 24px;
-    }
-    .pro-perks-list {
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-size: 13px;
-      color: #EDEFF2;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 16px;
-      border-radius: var(--radius-md);
-      border: 1px solid #2A2A33;
-    }
-    .pro-perk-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .pro-perk-icon { color: #10B981; }
-    .pro-actions-col {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .pro-stripe-btn {
-      background: linear-gradient(135deg, #635BFF, #4840D6);
-      color: #ffffff;
-      padding: 12px;
-      border-radius: var(--radius-md);
-      font-weight: 700;
-      text-decoration: none;
-      display: block;
-      box-shadow: 0 4px 16px rgba(99, 91, 255, 0.4);
-    }
-    .pro-solana-btn {
-      background: linear-gradient(135deg, #14F195, #9945FF);
-      color: #08080B;
-      padding: 12px;
-      border-radius: var(--radius-md);
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-    }
-    .pro-key-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .pro-key-input {
-      flex: 1;
-      background: #08080B;
-      border: 1px solid #2A2A33;
-      border-radius: var(--radius-sm);
-      padding: 8px 12px;
-      color: #EDEFF2;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      outline: none;
-    }
-    .pro-key-btn {
-      background: rgba(212, 175, 55, 0.2);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      color: #F5E6AB;
-      border-radius: var(--radius-sm);
-      padding: 8px 14px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .pro-badge-active {
-      background: rgba(212, 175, 55, 0.2);
-      color: #FFD700;
-      border: 1px solid #D4AF37;
-      padding: 4px 10px;
-      border-radius: var(--radius-full);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
     /* ========================================================= */
     /* Wave 9: Obsidian Second Brain Doctor & Karpathy LLM Wiki  */
     /* ========================================================= */
@@ -1875,38 +1757,6 @@
   <link rel="stylesheet" href="zoth-theme.css">
   <link rel="stylesheet" href="wave.css">
   <link rel="stylesheet" href="wave-states.css">
-
-  <!-- Zoth 100% Open-Access & Buy Us a Coffee Invariant -->
-  <script id="zoth-open-access-init">
-    (function() {
-      try {
-        var keys = ['agent_audiocipher_pro', 'agent_cyber_turtle_pro', 'agent_datamosh_pro', 'agent_nexus3d_pro', 'agent_policy_pro', 'audiocipher_license', 'audiocipher_pro_licensed', 'badge3d_pro_licensed', 'certpath_pro_key', 'certpath_pro_licensed', 'cron_rhythm_pro_key', 'cron_rhythm_pro_licensed', 'cwv-speed-engine_pro_licensed', 'cwv_pro_licensed', 'cyber_turtle_pro_licensed', 'datamosh_pro_licensed', 'deepsearch-research-agent_pro_licensed', 'deepsearch_pro_licensed', 'entropy_studio_licensed', 'envguard-secrets-vault_pro_licensed', 'envguard_pro_license', 'etsy_connector_pro', 'jwt_guard_licensed', 'mdg_pro_licensed', 'neuro_pro_licensed', 'nexus3d_pro_licensed', 'omnipost_pro_key', 'omnipost_pro_licensed', 'osint_pro_licensed', 'payload-entropy-studio_pro_licensed', 'polyglot_pro_licensed', 'pro_licensed', 'promptmaster_pro_licensed', 'promptmaster_pro_active', 'robots-txt-auditor_pro_licensed', 'robots_pro_licensed', 'schema_illustrator_pro_licensed', 'sovereign_pro_licensed', 'subsweep-lead-scanner_pro_licensed', 'subsweep_licensed', 'turtle_pro_licensed', 'ufo_sacred_licensed', 'vector-search-engine_pro_licensed', 'vector_studio_pro_licensed', 'web-security-guard_pro_licensed', 'web_security_guard_licensed', 'yourdigitalspace_pro', 'zela_guide_pro_licensed', 'zoth_ascii_magic_pro', 'zoth_audiocipher_licensed', 'zoth_badge3d_licensed', 'zoth_cyber_turtle_licensed', 'zoth_datamosh_licensed', 'zoth_etsy_licensed', 'zoth_nexus3d_licensed', 'zoth_osint_licensed', 'zoth_policy_licensed', 'zoth_sacred_licensed', 'zoth_ufo_licensed'];
-        for (var i = 0; i < keys.length; i++) {
-          localStorage.setItem(keys[i], 'true');
-        }
-        localStorage.setItem('pm_license_v2', JSON.stringify({ method: 'open_access', ref: 'free_forever', at: '2026-01-01T00:00:00Z' }));
-        window.isPro = true;
-        window.isProLicensed = true;
-      } catch (e) {}
-    })();
-  </script>
-  <style id="zoth-open-access-override">
-    .paywall-overlay, .output-paywall-overlay, #outputPaywallOverlay, #schemaPaywallOverlay,
-    #transformerPaywallOverlay, #proPaywallModal, #pro-modal, .pro-modal-backdrop, #licenseModal, #salesBanner, #founding-offer-banner,
-    #funnelHeroBanner, [data-alias="paywallOverlay"], [data-alias="founding-offer-banner"] {
-      display: none !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-    .paywall-wrap #outputPreview, .paywall-wrap #reportContentArea, .paywall-content,
-    .paywall-content.locked, .paywall-wrap.is-locked #outputPreview, .paywall-wrap.locked #outputPreview {
-      filter: none !important;
-      -webkit-filter: none !important;
-      user-select: auto !important;
-      pointer-events: auto !important;
-    }
-  </style>
-
 </head>
 <body data-theme="dark">
 
@@ -1927,7 +1777,7 @@
     </div>
 
     <div class="app-bar-actions">
-      <span id="pro-status-badge" class="badge-tag" style="background:rgba(212,175,55,0.15); color:#F5E6AB; border:1px solid rgba(212,175,55,0.35); border-radius:9999px; padding:5px 12px; font-size:11px; font-weight:700; cursor:pointer;" onclick="openProModal()">⭐ FREE TIER</span>
+      <span id="open-access-badge" class="badge-tag" style="background:rgba(16,185,129,0.15); color:#10B981; border:1px solid rgba(16,185,129,0.4); border-radius:9999px; padding:5px 12px; font-size:11px; font-weight:700;">✦ 100% OPEN ACCESS</span>
 
       <div class="status-pill" id="daemon-status-pill">
         <span class="status-indicator-dot"></span>
@@ -7228,49 +7078,11 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       }
     }
 
-    function openProModal() {
-      const modal = document.getElementById('pro-modal');
-      if (modal) modal.classList.add('open');
-    }
-
-    function closeProModal() {
-      const modal = document.getElementById('pro-modal');
-      if (modal) modal.classList.remove('open');
-    }
-
-    function openLicenseModal() {
-      openProModal();
-      setTimeout(() => {
-        const input = document.getElementById('pro-license-key-input');
-        if (input) input.focus();
-      }, 100);
-    }
-
-    function activateLicenseKey() {
-      const input = document.getElementById('pro-license-key-input');
-      const val = (input ? input.value : '').trim();
-      if (!val) {
-        showToast('Please enter your license key or purchase receipt email.', 'error');
-        return;
-      }
-
-      localStorage.setItem('neuro_pro_licensed', 'true');
-      checkLicenseState();
-      closeProModal();
-      showToast('⭐ Neuro-Memory Pro Activated Successfully!', 'success');
-    }
-
-    function openSolanaPay() {
-      openProModal();
-    }
-
-    function triggerSolanaCheckout() {
+    function triggerSolanaTip() {
       const solanaAddress = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
       if (navigator.clipboard) {
         navigator.clipboard.writeText(solanaAddress);
-        showToast(`Solana Receiver Address copied: ${solanaAddress}`, 'success');
-      } else {
-        prompt('Copy Solana Receiver Address (Free (100% Open Access) SOL equivalent):', solanaAddress);
+        showToast(`Solana Tip Address copied: ${solanaAddress}`, 'success');
       }
     }
   </script>
@@ -7336,40 +7148,6 @@ curl -X POST http://127.0.0.1:8788/api/recall \
           <span>★</span> Tag Flashbulb Engram (Zero-Decay)
         </button>
       </div>
-    </div>
-  </div>
-
-  <!-- High-Converting Pro Paywall Modal -->
-  <div id="pro-modal" class="pro-modal-backdrop">
-    <div class="pro-card">
-      <div style="font-size:36px;">✦</div>
-      <h2>Neuro-Memory Pro Workstation</h2>
-      <p style="font-size:13px; color:#9AA0A6;">Unlock the complete biological-fidelity memory substrate for sovereign AI agents and long-term autonomy.</p>
-      
-      <div class="pro-perks-list">
-        <div class="pro-perk-item"><span class="pro-perk-icon">✓</span> Infinite High-Dimensional Memory Storage & Vector Consensus</div>
-        <div class="pro-perk-item"><span class="pro-perk-icon">✓</span> Multi-Agent Spreading Activation Across 5 Galaxy Clusters</div>
-        <div class="pro-perk-item"><span class="pro-perk-icon">✓</span> Real-Time Liquid Plasma Axon Visualization at 60 FPS</div>
-        <div class="pro-perk-item"><span class="pro-perk-icon">✓</span> Dual MCP Server Deployment with Claude, Grok & Hermes</div>
-        <div class="pro-perk-item"><span class="pro-perk-icon">✓</span> Indelible Flashbulb Engrams & Autonomous Sleep Replay</div>
-        <div class="pro-perk-item"><span class="pro-perk-icon">✓</span> Zero-Egress Local Privacy with Instant Export Unlocked</div>
-      </div>
-
-      <div class="pro-actions-col">
-        <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" class="pro-stripe-btn" rel="noopener">
-          ★ Upgrade via Stripe — Free (100% Open Access) Open-Access Sovereign
-        </a>
-        <button class="pro-solana-btn" onclick="triggerSolanaCheckout()">
-          ◎ Solana Tip (GG2eQb…dXoK) (Free (100% Open Access) SOL)
-        </button>
-      </div>
-
-      <div class="pro-key-row">
-        <input type="text" id="pro-license-key-input" class="pro-key-input" placeholder="Enter license key or receipt email...">
-        <button class="pro-key-btn" onclick="activateLicenseKey()">Activate</button>
-      </div>
-
-      <button class="btn btn-outlined" style="margin-top:4px;" onclick="closeProModal()">Continue with Free Tier</button>
     </div>
   </div>
 
