@@ -6248,6 +6248,8 @@ curl -X POST http://127.0.0.1:8788/api/recall \
 
       try {
         const res = await fetch(`${API_BASE}/api/obsidian/backlinks?note=${encodeURIComponent(query)}`);
+        const ct = res.headers.get('content-type') || '';
+        if (!res.ok || !ct.includes('application/json')) return;
         const data = await res.json();
 
         if (res.ok && data.ok) {
@@ -6506,6 +6508,8 @@ curl -X POST http://127.0.0.1:8788/api/recall \
 
       try {
         const res = await fetch(`${API_BASE}/api/obsidian/note?path=${encodeURIComponent(query)}`);
+        const ct = res.headers.get('content-type') || '';
+        if (!res.ok || !ct.includes('application/json')) return;
         const data = await res.json();
         if (res.ok && data.ok) {
           window.activeOfmNote = data;
