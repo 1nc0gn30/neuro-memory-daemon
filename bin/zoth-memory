@@ -1,13 +1,70 @@
 #!/usr/bin/env bash
-# Open the federated Zoth Memory ledger (Neuro-Memory Studio Everywhere tab).
-set -u
+# ==============================================================================
+# Zoth Memory — Federated Ledger Launcher & Safe Read-Only CLI (v2.9.0)
+# Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+# ==============================================================================
+set -euo pipefail
+
+VERSION="2.9.0"
 URL="${ZOTH_MEMORY_URL:-http://127.0.0.1:8094/#everywhere}"
-HEALTH="http://127.0.0.1:8094/api/health"
+HEALTH="http://127.0.0.1:8094/health"
+STATS="http://127.0.0.1:8094/api/stats"
+
+REPO_DIR="${HOME:-/root}/NullAITech/neuro-memory-daemon"
+if [[ ! -d "$REPO_DIR/src/neuro_memory_daemon" ]]; then
+  REPO_DIR="/opt/neuro-memory-daemon"
+fi
+
+PYTHON_BIN="/opt/zothos-ai-env/bin/python3"
+if [[ ! -x "$PYTHON_BIN" ]]; then
+  PYTHON_BIN="python3"
+fi
+
+case "${1:-}" in
+  -h|--help)
+    cat <<EOF
+zoth-memory v${VERSION} — Federated Zoth Memory Ledger Launcher
+Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+
+Usage:
+  zoth-memory                 Open http://127.0.0.1:8094/#everywhere
+  zoth-memory --status        Check local :8094 daemon health
+  zoth-memory --json          Print live read-only :8094 /api/stats JSON
+  zoth-memory --consolidate   Run local STDP sleep consolidation via CLI
+  zoth-memory --version       Print version and exit
+EOF
+    exit 0
+    ;;
+  -v|--version)
+    echo "zoth-memory v${VERSION} (Neal Frazier Tech • NullAI Platform)"
+    exit 0
+    ;;
+  --status)
+    if command -v curl >/dev/null 2>&1 && curl -fsS --max-time 2 "$HEALTH"; then
+      echo ""
+      exit 0
+    fi
+    echo '{"status":"offline","port":8094,"service":"neuro-memory-daemon"}'
+    exit 1
+    ;;
+  --json)
+    if command -v curl >/dev/null 2>&1 && curl -fsS --max-time 2 "$STATS"; then
+      echo ""
+      exit 0
+    fi
+    printf '{"service":"neuro-memory-daemon","version":"%s","port":8094,"status":"offline"}\n' "$VERSION"
+    exit 0
+    ;;
+  --consolidate)
+    export PYTHONPATH="$REPO_DIR/src:${PYTHONPATH:-}"
+    exec "$PYTHON_BIN" -m neuro_memory_daemon.cli consolidate --json
+    ;;
+esac
 
 if command -v curl >/dev/null 2>&1; then
   if ! curl -fsS --max-time 1 "$HEALTH" >/dev/null 2>&1; then
     echo "Neuro-Memory daemon is not answering on 127.0.0.1:8094." >&2
-    echo "Start it with: sudo systemctl start neuro-memory" >&2
+    echo "Start it with: neuro-memory-daemon serve --port 8094" >&2
   fi
 fi
 

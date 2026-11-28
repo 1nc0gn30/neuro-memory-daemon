@@ -172,6 +172,11 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
     """HTTP Request handler serving Material 3 Memory Studio and REST API."""
 
+    server_version = "Neuro-Memory"
+    sys_version = ""
+    MAX_BODY_BYTES = 1_048_576  # 1 MiB strict request body cap
+    LOOPBACK_HOSTS = frozenset({"127.0.0.1", "localhost", "::1", "[::1]"})
+
     server_daemon: Optional[MemoryDaemon] = None
     public_dir: Optional[Path] = None
 
@@ -180,10 +185,278 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
             return self.server_daemon
         return get_default_daemon()
 
+    def _server_port(self) -> int:
+        try:
+            addr = self.server.server_address
+            return int(addr[1]) if addr and len(addr) >= 2 else 8094
+        except Exception:
+            return 8094
+
+    def _extract_host_hostname(self, host_header: str) -> str:
+        raw = (host_header or "").strip().lower()
+        if not raw:
+            return ""
+        if raw.startswith("["):
+            end = raw.find("]")
+            if end == -1:
+                return ""
+            return raw[: end + 1]
+        if ":" in raw:
+            return raw.split(":", 1)[0]
+        return raw
+
+    def _is_trusted_host(self) -> bool:
+        host_hdr = self.headers.get("Host")
+        if not host_hdr:
+            return True
+        hostname = self._extract_host_hostname(host_hdr)
+        return hostname in self.LOOPBACK_HOSTS
+
+    def _resolve_trusted_origin(self) -> tuple[bool, Optional[str]]:
+        """Validate Origin header if present. Returns (is_valid, reflected_origin)."""
+        origin = (self.headers.get("Origin") or "").strip()
+        if not origin:
+            return True, None
+        if origin.lower() == "null":
+            return False, None
+        try:
+            parsed = urllib.parse.urlparse(origin)
+        except Exception:
+            return False, None
+        if parsed.scheme != "http" or not parsed.hostname:
+            return False, None
+        host_l = parsed.hostname.lower()
+        if host_l not in ("127.0.0.1", "localhost", "::1"):
+            return False, None
+        try:
+            origin_port = parsed.port
+        except ValueError:
+            return False, None
+        allowed_ports = {self._server_port(), 3000}
+        if origin_port not in allowed_ports:
+            return False, None
+        return True, origin
+
+    def _check_loopback_guards(self) -> bool:
+        """Enforce strict loopback Host and Origin checks across all HTTP methods."""
+        if not self._is_trusted_host():
+            self._send_json({"error": "Forbidden: non-loopback Host header"}, status=403)
+            return False
+        ok_origin, _ = self._resolve_trusted_origin()
+        if not ok_origin:
+            self._send_json({"error": "Forbidden: untrusted Origin header"}, status=403)
+            return False
+        return True
+
+    def _send_security_headers(self) -> None:
+        if getattr(self, "_security_headers_sent", False):
+            return
+        self._security_headers_sent = True
+        self.send_header("X-Frame-Options", "SAMEORIGIN")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
+        self.send_header(
+            "Content-Security-Policy",
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data: blob:; "
+            "font-src 'self' data:; "
+            "connect-src 'self' http://127.0.0.1:* http://localhost:*; "
+            "frame-ancestors 'self' http://127.0.0.1:3000 http://localhost:3000; "
+            "base-uri 'self'; "
+            "object-src 'none'",
+        )
+
     def _send_cors_headers(self) -> None:
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+        self._send_security_headers()
+        ok_origin, origin = self._resolve_trusted_origin()
+        if ok_origin and origin:
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
+            self.send_header("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+
+    def send_response(self, code: int, message: Optional[str] = None) -> None:
+        self._security_headers_sent = False
+        super().send_response(code, message)
+
+    def end_headers(self) -> None:
+        self._send_security_headers()
+        super().end_headers()
+
+    def _parse_int_param(
+        self,
+        params: Dict[str, List[str]],
+        name: str,
+        default: int,
+        min_val: int = 1,
+        max_val: int = 10000,
+    ) -> Optional[int]:
+        raw = params.get(name, [None])[0]
+        if raw is None or raw == "":
+            return default
+        try:
+            val = int(raw)
+        except (TypeError, ValueError):
+            self._send_json({"error": f"Invalid integer query parameter '{name}'"}, status=400)
+            return None
+        if val < min_val or val > max_val:
+            self._send_json(
+                {"error": f"Query parameter '{name}' out of range [{min_val}, {max_val}]"},
+                status=400,
+            )
+            return None
+        return val
+
+    def _parse_float_param(
+        self,
+        params: Dict[str, List[str]],
+        name: str,
+        default: float,
+        min_val: float = 0.0,
+        max_val: float = 1000.0,
+    ) -> Optional[float]:
+        raw = params.get(name, [None])[0]
+        if raw is None or raw == "":
+            return default
+        try:
+            val = float(raw)
+        except (TypeError, ValueError):
+            self._send_json({"error": f"Invalid numeric query parameter '{name}'"}, status=400)
+            return None
+        if val < min_val or val > max_val:
+            self._send_json(
+                {"error": f"Query parameter '{name}' out of range [{min_val}, {max_val}]"},
+                status=400,
+            )
+            return None
+        return val
+
+    def _read_json_body(self, is_mcp: bool = False) -> Optional[Dict[str, Any]]:
+        raw_cl = self.headers.get("Content-Length")
+        transfer_enc = (self.headers.get("Transfer-Encoding") or "").lower()
+        if raw_cl is None or raw_cl == "":
+            if "chunked" in transfer_enc:
+                chunks = bytearray()
+                try:
+                    while True:
+                        line = self.rfile.readline(64)
+                        if not line:
+                            break
+                        size_str = line.split(b";", 1)[0].strip()
+                        chunk_size = int(size_str, 16)
+                        if chunk_size == 0:
+                            # consume trailing CRLF/headers
+                            while True:
+                                trailer = self.rfile.readline(1024)
+                                if not trailer or trailer in (b"\r\n", b"\n"):
+                                    break
+                            break
+                        if len(chunks) + chunk_size > self.MAX_BODY_BYTES:
+                            self._send_json(
+                                {"error": f"Payload Too Large: exceeds {self.MAX_BODY_BYTES} byte limit"},
+                                status=413,
+                            )
+                            return None
+                        data = self.rfile.read(chunk_size)
+                        chunks.extend(data)
+                        self.rfile.readline(4)
+                except (ValueError, OSError):
+                    self._send_json({"error": "Invalid chunked request body"}, status=400)
+                    return None
+                raw_bytes = bytes(chunks)
+            else:
+                return {}
+        else:
+            try:
+                length = int(raw_cl.strip())
+                if length < 0:
+                    raise ValueError("negative Content-Length")
+            except (TypeError, ValueError):
+                if is_mcp:
+                    self._send_json(
+                        {"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "Invalid Content-Length header"}},
+                        status=400,
+                    )
+                else:
+                    self._send_json({"error": "Invalid Content-Length header"}, status=400)
+                return None
+
+            if length > self.MAX_BODY_BYTES:
+                self._send_json(
+                    {"error": f"Payload Too Large: exceeds {self.MAX_BODY_BYTES} byte limit"},
+                    status=413,
+                )
+                return None
+
+            if length == 0:
+                return {}
+
+            raw_bytes = self.rfile.read(length)
+        try:
+            raw_body = raw_bytes.decode("utf-8")
+        except UnicodeDecodeError:
+            if is_mcp:
+                self._send_json(
+                    {"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "Parse error: invalid UTF-8"}},
+                    status=400,
+                )
+            else:
+                self._send_json({"error": "Invalid UTF-8 request body"}, status=400)
+            return None
+
+        if not raw_body.strip():
+            return {}
+
+        try:
+            parsed = json.loads(raw_body)
+        except json.JSONDecodeError as ex:
+            if is_mcp:
+                self._send_json(
+                    {"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": f"Parse error: {ex.msg}"}},
+                    status=400,
+                )
+            else:
+                self._send_json({"error": f"Invalid JSON body: {ex.msg}"}, status=400)
+            return None
+
+        if not isinstance(parsed, dict):
+            if is_mcp:
+                self._send_json(
+                    {"jsonrpc": "2.0", "id": None, "error": {"code": -32600, "message": "Invalid Request: JSON object expected"}},
+                    status=400,
+                )
+            else:
+                self._send_json({"error": "JSON request body must be an object"}, status=400)
+            return None
+
+        return parsed
+
+    @staticmethod
+    def _validate_safe_topic_filename(base_dir: Path, raw_topic: str, suffix: str) -> tuple[Optional[Path], Optional[str], Optional[str]]:
+        """Validate a topic name for writing a file strictly inside base_dir.
+
+        Rejects any traversal segment ('..'), path separator ('/', '\\'), or NUL byte,
+        and verifies realpath confinement via Path.resolve().is_relative_to().
+        Returns (target_path, clean_name, error_message).
+        """
+        topic = str(raw_topic or "").strip()
+        if not topic:
+            return None, None, "Topic is required"
+        if "\x00" in topic or "/" in topic or "\\" in topic or ".." in topic:
+            return None, None, "Path traversal forbidden: topic contains invalid path characters"
+        clean_name = re.sub(r'["\']', "", topic).strip()
+        if not clean_name or clean_name in (".", "..") or clean_name.startswith("."):
+            return None, None, "Path traversal forbidden: invalid topic filename"
+        resolved_base = base_dir.resolve()
+        candidate = (resolved_base / f"{clean_name}{suffix}").resolve()
+        try:
+            if not candidate.is_relative_to(resolved_base) or candidate.parent != resolved_base:
+                return None, None, "Path traversal forbidden: resolved path escapes vault root"
+        except Exception:
+            return None, None, "Path traversal forbidden: invalid target path"
+        return candidate, clean_name, None
 
     def _send_json(self, data: Any, status: int = 200) -> None:
         payload = json.dumps(data, indent=2, ensure_ascii=False, default=str).encode("utf-8")
@@ -529,10 +802,18 @@ class StudioHTTPRequestHandler(BaseHTTPRequestHandler):
     def _get_or_create_obsidian_daily(self, vault_dir: Path, daemon: Any, date_str: str = "") -> Dict[str, Any]:
         """Retrieve or initialize today's Obsidian Daily Sovereign Note."""
         import datetime
-        target_date = date_str.strip() if date_str and date_str.strip() else datetime.date.today().isoformat()
-        daily_dir = vault_dir / "07-Daily"
+        raw_date = (date_str or "").strip()
+        if raw_date:
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw_date):
+                return {"ok": False, "error": "Invalid date format; expected YYYY-MM-DD"}
+            target_date = raw_date
+        else:
+            target_date = datetime.date.today().isoformat()
+        daily_dir = (vault_dir / "07-Daily").resolve()
         daily_dir.mkdir(parents=True, exist_ok=True)
-        daily_file = daily_dir / f"{target_date}.md"
+        daily_file = (daily_dir / f"{target_date}.md").resolve()
+        if not daily_file.is_relative_to(daily_dir):
+            return {"ok": False, "error": "Path traversal forbidden"}
 
         if not daily_file.exists():
             now_time = datetime.datetime.now().strftime("%H:%M")
@@ -795,16 +1076,9 @@ health_score: 100
         if not vault_dir.exists():
             return {"ok": False, "error": "Vault directory not found"}
 
-        target_file = vault_dir / source_path
-        if not target_file.exists():
-            clean_sp = source_path.lower()
-            for p in vault_dir.rglob("*.md"):
-                if str(p.relative_to(vault_dir)).lower() == clean_sp or p.name.lower() == clean_sp:
-                    target_file = p
-                    break
-
-        if not target_file or not target_file.exists():
-            return {"ok": False, "error": f"Source file '{source_path}' not found in vault"}
+        target_file, err_msg, _status = self._safe_vault_path(vault_dir, source_path, allow_create=False)
+        if err_msg or not target_file or not target_file.exists():
+            return {"ok": False, "error": err_msg or f"Source file '{source_path}' not found in vault"}
 
         content = safe_read_text(target_file)
         fm_text = ""
@@ -1025,10 +1299,18 @@ health_score: 100
         }, 200
 
     def do_OPTIONS(self) -> None:
-        """Handle CORS preflight requests."""
+        """Handle CORS preflight requests with strict loopback Host/Origin checks."""
+        if not self._check_loopback_guards():
+            return
         self.send_response(204)
         self._send_cors_headers()
         self.end_headers()
+
+    def do_PUT(self) -> None:
+        """Reject untrusted Host/Origin on PUT and return 405 for unsupported routes."""
+        if not self._check_loopback_guards():
+            return
+        self._send_json({"error": "Method Not Allowed"}, status=405)
 
     def do_HEAD(self) -> None:
         """Handle HEAD requests for static UI and REST API."""
@@ -1040,6 +1322,8 @@ health_score: 100
 
     def do_GET(self) -> None:
         """Handle GET requests for static UI and REST API."""
+        if not self._check_loopback_guards():
+            return
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path.rstrip("/")
         if not path:
@@ -1110,7 +1394,9 @@ health_score: 100
             cat = params.get("category", [""])[0].strip() or None
             tag = params.get("tag", [""])[0].strip() or None
             agent_id = params.get("agent_id", [""])[0].strip() or None
-            limit = int(params.get("limit", ["100"])[0])
+            limit = self._parse_int_param(params, "limit", 100, min_val=1, max_val=5000)
+            if limit is None:
+                return
 
             if topic:
                 results = daemon.recall(query=topic, top_k=limit, category=cat)
@@ -1150,8 +1436,12 @@ health_score: 100
         # Recall endpoint (GET with query param)
         if path in ("/api/recall", "/v1/memories/recall"):
             cue = params.get("query", [""])[0] or params.get("topic", [""])[0]
-            top_k = int(params.get("top_k", ["5"])[0])
-            min_score = float(params.get("min_score", ["0.1"])[0])
+            top_k = self._parse_int_param(params, "top_k", 5, min_val=1, max_val=500)
+            if top_k is None:
+                return
+            min_score = self._parse_float_param(params, "min_score", 0.1, min_val=0.0, max_val=10.0)
+            if min_score is None:
+                return
             cat = params.get("category", [""])[0] or None
             results = daemon.recall(query=cue, top_k=top_k, min_score=min_score, category=cat)
             self._send_json({"query": cue, "recalled": results, "count": len(results)})
@@ -1163,7 +1453,9 @@ health_score: 100
             cat = params.get("category", [""])[0] or None
             tag = params.get("tag", [""])[0] or None
             tags = [tag] if tag else None
-            limit = int(params.get("limit", ["10"])[0])
+            limit = self._parse_int_param(params, "limit", 10, min_val=1, max_val=1000)
+            if limit is None:
+                return
             results = daemon.search(query=q, tags=tags, category=cat, limit=limit)
             self._send_json({"query": q, "results": results, "count": len(results)})
             return
@@ -1171,8 +1463,12 @@ health_score: 100
         # Synaptic Graph
         if path in ("/api/graph", "/v1/memories/graph", "/v1/graph"):
             fmt = params.get("format", ["json"])[0].lower()
-            min_weight = float(params.get("min_weight", ["0.05"])[0])
-            node_limit = int(params.get("limit", ["50"])[0])
+            min_weight = self._parse_float_param(params, "min_weight", 0.05, min_val=0.0, max_val=10.0)
+            if min_weight is None:
+                return
+            node_limit = self._parse_int_param(params, "limit", 50, min_val=1, max_val=2000)
+            if node_limit is None:
+                return
             root_id = params.get("root_id", [None])[0]
 
             graph_data = daemon.get_graph(
@@ -1200,7 +1496,9 @@ health_score: 100
 
         elif path in ("/api/metacognition", "/v1/metacognition"):
             query = params.get("query", params.get("q", [""]))[0]
-            top_k = int(params.get("top_k", [5])[0])
+            top_k = self._parse_int_param(params, "top_k", 5, min_val=1, max_val=500)
+            if top_k is None:
+                return
             res = daemon.audit_metacognition(query=query, top_k=top_k)
             self._send_json(res)
             return
@@ -1210,10 +1508,9 @@ health_score: 100
             source = params.get("source", [""])[0].strip()
             q = params.get("q", [""])[0].strip() or params.get("query", [""])[0].strip()
             include_archive = params.get("archive", ["false"])[0].lower() in ("true", "1", "yes")
-            try:
-                limit = int(params.get("limit", ["80"])[0])
-            except (TypeError, ValueError):
-                limit = 80
+            limit = self._parse_int_param(params, "limit", 80, min_val=1, max_val=1000)
+            if limit is None:
+                return
             payload = collect_everywhere(
                 daemon=daemon,
                 source=source,
@@ -1508,10 +1805,9 @@ health_score: 100
         elif path in ("/api/obsidian/bases/records", "/v1/obsidian/bases/records"):
             vault_dir = Path.home() / "Documents" / "Obsidian Vault"
             base_name = params.get("name", params.get("base", [""]))[0]
-            try:
-                limit = int(params.get("limit", ["100"])[0])
-            except (ValueError, TypeError):
-                limit = 100
+            limit = self._parse_int_param(params, "limit", 100, min_val=1, max_val=2000)
+            if limit is None:
+                return
             result = self._query_obsidian_base_records(vault_dir, base_name, limit=limit)
             self._send_json(result)
             return
@@ -1521,7 +1817,7 @@ health_score: 100
             vault_dir = Path.home() / "Documents" / "Obsidian Vault"
             date_str = params.get("date", [""])[0]
             result = self._get_or_create_obsidian_daily(vault_dir, daemon, date_str=date_str)
-            self._send_json(result)
+            self._send_json(result, status=200 if result.get("ok") else 400)
             return
 
         # Obsidian Portable Second Brain Knowledge Bundle Endpoint (GET)
@@ -1530,7 +1826,7 @@ health_score: 100
             bundle_file = vault_dir / "05-Telemetry" / "second_brain_bundle.json"
             if not bundle_file.exists():
                 try:
-                    script_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain")
+                    script_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain").expanduser()
                     if script_path.exists() and os.access(script_path, os.X_OK):
                         subprocess.run([str(script_path), "bundle"], capture_output=True, timeout=10)
                 except Exception:
@@ -1569,10 +1865,9 @@ health_score: 100
         elif path in ("/api/obsidian/search", "/v1/obsidian/search"):
             vault_dir = Path.home() / "Documents" / "Obsidian Vault"
             q = params.get("q", params.get("query", [""]))[0]
-            try:
-                limit = int(params.get("limit", ["30"])[0])
-            except (ValueError, TypeError):
-                limit = 30
+            limit = self._parse_int_param(params, "limit", 30, min_val=1, max_val=500)
+            if limit is None:
+                return
             result = self._perform_obsidian_search(vault_dir, daemon, q, limit=limit)
             self._send_json(result)
             return
@@ -1775,15 +2070,14 @@ health_score: 100
 
     def do_POST(self) -> None:
         """Handle POST requests for memory ingestion, recall, triggering, and consolidation."""
+        if not self._check_loopback_guards():
+            return
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path.rstrip("/")
-        length = int(self.headers.get("Content-Length", 0))
-        raw_body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
-
-        try:
-            body = json.loads(raw_body) if raw_body.strip() else {}
-        except Exception:
-            body = {}
+        is_mcp = path in ("/api/mcp", "/v1/mcp")
+        body = self._read_json_body(is_mcp=is_mcp)
+        if body is None:
+            return
 
         daemon = self._get_daemon()
 
@@ -1988,31 +2282,35 @@ health_score: 100
 
         # Karpathy LLM Wiki Synthesis Endpoint
         if path in ("/api/obsidian/wiki", "/v1/obsidian/wiki"):
-            topic = body.get("topic", "").strip()
+            topic = str(body.get("topic", "")).strip()
             if not topic:
                 self._send_json({"error": "Topic is required in JSON body: {\"topic\": \"...\"}"}, status=400)
                 return
 
-            cli_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain")
-            vault_dir = Path.home() / "Documents" / "Obsidian Vault"
-            wiki_dir = vault_dir / "06-Wiki"
+            vault_dir = (Path.home() / "Documents" / "Obsidian Vault").resolve()
+            wiki_dir = (vault_dir / "06-Wiki").resolve()
             wiki_dir.mkdir(parents=True, exist_ok=True)
 
+            target_file, clean_name, err_msg = self._validate_safe_topic_filename(wiki_dir, topic, ".md")
+            if err_msg or target_file is None or clean_name is None:
+                self._send_json({"ok": False, "error": err_msg or "Invalid topic"}, status=400)
+                return
+
+            cli_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain").expanduser()
             if cli_path.exists():
                 try:
-                    subprocess.run([str(cli_path), "wiki", topic], capture_output=True, text=True, timeout=25)
+                    subprocess.run([str(cli_path), "wiki", clean_name], capture_output=True, text=True, timeout=25)
                 except Exception:
                     pass
 
-            clean_name = re.sub(r'["\']', '', topic).strip()
-            target_file = wiki_dir / f"{clean_name}.md"
             if not target_file.exists():
                 for p in wiki_dir.glob("*.md"):
-                    if clean_name.lower() in p.stem.lower() or p.stem.lower() in clean_name.lower():
-                        target_file = p
+                    p_res = p.resolve()
+                    if p_res.is_relative_to(wiki_dir) and (clean_name.lower() in p.stem.lower() or p.stem.lower() in clean_name.lower()):
+                        target_file = p_res
                         break
 
-            if target_file.exists():
+            if target_file.exists() and target_file.resolve().is_relative_to(wiki_dir):
                 article = _parse_wiki_article(target_file)
                 daemon.store(
                     text=f"[Karpathy LLM Wiki · [[{article['title']}]]] {article['executive_summary'][:280]}",
@@ -2021,42 +2319,48 @@ health_score: 100
                     category="semantic",
                     agent_id="obsidian-bridge"
                 )
-                EVENT_BROADCASTER.broadcast("obsidian_wiki_synthesized", {"topic": topic, "file": target_file.name})
+                EVENT_BROADCASTER.broadcast("obsidian_wiki_synthesized", {"topic": clean_name, "file": target_file.name})
                 self._send_json({
                     "ok": True,
                     "status": "synthesized",
-                    "topic": topic,
+                    "topic": clean_name,
                     "article": article
                 }, status=201)
             else:
-                self._send_json({"error": f"Failed to synthesize article for topic: {topic}"}, status=500)
+                self._send_json({"error": f"Failed to synthesize article for topic: {clean_name}"}, status=500)
             return
 
         # Procedural JSON Canvas 1.0 Synthesis Endpoint
         if path in ("/api/obsidian/canvas", "/v1/obsidian/canvas"):
-            topic = body.get("topic", "").strip()
+            topic = str(body.get("topic", "")).strip()
             if not topic:
                 self._send_json({"error": "Topic is required in JSON body: {\"topic\": \"...\"}"}, status=400)
                 return
 
-            cli_path = Path.home() / "NullAITech" / "zoth-os" / "bin" / "zoth-second-brain"
-            vault_dir = Path.home() / "Documents" / "Obsidian Vault"
+            vault_dir = (Path.home() / "Documents" / "Obsidian Vault").resolve()
             vault_dir.mkdir(parents=True, exist_ok=True)
 
+            target_file, clean_name, err_msg = self._validate_safe_topic_filename(vault_dir, topic, " Knowledge Map.canvas")
+            if err_msg or target_file is None or clean_name is None:
+                self._send_json({"ok": False, "error": err_msg or "Invalid topic"}, status=400)
+                return
+
+            cli_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain").expanduser()
             if cli_path.exists():
                 try:
-                    subprocess.run([str(cli_path), "canvas", topic], capture_output=True, text=True, timeout=30)
+                    subprocess.run([str(cli_path), "canvas", clean_name], capture_output=True, text=True, timeout=30)
                 except Exception:
                     pass
 
-            clean_name = re.sub(r'["\']', '', topic).strip()
-            target_file = vault_dir / f"{clean_name} Knowledge Map.canvas"
             if not target_file.exists():
-                target_file = vault_dir / f"{clean_name}.canvas"
+                alt_file = (vault_dir / f"{clean_name}.canvas").resolve()
+                if alt_file.is_relative_to(vault_dir) and alt_file.exists():
+                    target_file = alt_file
             if not target_file.exists():
                 for p in vault_dir.rglob("*.canvas"):
-                    if clean_name.lower() in p.stem.lower():
-                        target_file = p
+                    p_res = p.resolve()
+                    if p_res.is_relative_to(vault_dir) and clean_name.lower() in p.stem.lower():
+                        target_file = p_res
                         break
 
             if not target_file.exists():
@@ -2113,7 +2417,10 @@ health_score: 100
                         }
                     ]
                 }
-                target_file = vault_dir / f"{clean_name} Knowledge Map.canvas"
+                target_file = (vault_dir / f"{clean_name} Knowledge Map.canvas").resolve()
+                if not target_file.is_relative_to(vault_dir):
+                    self._send_json({"ok": False, "error": "Path traversal forbidden"}, status=403)
+                    return
                 target_file.write_text(json.dumps(fallback_canvas, indent=2), encoding="utf-8")
 
             if target_file.exists():
@@ -2238,7 +2545,7 @@ health_score: 100
             telemetry_dir.mkdir(parents=True, exist_ok=True)
 
             cmd_output = ""
-            script_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain")
+            script_path = Path("~/NullAITech/zoth-os/bin/zoth-second-brain").expanduser()
             if script_path.exists() and os.access(script_path, os.X_OK):
                 try:
                     proc = subprocess.run(
@@ -2572,6 +2879,8 @@ health_score: 100
 
     def do_DELETE(self) -> None:
         """Handle DELETE requests for pruning memory nodes."""
+        if not self._check_loopback_guards():
+            return
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path.rstrip("/")
         daemon = self._get_daemon()
@@ -2659,7 +2968,7 @@ health_score: 100
 <body>
   <div class="card">
     <h1>🧠 Neural Memory Studio</h1>
-    <p>Synaptic Daemon is running on <code>:8788</code></p>
+    <p>Synaptic Daemon is running on <code>:8094</code></p>
     <p><a href="/api/stats">View Substrate Telemetry JSON</a></p>
   </div>
 </body>
@@ -2684,7 +2993,7 @@ class MemoryUIServer:
     def __init__(
         self,
         host: str = "127.0.0.1",
-        port: int = 8788,
+        port: int = 8094,
         daemon: Optional[MemoryDaemon] = None,
         public_dir: Optional[Union[str, Path]] = None,
     ) -> None:
@@ -2731,7 +3040,7 @@ class MemoryUIServer:
 
 def run_server(
     host: str = "127.0.0.1",
-    port: int = 8788,
+    port: int = 8094,
     open_browser: bool = False,
     daemon: Optional[MemoryDaemon] = None,
     db_path: Optional[Union[str, Path]] = None,
@@ -2751,7 +3060,7 @@ def run_server(
 
 def start_server_in_thread(
     host: str = "127.0.0.1",
-    port: int = 8788,
+    port: int = 8094,
     daemon: Optional[MemoryDaemon] = None,
     public_dir: Optional[Union[str, Path]] = None,
 ) -> MemoryUIServer:
@@ -2768,4 +3077,4 @@ def start_server_in_thread(
 
 
 if __name__ == "__main__":
-    run_server(host="127.0.0.1", port=8788, open_browser=True)
+    run_server(host="127.0.0.1", port=8094, open_browser=True)

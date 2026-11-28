@@ -1,234 +1,552 @@
 /* ============================================================
-   ZOTH STUDIO v2 — Sovereign Gold/Void Theme
-   Shared brand layer for NullAI micro-tool repos.
-   Overrides Material 3 (--md-*), Google (--g-* / --google-*),
-   and generic (--primary/--surface) token schemes to the
-   Zoth gold-on-void palette. Injected via <link> in each
-   repo's index.html <head>. Light + dark aware.
+   Neuro-Memory Daemon v2.9.0 — Dual-Theme Sovereign Stylesheet
+   Editorial Ivory Light Mode + Obsidian Gold Dark Mode
+   Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+   Zero external font or CDN egress; WCAG AA (>= 4.5:1) compliant.
    ============================================================ */
 
-:root {
-  /* ---- Zoth brand tokens ---- */
+:root,
+[data-theme="dark"] {
   --zoth-gold: #D4AF37;
   --zoth-gold-dark: #B8860B;
   --zoth-gold-light: #F5E6AB;
-  --zoth-void: #08080B;
-  --zoth-void-2: #0B0B12;
-  --zoth-ink: #101828;
+  --zoth-void: #0A0A0D;
+  --zoth-void-2: #11131A;
+  --zoth-ink: #0A0A0D;
   --zoth-text: #F5E6AB;
-  --zoth-text-2: #EDEFF2;
-  --zoth-muted: #9AA0A6;
-  --zoth-border: #2A2A33;
-  --zoth-font-display: "Celtic Garamond", Georgia, "Times New Roman", serif;
-  --zoth-font-sans: "Inter", "Google Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --zoth-font-mono: "JetBrains Mono", "IBM Plex Mono", "Roboto Mono", ui-monospace, monospace;
-}
+  --zoth-text-2: #F2F4F8;
+  --zoth-muted: #B4BAC6;
+  --zoth-border: #2B2E3B;
+  --zoth-font-display: "Space Grotesk", "DejaVu Sans", system-ui, -apple-system, sans-serif;
+  --zoth-font-sans: "Inter", "DejaVu Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --zoth-font-mono: "JetBrains Mono", "DejaVu Sans Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-/* ---- Material 3 scheme (--md-*) ---- */
-:root {
-  --md-primary: #D4AF37;
-  --md-on-primary: #101828;
-  --md-primary-container: #2A2410;
-  --md-on-primary-container: #F5E6AB;
-  --md-secondary: #D4AF37;
-  --md-on-secondary: #101828;
-  --md-secondary-container: #2A2410;
-  --md-on-secondary-container: #F5E6AB;
-  --md-surface: #0B0B12;
-  --md-surface-card: #12121A;
-  --md-surface-variant: #0B0B12;
-  --md-background: #08080B;
-  --md-on-surface: #EDEFF2;
-  --md-on-surface-variant: #9AA0A6;
-  --md-outline: #2A2A33;
-  --md-outline-variant: #23232C;
-  --md-success: #12B76A;
-  --md-success-container: #0E2A1C;
-  --md-error: #F97066;
-  --md-error-container: #3A1A18;
-  --md-warning: #F5E6AB;
-  --md-warning-container: #2A2410;
-  --md-sys-color-primary: #D4AF37;
-  --md-sys-color-on-primary: #101828;
-  --md-sys-color-primary-container: #2A2410;
-  --md-sys-color-on-primary-container: #F5E6AB;
-  --md-sys-color-surface: #0B0B12;
-  --md-sys-color-surface-dim: #08080B;
-  --md-sys-color-surface-container-lowest: #08080B;
-  --md-sys-color-surface-container-low: #0B0B12;
-  --md-sys-color-surface-container: #12121A;
-  --md-sys-color-surface-container-high: #16161F;
-  --md-sys-color-surface-container-highest: #1A1A24;
-  --md-sys-color-on-surface: #EDEFF2;
-  --md-sys-color-on-surface-variant: #9AA0A6;
-  --md-sys-color-outline: #2A2A33;
-  --md-sys-color-outline-variant: #23232C;
-  --md-sys-color-secondary: #D4AF37;
-  --md-sys-color-on-secondary: #101828;
-  --md-sys-color-secondary-container: #2A2410;
-  --md-sys-color-on-secondary-container: #F5E6AB;
-  --md-sys-color-error: #F97066;
-  --md-sys-color-error-container: #3A1A18;
-  --md-sys-color-on-error-container: #FFDAD6;
-  --md-sys-color-success: #12B76A;
-  --md-sys-color-success-container: #0E2A1C;
-  --md-sys-color-on-success-container: #A6F4C5;
-  --md-sys-color-warning: #F5E6AB;
-  --md-sys-color-warning-container: #2A2410;
-  --md-sys-color-on-warning-container: #F5E6AB;
-}
-
-/* ---- Google scheme (--g-*) ---- */
-:root {
-  --g-blue: #D4AF37;
-  --g-blue-dark: #B8860B;
-  --g-blue-hover: #C9A227;
-  --g-blue-light: #2A2410;
-  --g-green: #12B76A;
-  --g-green-light: #0E2A1C;
-  --g-red: #F97066;
-  --g-red-light: #3A1A18;
-  --g-yellow: #F5E6AB;
-  --g-yellow-dark: #B8860B;
-  --g-yellow-light: #2A2410;
-  --g-purple: #C9A227;
-  --g-purple-light: #2A2410;
-  --surface: #0B0B12;
-  --surface-variant: #0B0B12;
-  --surface-card: #12121A;
-  --surface-container: #12121A;
-  --surface-container-low: #0B0B12;
-  --surface-container-high: #16161F;
-  --border: #2A2A33;
-  --border-subtle: #23232C;
-  --text: #EDEFF2;
-  --text-secondary: #9AA0A6;
-  --code-bg: #0B0B12;
-  --bg-primary: #08080B;
-  --bg-secondary: #0B0B12;
-}
-
-/* ---- Google scheme (--google-*) ---- */
-:root {
-  --google-blue: #D4AF37;
-  --google-blue-hover: #C9A227;
-  --google-blue-light: #2A2410;
-  --google-blue-surface: #12121A;
-  --google-green: #12B76A;
-  --google-green-surface: #0E2A1C;
-  --google-yellow: #F5E6AB;
-  --google-yellow-dark: #B8860B;
-  --google-yellow-light: #2A2410;
-  --google-red: #F97066;
-  --google-red-light: #3A1A18;
-  --google-purple: #C9A227;
-  --google-purple-light: #2A2410;
-}
-
-/* ---- Generic scheme (--primary/--surface) ---- */
-:root {
-  --primary: #D4AF37;
-  --primary-hover: #C9A227;
-  --primary-container: #2A2410;
-  --on-primary-container: #F5E6AB;
-  --on-primary: #101828;
-  --surface-dim: #08080B;
-  --surface-container-lowest: #08080B;
-  --surface-container-low: #0B0B12;
-  --surface-container: #12121A;
-  --surface-container-high: #16161F;
-  --surface-container-highest: #1A1A24;
-  --on-surface: #EDEFF2;
-  --on-surface-variant: #9AA0A6;
-  --outline: #2A2A33;
-  --outline-variant: #23232C;
-}
-
-/* ---- Fonts ---- */
-:root {
   --font-google: var(--zoth-font-sans);
+  --font-text: var(--zoth-font-sans);
   --font-sans: var(--zoth-font-sans);
   --font-body: var(--zoth-font-sans);
   --font-mono: var(--zoth-font-mono);
-  --md-font-sans: var(--zoth-font-sans);
-  --md-font-mono: var(--zoth-font-mono);
+
+  /* High-contrast Dark Mode Material tokens */
+  --md-primary: #D4AF37;
+  --md-primary-hover: #E5C65C;
+  --md-on-primary: #0A0A0D;
+  --md-primary-container: #2A220B;
+  --md-on-primary-container: #F5E6AB;
+
+  --md-surface: #12141C;
+  --md-surface-card: #161924;
+  --md-surface-variant: #1A1E2B;
+  --md-background: #0A0A0D;
+  --md-on-surface: #F2F4F8;
+  --md-on-surface-variant: #B4BAC6;
+  --md-outline: #35394A;
+  --md-outline-variant: #252836;
+
+  --md-green: #4ADE80;
+  --md-green-container: #0F291A;
+  --md-red: #FCA5A5;
+  --md-red-container: #381518;
+  --md-yellow: #FDE68A;
+  --md-yellow-container: #2E2208;
+  --md-purple: #D8B4FE;
+  --md-purple-container: #27153D;
+  --md-cyan: #7DD3FC;
+  --md-cyan-container: #0D2538;
+
+  --md-surface-rgb: 18, 20, 28;
+  --scrollbar-track: #0E1017;
+  --scrollbar-thumb: #3A3F52;
+  --scrollbar-thumb-hover: #D4AF37;
+
+  color-scheme: dark;
 }
 
-/* ---- Base body ---- */
+html[data-theme="light"],
+body[data-theme="light"] {
+  --zoth-gold: #7A5600;
+  --zoth-gold-dark: #5E4200;
+  --zoth-gold-light: #F6EED6;
+  --zoth-void: #FAF7F2;
+  --zoth-void-2: #F3EFE6;
+  --zoth-ink: #141418;
+  --zoth-text: #5E4200;
+  --zoth-text-2: #141418;
+  --zoth-muted: #475467;
+  --zoth-border: #D8CEB6;
+
+  /* Editorial Ivory Light Mode Material tokens (all >= 4.5:1 WCAG AA) */
+  --md-primary: #7A5600;
+  --md-primary-hover: #5E4200;
+  --md-on-primary: #FFFFFF;
+  --md-primary-container: #F6EED6;
+  --md-on-primary-container: #523800;
+
+  --md-surface: #FFFFFF;
+  --md-surface-card: #FFFFFF;
+  --md-surface-variant: #F3EFE6;
+  --md-background: #FAF7F2;
+  --md-on-surface: #141418;
+  --md-on-surface-variant: #475467;
+  --md-outline: #C7BCA2;
+  --md-outline-variant: #DFD7C4;
+
+  --md-green: #0B5E38;
+  --md-green-container: #E4F5EC;
+  --md-red: #991B1B;
+  --md-red-container: #FEECEC;
+  --md-yellow: #7C4A03;
+  --md-yellow-container: #FDF2DC;
+  --md-purple: #5B21B6;
+  --md-purple-container: #F2ECFC;
+  --md-cyan: #0E4F7A;
+  --md-cyan-container: #E5F2FA;
+
+  --md-surface-rgb: 255, 255, 255;
+  --scrollbar-track: #EFEADF;
+  --scrollbar-thumb: #C2B699;
+  --scrollbar-thumb-hover: #7A5600;
+
+  color-scheme: light;
+}
+
+/* ---- Base Layout & Typography ---- */
+html,
 body {
-  background: var(--zoth-void) !important;
-  color: var(--zoth-text-2) !important;
+  background-color: var(--md-background) !important;
+  color: var(--md-on-surface) !important;
   font-family: var(--zoth-font-sans) !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
-/* ---- Zoth brand header strip (injected) ---- */
-.zoth-brand-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 1.5rem;
-  background: linear-gradient(90deg, #0B0B12 0%, #12121A 100%);
-  border-bottom: 1px solid #2A2A33;
-  font-family: var(--zoth-font-sans);
+/* Custom sleek scrollbars (zero bright-white native bars in dark mode) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
-.zoth-brand-bar .zoth-z {
-  width: 30px; height: 30px;
-  display: inline-flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #F3D56A 0%, #D4AF37 48%, #B8860B 100%);
-  color: #101828; font-weight: 800; font-size: 1.05rem;
-  border-radius: 8px; font-family: var(--zoth-font-display);
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
-.zoth-brand-bar .zoth-name {
-  font-family: var(--zoth-font-display);
-  font-size: 1.15rem; color: #F5E6AB; letter-spacing: 0.03em;
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
 }
-.zoth-brand-bar .zoth-tool {
-  font-size: 0.78rem; color: #9AA0A6; letter-spacing: 0.06em;
-  text-transform: uppercase; font-weight: 600;
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 2px solid var(--scrollbar-track);
 }
-.zoth-brand-bar .zoth-spacer { flex: 1; }
-.zoth-brand-bar .zoth-badge {
-  font-size: 0.68rem; color: #B8860B; background: #2A2410;
-  border: 1px solid #3A2F12; padding: 0.15rem 0.6rem; border-radius: 9999px;
-  font-weight: 700; letter-spacing: 0.05em;
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
 }
 
-/* ---- Zoth footer strip (injected) ---- */
+/* ---- Buttons & Accessible Contrast ---- */
+button,
+.btn,
+.btn-pill,
+.btn-icon,
+.btn-primary,
+.btn-secondary {
+  border-radius: 9999px;
+}
+
+.btn-primary {
+  background-color: var(--md-primary) !important;
+  color: var(--md-on-primary) !important;
+  font-weight: 700 !important;
+}
+.btn-primary:hover {
+  background-color: var(--md-primary-hover) !important;
+}
+
+.btn-fire-pulse {
+  background-color: #D4AF37 !important;
+  background-image: none !important;
+  color: #0A0A0D !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .btn-fire-pulse {
+  background-color: #7A5600 !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+}
+[data-theme="light"] .btn-fire-pulse * {
+  color: #FFFFFF !important;
+}
+
+.btn-tonal {
+  background-color: var(--md-primary-container) !important;
+  color: var(--md-on-primary-container) !important;
+  border: 1px solid var(--md-outline) !important;
+  font-weight: 600 !important;
+}
+
+.btn-outlined {
+  background-color: transparent;
+  color: var(--md-on-surface) !important;
+  border: 1px solid var(--md-outline) !important;
+}
+.btn-outlined:hover {
+  background-color: var(--md-surface-variant) !important;
+  border-color: var(--md-primary) !important;
+}
+
+.status-pill {
+  background-color: var(--md-green-container) !important;
+  color: var(--md-green) !important;
+  border: 1px solid var(--md-green);
+}
+
+#open-access-badge {
+  background-color: var(--md-green-container) !important;
+  color: var(--md-green) !important;
+  border: 1px solid var(--md-green) !important;
+}
+
+.brand-icon-wrapper {
+  background: linear-gradient(135deg, #D4AF37, #8A6508) !important;
+  color: #0A0A0D !important;
+  font-weight: 800;
+}
+
+/* ---- High-contrast Footer ---- */
 .zoth-brand-footer {
   text-align: center;
-  padding: 1.4rem 1rem;
-  border-top: 1px solid #2A2A33;
-  background: #0B0B12;
-  color: #9AA0A6;
-  font-size: 0.8rem;
+  padding: 20px 16px;
+  border-top: 1px solid var(--md-outline-variant);
+  background: var(--md-surface) !important;
+  color: var(--md-on-surface-variant) !important;
+  font-size: 12px;
   font-family: var(--zoth-font-sans);
+  line-height: 1.7;
 }
-.zoth-brand-footer .zoth-foot-name {
-  font-family: var(--zoth-font-display);
-  color: #F5E6AB; font-size: 1.05rem; letter-spacing: 0.03em;
+.zoth-brand-footer a {
+  color: var(--md-primary) !important;
+  font-weight: 600;
+  text-decoration: none;
 }
-.zoth-brand-footer a { color: #D4AF37; text-decoration: none; }
-.zoth-brand-footer a:hover { text-decoration: underline; }
+.zoth-brand-footer a:hover {
+  text-decoration: underline;
+}
+.zoth-brand-footer code {
+  color: var(--md-green) !important;
+  background: var(--md-green-container);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-family: var(--zoth-font-mono);
+  word-break: break-all;
+}
 
-/* ---- Scanline / grid ambient (dark only) ---- */
-@media (prefers-reduced-motion: no-preference) {
-  body::before {
-    content: "";
-    position: fixed; inset: 0; z-index: 9999; pointer-events: none;
-    background: repeating-linear-gradient(
-      0deg,
-      rgba(212, 175, 55, 0.025) 0px,
-      rgba(212, 175, 55, 0.025) 1px,
-      transparent 1px,
-      transparent 3px
-    );
+/* ---- Studio ?embed=1 Mode: Hide redundant outer chrome ---- */
+body.embed-mode header.google-app-bar,
+body.embed-mode footer.zoth-brand-footer,
+body.embed-mode #sovereign-tutorial-fab,
+body.embed-mode .sovereign-tutorial-fab {
+  display: none !important;
+}
+body.embed-mode main.studio-content {
+  padding-top: 12px;
+}
+
+/* ---- Editorial Ivory Light Mode Overrides for Inline Dark Panels ---- */
+[data-theme="light"] .graph-wrapper-card,
+[data-theme="light"] .sidebar-panel,
+[data-theme="light"] .telemetry-card,
+[data-theme="light"] .memory-card,
+[data-theme="light"] .wiki-panel,
+[data-theme="light"] .wiki-reader-pane,
+[data-theme="light"] .wiki-card,
+[data-theme="light"] .obs-card,
+[data-theme="light"] .obs-audit-card,
+[data-theme="light"] .modal-content,
+[data-theme="light"] .modal-card,
+[data-theme="light"] .recall-card,
+[data-theme="light"] .mcp-card,
+[data-theme="light"] .quick-action-potential-bar,
+[data-theme="light"] .quick-trigger-bar,
+[data-theme="light"] #engram-inspector,
+[data-theme="light"] .engram-inspector-modal,
+[data-theme="light"] .galaxy-nav-bar,
+[data-theme="light"] .nebula-hud-bar,
+[data-theme="light"] #memory-stream-container > div {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  color: #141418 !important;
+  border-color: #DFD7C4 !important;
+}
+
+[data-theme="light"] .quick-trigger-bar,
+[data-theme="light"] .quick-action-potential-bar {
+  box-shadow: 0 2px 8px rgba(20, 20, 24, 0.06) !important;
+}
+
+[data-theme="light"] .quick-trigger-bar span,
+[data-theme="light"] .quick-action-potential-bar .quick-bar-label,
+[data-theme="light"] .quick-action-potential-bar span {
+  color: #7A5600 !important;
+}
+
+[data-theme="light"] .memory-text {
+  color: #141418 !important;
+}
+[data-theme="light"] .agent-tag {
+  color: #5E4200 !important;
+}
+[data-theme="light"] .tag-badge {
+  background: #F3EFE6 !important;
+  background-color: #F3EFE6 !important;
+  color: #5E4200 !important;
+  border: 1px solid #D8CEB6 !important;
+}
+
+/* Comprehensive Light Mode surface & text contrast normalization for Obsidian, MCP, Decay, Neuromod tabs */
+[data-theme="light"] #tab-obsidian div,
+[data-theme="light"] #tab-obsidian section,
+[data-theme="light"] #tab-obsidian article {
+  border-color: #DFD7C4;
+}
+[data-theme="light"] #tab-obsidian .wiki-panel,
+[data-theme="light"] #tab-obsidian .wiki-reader-pane,
+[data-theme="light"] #tab-obsidian .wiki-card,
+[data-theme="light"] #tab-obsidian .obs-audit-card,
+[data-theme="light"] #tab-obsidian #obsidian-skills-grid > div,
+[data-theme="light"] #tab-obsidian div[style*="rgba(18"],
+[data-theme="light"] #tab-obsidian div[style*="rgba(10"],
+[data-theme="light"] #tab-obsidian div[style*="rgba(12"],
+[data-theme="light"] #tab-obsidian div[style*="rgba(15"],
+[data-theme="light"] #tab-obsidian div[style*="rgba(8"],
+[data-theme="light"] #tab-obsidian div[style*="rgba(20"],
+[data-theme="light"] #tab-obsidian div[style*="rgba(30"],
+[data-theme="light"] #tab-obsidian div[style*="linear-gradient"] {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  color: #141418 !important;
+  border-color: #DFD7C4 !important;
+}
+
+[data-theme="light"] #tab-obsidian *,
+[data-theme="light"] #engram-inspector * {
+  color: #141418;
+}
+
+[data-theme="light"] .wiki-card-title,
+[data-theme="light"] .obs-header-title,
+[data-theme="light"] .obs-section-title,
+[data-theme="light"] .obs-audit-title,
+[data-theme="light"] [style*="color:#E090FF"],
+[data-theme="light"] [style*="color:#D946EF"],
+[data-theme="light"] [style*="color:#E879F9"],
+[data-theme="light"] [style*="color:#F0ABFC"],
+[data-theme="light"] [style*="color:#F5D0FE"],
+[data-theme="light"] [style*="color:#A78BFA"],
+[data-theme="light"] [style*="color:#818CF8"],
+[data-theme="light"] [style*="color:#9333EA"],
+[data-theme="light"] [style*="background-clip:text"],
+[data-theme="light"] [style*="-webkit-text-fill-color"] {
+  background: none !important;
+  -webkit-text-fill-color: #5B21B6 !important;
+  color: #5B21B6 !important;
+}
+
+[data-theme="light"] .wiki-tag-pill {
+  background: #F3EFE6 !important;
+  background-color: #F3EFE6 !important;
+  color: #5E4200 !important;
+  border: 1px solid #C7BCA2 !important;
+}
+
+[data-theme="light"] #obs-doctor-badge,
+[data-theme="light"] .obs-doctor-badge,
+[data-theme="light"] .obs-audit-banner,
+[data-theme="light"] #obs-audit-banner,
+[data-theme="light"] #obs-audit-badge,
+[data-theme="light"] .obs-badge {
+  background: #E4F5EC !important;
+  background-color: #E4F5EC !important;
+  background-image: none !important;
+  color: #0B5E38 !important;
+  border-color: #8CC9A7 !important;
+}
+
+[data-theme="light"] #btn-obsidian-sync,
+[data-theme="light"] #btn-obsidian-search,
+[data-theme="light"] .wiki-synth-btn,
+[data-theme="light"] #wiki-synth-btn {
+  background: #5B21B6 !important;
+  background-color: #5B21B6 !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+}
+[data-theme="light"] #btn-obsidian-sync *,
+[data-theme="light"] #btn-obsidian-search *,
+[data-theme="light"] .wiki-synth-btn *,
+[data-theme="light"] #wiki-synth-btn * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+[data-theme="light"] #tab-obsidian button.btn-outlined {
+  background: #FAF7F2 !important;
+  background-color: #FAF7F2 !important;
+  color: #141418 !important;
+  border-color: #C7BCA2 !important;
+}
+
+[data-theme="light"] .toast-msg {
+  background: #FFFFFF !important;
+  color: #141418 !important;
+  border: 1px solid #C7BCA2 !important;
+  box-shadow: 0 8px 24px rgba(20, 20, 24, 0.14) !important;
+}
+
+/* Keep galaxy overlay pill bar high-contrast dark on dark 3D canvas */
+[data-theme="light"] #nebula-3d-wrapper .galaxy-nav-bar,
+[data-theme="light"] #nebula-3d-wrapper .nebula-hud-bar {
+  background: rgba(16, 18, 26, 0.88) !important;
+  color: #F2F4F8 !important;
+  border-color: rgba(212, 175, 55, 0.4) !important;
+}
+
+[data-theme="light"] .input-field,
+[data-theme="light"] .select-field,
+[data-theme="light"] .textarea-field,
+[data-theme="light"] input[type="text"],
+[data-theme="light"] input[type="search"],
+[data-theme="light"] input[type="number"],
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+  background: #FAF7F2 !important;
+  background-color: #FAF7F2 !important;
+  color: #141418 !important;
+  border-color: #C7BCA2 !important;
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #5C6678 !important;
+}
+
+/* Keep the 3D WebGL nebula viewport container clearly framed as an ivory-bordered stage in light mode */
+[data-theme="light"] #nebula-3d-wrapper {
+  background: radial-gradient(circle at 50% 45%, #F6F1E6 0%, #EAE2D0 100%) !important;
+  border-color: #C7BCA2 !important;
+}
+
+[data-theme="light"] .nebula-overlay-hud,
+[data-theme="light"] .nebula-hud,
+[data-theme="light"] .graph-legend,
+[data-theme="light"] .inspector-drawer,
+[data-theme="light"] #node-inspector-drawer,
+[data-theme="light"] #obsidian-unified-search > div,
+[data-theme="light"] #tab-obsidian div[style*="background:#0"],
+[data-theme="light"] #tab-obsidian div[style*="background: #0"],
+[data-theme="light"] #tab-obsidian div[style*="background:#1"],
+[data-theme="light"] #tab-obsidian div[style*="background: #1"],
+[data-theme="light"] #tab-obsidian pre,
+[data-theme="light"] #tab-obsidian code,
+[data-theme="light"] #tab-mcp pre,
+[data-theme="light"] #tab-mcp code,
+[data-theme="light"] #tab-decay div[style*="background:#0"],
+[data-theme="light"] #tab-neuromod div[style*="background:#0"] {
+  background: #F6F2E8 !important;
+  background-color: #F6F2E8 !important;
+  color: #141418 !important;
+  border-color: #D8CEB6 !important;
+}
+
+/* Darken neon pastel inline text colors in Light Mode for WCAG AA >= 4.5:1 */
+[data-theme="light"] [style*="color:#38BDF8"],
+[data-theme="light"] [style*="color: #38BDF8"],
+[data-theme="light"] [style*="color:#60A5FA"],
+[data-theme="light"] [style*="color: #60A5FA"],
+[data-theme="light"] [style*="color:#80F0FF"],
+[data-theme="light"] [style*="color:#00E5FF"] {
+  color: #0E4F7A !important;
+}
+[data-theme="light"] [style*="color:#34D399"],
+[data-theme="light"] [style*="color: #34D399"],
+[data-theme="light"] [style*="color:#10B981"],
+[data-theme="light"] [style*="color: #10B981"],
+[data-theme="light"] [style*="color:#14F195"],
+[data-theme="light"] [style*="color:#22C55E"] {
+  color: #0B5E38 !important;
+}
+[data-theme="light"] [style*="color:#D4AF37"],
+[data-theme="light"] [style*="color: #D4AF37"],
+[data-theme="light"] [style*="color:#F5E6AB"],
+[data-theme="light"] [style*="color: #F5E6AB"],
+[data-theme="light"] [style*="color:#FFD700"],
+[data-theme="light"] [style*="color:#FACC15"],
+[data-theme="light"] [style*="color:#FBBF24"] {
+  color: #7A5600 !important;
+}
+[data-theme="light"] [style*="color:#C084FC"],
+[data-theme="light"] [style*="color: #C084FC"],
+[data-theme="light"] [style*="color:#A855F7"],
+[data-theme="light"] [style*="color: #A855F7"] {
+  color: #5B21B6 !important;
+}
+[data-theme="light"] [style*="color:#F87171"],
+[data-theme="light"] [style*="color:#F43F5E"],
+[data-theme="light"] [style*="color:#EF4444"] {
+  color: #991B1B !important;
+}
+[data-theme="light"] [style*="color:#9AA0A6"],
+[data-theme="light"] [style*="color: #9AA0A6"],
+[data-theme="light"] [style*="color:#94A3B8"],
+[data-theme="light"] [style*="color:#6B7280"] {
+  color: #475467 !important;
+}
+[data-theme="light"] [style*="color:#EDEFF2"],
+[data-theme="light"] [style*="color: #EDEFF2"],
+[data-theme="light"] [style*="color:#FFFFFF"],
+[data-theme="light"] [style*="color:#fff"] {
+  color: #141418 !important;
+}
+[data-theme="light"] .btn-primary,
+[data-theme="light"] .btn-primary * {
+  color: #FFFFFF !important;
+}
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn-primary * {
+  color: #0A0A0D !important;
+}
+
+/* ---- Dark Mode Inline Contrast Guards ---- */
+[data-theme="dark"] [style*="color:#6B7280"] {
+  color: #B4BAC6 !important;
+}
+[data-theme="dark"] .galaxy-chip,
+[data-theme="dark"] .cluster-btn,
+[data-theme="dark"] .aura-btn,
+[data-theme="dark"] .filter-chip {
+  color: #E6E9F0;
+}
+
+/* ---- Mobile Touch Target Accessibility (>= 44x44px) ---- */
+@media (max-width: 600px) {
+  button,
+  .btn,
+  .btn-icon,
+  .nav-tab,
+  .segmented-btn,
+  .filter-chip,
+  .tag-badge,
+  .galaxy-btn,
+  .aura-btn,
+  .zoth-brand-footer a {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
-}
-
-/* ---- Buttons / cards gold accent ---- */
-button, .btn, .btn-pill, .btn-icon, .btn-primary, .btn-secondary {
-  border-radius: 9999px !important;
-}
-button:hover, .btn:hover, .btn-pill:hover, .btn-icon:hover {
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.16) !important;
+  .btn-icon {
+    width: 44px !important;
+    height: 44px !important;
+  }
 }

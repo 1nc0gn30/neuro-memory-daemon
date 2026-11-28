@@ -1,48 +1,64 @@
-# Neuro-Memory Daemon (`neuro-memory-daemon`)
+# Neuro-Memory Daemon (`neuro-memory-daemon` v2.9.0)
 
-Zero-dependency Python cognitive memory substrate, 3-factor Spike-Timing-Dependent Plasticity (STDP) engine, 28-route HTTP workstation (`127.0.0.1:8094`), Obsidian Second Brain vault synchronizer, and 21-tool Model Context Protocol (MCP) server.
+Zero-dependency Python cognitive memory substrate, 3-factor Spike-Timing-Dependent Plasticity (STDP) engine, hardened loopback HTTP workstation (`127.0.0.1:8094`), Obsidian Second Brain vault synchronizer, and 21-tool Model Context Protocol (MCP) server.
 
-[![CI](https://github.com/NullAITech/neuro-memory-daemon/actions/workflows/ci.yml/badge.svg)](https://github.com/NullAITech/neuro-memory-daemon/actions/workflows/ci.yml)
+[![CI](https://github.com/1nc0gn30/neuro-memory-daemon/actions/workflows/ci.yml/badge.svg)](https://github.com/1nc0gn30/neuro-memory-daemon/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 ---
 
-## Cognitive Substrate Architecture
+## What It Does
 
-`neuro-memory-daemon` implements persistent associative agent memory using standard-library Python (`sqlite3` WAL, `math`, `http.server`, `threading`) with zero third-party runtime dependencies:
+`neuro-memory-daemon` provides persistent, locally stored associative memory for autonomous AI agents and human operators using standard-library Python (`sqlite3` WAL, `http.server`, `threading`, `math`) with zero pip runtime dependencies and zero external font/CDN egress:
+
+- **Persistent STDP Memory Engrams**: Stores episodic, semantic, procedural, architecture, and security engrams in a local SQLite WAL database (`~/.neuro-memory/`).
+- **Associative Recall & Consolidation**: Performs Hippocampal CA3/CA1 pattern completion, spreading activation across weighted synaptic edges, Ebbinghaus retention decay, and sleep consolidation pruning.
+- **Dual-Theme 3D WebGL Workstation (`127.0.0.1:8094`)**: Serves Editorial Ivory Light Mode and Obsidian Gold Dark Mode with `?embed=1&theme=light|dark` Zoth Studio integration, 3D Cosmic Neural Nebula, federated Everywhere memory ledger, and Obsidian Second Brain hub.
+- **21-Tool MCP Server**: Exposes 11 cognitive substrate tools and 10 Obsidian Second Brain / Vaelor tools over both `stdio` JSON-RPC 2.0 and loopback HTTP `POST /api/mcp`.
+
+---
+
+## How It Works
 
 1. **3-Factor Spike-Timing-Dependent Plasticity (STDP)**:
-   - Updates synaptic edge weights between co-activated memory engrams according to $\Delta w = \eta \cdot \text{DA} \cdot \exp(-|\Delta t|/\tau)$, supporting reward-modulated Long-Term Potentiation (LTP) and Long-Term Depression (LTD).
+   - Updates synaptic edge weights between co-activated memory engrams according to $\Delta w = \eta \cdot \text{DA} \cdot \exp(-|\Delta t|/\tau)$, supporting causal Long-Term Potentiation (LTP) and anti-causal Long-Term Depression (LTD).
 2. **Hippocampal CA3/CA1 Auto-Associative Recall & Pattern Separation**:
    - Spreading activation across weighted adjacency edges reconstructs full memory engrams from partial query cues while orthogonalizing overlapping traces.
 3. **DLPFC Working Memory & Ebbinghaus Retention Decay**:
-   - Bounded LRU working buffer ($7 \pm 2$ active slots) paired with exponential retention decay $R(t) = \exp(-\Delta t / S)$ and sharp-wave ripple (SWR) consolidation passes that prune sub-threshold noise.
+   - Bounded LRU working buffer ($7 \pm 2$ active slots) paired with exponential retention decay $R(t) = \exp(-\Delta t / S)$ and sharp-wave ripple (SWR) consolidation passes.
 4. **Endogenous Neuromodulation & Yerkes-Dodson Arousal**:
-   - Tracks Norepinephrine (`NE`, flashbulb memory lock at $\text{NE} \ge 0.85$), Dopamine (`DA`, plasticity gain), Acetylcholine (`ACh`, sensory encoding vs. internal consolidation), and Serotonin (`5-HT`).
-5. **Bidirectional Obsidian Second Brain Integration**:
-   - Indexes and audits Obsidian Flavored Markdown (`[[Wikilinks]]`, frontmatter, callouts), JSON Canvas 1.0 (`.canvas`), Obsidian Bases (`.base`), and LLM Wiki synthesis pages with fixed-root path confinement.
-6. **3D WebGL Cortex & Memory Studio UI (`127.0.0.1:8094`)**:
-   - Interactive Three.js visualization of six semantic clusters (`Agents`, `Tools`, `Security`, `System`, `Living Minds`, `Obsidian Second Brain`), multi-hop Dijkstra pathway tracing, salience threshold scrubbing, and dual-pane note editing.
+   - Tracks Norepinephrine (`NE`, flashbulb memory lock at $\text{NE} \ge 0.85$), Dopamine (`DA`), Acetylcholine (`ACh`), and Serotonin (`5-HT`).
+5. **Loopback Security & Fixed-Root Vault Confinement**:
+   - Enforces strict loopback `Host` (`127.0.0.1`, `localhost`, `[::1]`) and exact-port `Origin` (`403 Forbidden`) across `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, and `OPTIONS` (reflecting trusted loopback origin only, never wildcard `*`).
+   - Emits `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, strict loopback `Content-Security-Policy`, and stripped `Server: Neuro-Memory`.
+   - Enforces a `1 MiB` (`413 Payload Too Large`) body cap, strict JSON / numeric query parameter validation (`400 Bad Request` / JSON-RPC `-32700`), DOM-safe rendering, and `Path.resolve().is_relative_to()` confinement on all Obsidian note, wiki, and `.canvas` reads and writes.
 
 ---
 
 ## Installation & Quick Start
 
 ```bash
-git clone https://github.com/NullAITech/neuro-memory-daemon.git
+git clone https://github.com/1nc0gn30/neuro-memory-daemon.git
 cd neuro-memory-daemon
 pip install -e .
 
-# Launch the HTTP daemon & WebGL Memory Studio on http://127.0.0.1:8094
-neuro-memory serve --port 8094
+# Launch the HTTP daemon & 3D Memory Studio on http://127.0.0.1:8094
+neuro-memory-daemon serve --port 8094
 curl -s http://127.0.0.1:8094/health
 ```
 
 ---
 
-## CLI Reference (`neuro-memory` / `neuro-memory-daemon`)
+## ZothOS CLI & 21-Tool MCP Commands
+
+### CLI Reference (`neuro-memory-daemon`, `neuro-memory`, `zoth-neuro-memory`, `zoth-memory`, `neuro-memory-daemon-tui`)
 
 ```bash
+# Version, health & live Braille telemetry TUI
+neuro-memory-daemon --version
+neuro-memory-daemon --json
+neuro-memory-daemon-tui --status
+
 # Encode an associative memory engram
 neuro-memory store "Configured SQLite WAL journaling for concurrent readers" \
   --tags "sqlite,wal,storage" --category "architecture" --importance 1.2
@@ -63,19 +79,12 @@ neuro-memory stats --detailed
 neuro-memory doctor
 ```
 
----
+### 21-Tool Model Context Protocol (MCP) Server
 
-## 21-Tool Model Context Protocol (MCP) Server
+Supports both `stdio` (`neuro-memory mcp` / `python3 -m neuro_memory_daemon.mcp_server`) and loopback HTTP JSON-RPC 2.0 (`POST http://127.0.0.1:8094/api/mcp` and `GET http://127.0.0.1:8094/api/mcp/tools`).
 
-Supports both stdio (`neuro-memory mcp` / `python3 -m neuro_memory_daemon.mcp_server`) and HTTP JSON-RPC 2.0 (`POST /api/mcp` on `127.0.0.1:8094`).
-
-### Cognitive Substrate Tools (11)
-- `memory_store`, `memory_recall`, `memory_search`, `memory_graph`, `memory_consolidate`, `memory_stats`, `memory_diagnostics`, `memory_metacognition`, `neuro_neuromodulator_status`, `neuro_neuromodulate_pulse`, `neuro_flashbulb_tag`
-
-### Obsidian Second Brain & Layer-1 Tools (10)
-- `obsidian_vault_search`, `obsidian_wiki_synthesize`, `obsidian_canvas_generate`, `obsidian_doctor_audit`, `obsidian_daily_log`, `obsidian_backlinks_inspect`, `obsidian_bundle_export`, `obsidian_note_read`, `obsidian_note_write`, `obsidian_vaelor_pouw`
-
-### Client Registration (`claude_desktop_config.json` / `.cursor/mcp.json`)
+- **Cognitive Substrate Tools (11)**: `memory_store`, `memory_recall`, `memory_search`, `memory_graph`, `memory_consolidate`, `memory_stats`, `memory_diagnostics`, `memory_metacognition`, `neuro_neuromodulator_status`, `neuro_neuromodulate_pulse`, `neuro_flashbulb_tag`
+- **Obsidian Second Brain & Vaelor Bridge Tools (10)**: `obsidian_vault_search`, `obsidian_wiki_synthesize`, `obsidian_canvas_generate`, `obsidian_doctor_audit`, `obsidian_daily_log`, `obsidian_backlinks_inspect`, `obsidian_bundle_export`, `obsidian_note_read`, `obsidian_note_write`, `obsidian_vaelor_pouw`
 
 ```json
 {
@@ -90,58 +99,22 @@ Supports both stdio (`neuro-memory mcp` / `python3 -m neuro_memory_daemon.mcp_se
 
 ---
 
-## Python Library API
-
-```python
-from neuro_memory_daemon import consolidate_memories, recall_memory, store_memory
-
-store_memory(
-    text="Implemented loopback Origin verification on local daemons",
-    tags=["security", "cors", "http"],
-    category="security",
-    importance=1.3,
-)
-matches = recall_memory("loopback origin", top_k=3)
-consolidate_memories(decay_rate=0.05)
-```
-
----
-
 ## Verification & Test Suite
 
 ```bash
-PYTHONPATH=src python3 -m pytest tests/ -v   # 165 unit & integration tests
-gitleaks detect --source . --no-banner --redact
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python3 -m pytest tests/ -q
+gitleaks detect --no-git --source .
 ```
 
 ---
 
 ## License & Support
 
-- **License**: Apache-2.0
+- **Version**: `2.9.0`
+- **License**: `Apache-2.0`
 - **Open Access**: 100% free and open-source with zero paywalls or locked tools.
+- **Zoth Studio Route**: [https://zoth.nullai.tech/tools/neuro-memory-daemon](https://zoth.nullai.tech/tools/neuro-memory-daemon)
 - **Buy Us a Coffee (Stripe)**: [https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X](https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X)
 - **Solana Tip Address**: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK` (`solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`)
 
 Engineered by **Neal Frazier Tech** ([@1nc0gn30](https://github.com/1nc0gn30) · [https://github.com/1nc0gn30/neuro-memory-daemon](https://github.com/1nc0gn30/neuro-memory-daemon)) · [NullAI Platform](https://nullai.tech) · [Zoth Studio](https://zoth.nullai.tech)
-
-## Sovereign Surfaces
-
-_Machine-generated surface inventory (docs/tools/layerD_probe.py). Do not hand-edit; re-run the probe instead.
-
-**What it does.** Neuro-Memory Daemon — 🧠 Neuro-Memory Daemon: Cognitive Associative Substrate & MCP Protocol Bridge
-
-**Category.** Memory & Brain  ·  **Version.** 2.8.0  ·  **Execution type.** `local_cli`
-
-**Architecture & port.** Canonical source: `~/NullAITech/neuro-memory-daemon`. Assigned `localPort` **8094** (`http://127.0.0.1:8094`).
-
-**ZothOS CLI usage.**
-
-```bash
-neuro-memory-daemon --help     # exit 0
-neuro-memory-daemon --json     # exit 0
-```
-
-**Zoth Studio route.** https://zoth.nullai.tech/tools/neuro-memory-daemon
-
-_Verified 2026-11-15 across the three install surfaces (`/usr/local/bin`, `~/.local/bin`, `zoth-os/config/includes.chroot/usr/local/bin`)._

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "neuro-memory-daemon",
+  "name": "Neuro-Memory Daemon",
+  "version": "2.9.0",
+  "license": "Apache-2.0",
+  "author": "Neal Frazier Tech (@1nc0gn30) • NullAI Platform",
+  "repository": "https://github.com/1nc0gn30/neuro-memory-daemon",
+  "homepage": "https://neuro-memory.nullai.tech/",
+  "protocolVersion": "2024-11-05",
+  "transports": [
+    {
+      "type": "stdio",
+      "command": "neuro-memory",
+      "args": ["mcp"]
+    },
+    {
+      "type": "http-loopback",
+      "endpoint": "http://127.0.0.1:8094/api/mcp",
+      "discovery": "http://127.0.0.1:8094/api/mcp/tools"
+    }
+  ],
+  "toolCount": 21,
+  "tools": [
+    "memory_store",
+    "memory_recall",
+    "memory_search",
+    "memory_graph",
+    "memory_consolidate",
+    "memory_stats",
+    "memory_diagnostics",
+    "memory_metacognition",
+    "neuro_neuromodulator_status",
+    "neuro_neuromodulate_pulse",
+    "neuro_flashbulb_tag",
+    "obsidian_vault_search",
+    "obsidian_wiki_synthesize",
+    "obsidian_canvas_generate",
+    "obsidian_doctor_audit",
+    "obsidian_daily_log",
+    "obsidian_backlinks_inspect",
+    "obsidian_bundle_export",
+    "obsidian_note_read",
+    "obsidian_note_write",
+    "obsidian_vaelor_pouw"
+  ]
+}

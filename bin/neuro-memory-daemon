@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Neuro-Memory Daemon v2.9.0 — Unified CLI, Desktop & Braille TUI Wrapper
+# Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+# ==============================================================================
+set -euo pipefail
+
+VERSION="2.9.0"
+
+# Resolve canonical repository or /opt fallback (no literal host home paths)
+REPO_DIR="${HOME:-/root}/NullAITech/neuro-memory-daemon"
+if [[ ! -d "$REPO_DIR/src/neuro_memory_daemon" ]]; then
+  REPO_DIR="/opt/neuro-memory-daemon"
+fi
+
+PYTHON_BIN="/opt/zothos-ai-env/bin/python3"
+if [[ ! -x "$PYTHON_BIN" ]]; then
+  PYTHON_BIN="python3"
+fi
+
+CMD="${1:-}"
+
+if [[ "$CMD" == "desktop" || "$CMD" == "electron" || "$CMD" == "--electron" ]]; then
+  shift
+  ELECTRON_BIN="$(command -v electron || echo /usr/local/bin/electron)"
+  exec "$ELECTRON_BIN" "$REPO_DIR/electron/main.cjs" "$@"
+elif [[ "$CMD" == "tui" || "$CMD" == "--tui" ]]; then
+  shift
+  TUI_BIN="$REPO_DIR/bin/neuro-memory-daemon-tui"
+  [[ ! -x "$TUI_BIN" ]] && TUI_BIN="/usr/local/bin/neuro-memory-daemon-tui"
+  exec "$PYTHON_BIN" "$TUI_BIN" "$@"
+elif [[ "$CMD" == "--version" || "$CMD" == "-v" ]]; then
+  echo "neuro-memory-daemon v${VERSION} (Neal Frazier Tech • NullAI Platform)"
+  exit 0
+elif [[ "$CMD" == "--json" ]]; then
+  if command -v curl >/dev/null 2>&1 && curl -fsS --max-time 2 http://127.0.0.1:8094/health >/dev/null 2>&1; then
+    curl -fsS --max-time 2 http://127.0.0.1:8094/api/stats
+    echo ""
+    exit 0
+  fi
+  printf '{"service":"neuro-memory-daemon","version":"%s","port":8094,"status":"offline","author":"Neal Frazier Tech (@1nc0gn30) • NullAI Platform"}\n' "$VERSION"
+  exit 0
+elif [[ "$CMD" == "--status" || "$CMD" == "status" ]]; then
+  if command -v curl >/dev/null 2>&1 && curl -fsS --max-time 2 http://127.0.0.1:8094/health >/dev/null 2>&1; then
+    curl -fsS --max-time 2 http://127.0.0.1:8094/health
+    echo ""
+    exit 0
+  fi
+  export PYTHONPATH="$REPO_DIR/src:${PYTHONPATH:-}"
+  exec "$PYTHON_BIN" -m neuro_memory_daemon.cli stats
+elif [[ "$CMD" == "web" ]]; then
+  shift
+  export PYTHONPATH="$REPO_DIR/src:${PYTHONPATH:-}"
+  exec "$PYTHON_BIN" -m neuro_memory_daemon.cli serve --host 127.0.0.1 --port 8094 "$@"
+elif [[ "$CMD" == "serve" ]]; then
+  shift
+  export PYTHONPATH="$REPO_DIR/src:${PYTHONPATH:-}"
+  if [[ $# -eq 0 ]]; then
+    exec "$PYTHON_BIN" -m neuro_memory_daemon.cli serve --host 127.0.0.1 --port 8094
+  fi
+  exec "$PYTHON_BIN" -m neuro_memory_daemon.cli serve "$@"
+fi
+
+if [[ -d "$REPO_DIR/src/neuro_memory_daemon" ]]; then
+  export PYTHONPATH="$REPO_DIR/src:${PYTHONPATH:-}"
+  exec "$PYTHON_BIN" -m neuro_memory_daemon.cli "$@"
+fi
+
+echo "Error: neuro-memory-daemon package not found in $REPO_DIR" >&2
+exit 1

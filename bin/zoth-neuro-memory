@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# ZothOS Neuro-Memory Alias CLI Wrapper (v2.9.0)
+# Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+# ==============================================================================
+set -euo pipefail
+
+VERSION="2.9.0"
+REPO_DIR="${HOME:-/root}/NullAITech/neuro-memory-daemon"
+if [[ ! -d "$REPO_DIR/src/neuro_memory_daemon" ]]; then
+  REPO_DIR="/opt/neuro-memory-daemon"
+fi
+
+PYTHON_BIN="/opt/zothos-ai-env/bin/python3"
+if [[ ! -x "$PYTHON_BIN" ]]; then
+  PYTHON_BIN="python3"
+fi
+
+if [[ "${1:-}" == "--version" || "${1:-}" == "-v" ]]; then
+  echo "zoth-neuro-memory v${VERSION} (Neal Frazier Tech • NullAI Platform)"
+  exit 0
+elif [[ "${1:-}" == "--json" ]]; then
+  if command -v curl >/dev/null 2>&1 && curl -fsS --max-time 2 http://127.0.0.1:8094/api/stats >/dev/null 2>&1; then
+    curl -fsS --max-time 2 http://127.0.0.1:8094/api/stats
+    echo ""
+    exit 0
+  fi
+  printf '{"service":"neuro-memory-daemon","version":"%s","port":8094,"status":"offline"}\n' "$VERSION"
+  exit 0
+fi
+
+if [[ -d "$REPO_DIR/src/neuro_memory_daemon" ]]; then
+  export PYTHONPATH="$REPO_DIR/src:${PYTHONPATH:-}"
+  exec "$PYTHON_BIN" -m neuro_memory_daemon.cli "$@"
+fi
+
+echo "Error: zoth-neuro-memory not found in $REPO_DIR" >&2
+exit 1

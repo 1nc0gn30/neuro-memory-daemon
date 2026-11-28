@@ -855,6 +855,23 @@ class MCPServer:
             "stdpMatches": stdp_results[:limit]
         }, indent=2)
 
+    @staticmethod
+    def _validate_safe_topic(base_dir: Path, raw_topic: str, suffix: str) -> tuple[Path, str]:
+        import re as _re
+        topic = str(raw_topic or "").strip()
+        if not topic:
+            raise ValueError("Parameter 'topic' is required.")
+        if "\x00" in topic or "/" in topic or "\\" in topic or ".." in topic:
+            raise ValueError("Path traversal forbidden: topic contains invalid path characters.")
+        clean_name = _re.sub(r'["\']', "", topic).strip()
+        if not clean_name or clean_name in (".", "..") or clean_name.startswith("."):
+            raise ValueError("Path traversal forbidden: invalid topic filename.")
+        resolved_base = base_dir.resolve()
+        candidate = (resolved_base / f"{clean_name}{suffix}").resolve()
+        if not candidate.is_relative_to(resolved_base) or candidate.parent != resolved_base:
+            raise ValueError("Path traversal forbidden: target escapes vault root.")
+        return candidate, clean_name
+
     def _tool_obsidian_wiki_synthesize(self, args: Dict[str, Any]) -> str:
         topic = str(args.get("topic", "")).strip()
         if not topic:
@@ -867,7 +884,7 @@ class MCPServer:
         wiki_dir = vault_dir / "06-Wiki"
         wiki_dir.mkdir(parents=True, exist_ok=True)
 
-        target_file = wiki_dir / f"{topic}.md"
+        target_file, topic = self._validate_safe_topic(wiki_dir, topic, ".md")
         now_iso = datetime.now(timezone.utc).isoformat()
 
         if target_file.exists():
@@ -936,7 +953,7 @@ class MCPServer:
         vault_dir = Path.home() / "Documents" / "Obsidian Vault"
         vault_dir.mkdir(parents=True, exist_ok=True)
 
-        target_file = vault_dir / f"{topic} Knowledge Map.canvas"
+        target_file, topic = self._validate_safe_topic(vault_dir, topic, " Knowledge Map.canvas")
         now_ts = int(time.time())
 
         nodes = [

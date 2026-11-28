@@ -1,0 +1,23 @@
+# Neuro-Memory Daemon (v2.9.0)
+
+> Zero-dependency Python cognitive memory substrate, 3-factor Spike-Timing-Dependent Plasticity (STDP) engine, CA3/CA1 associative recall, 3D WebGL Neural Nebula workstation (`127.0.0.1:8094`), Obsidian Second Brain vault synchronizer, and 21-tool Model Context Protocol (MCP) server.
+
+- **Canonical Repository**: https://github.com/1nc0gn30/neuro-memory-daemon
+- **Showcase & Documentation**: https://neuro-memory.nullai.tech/
+- **Zoth Studio Route**: https://zoth.nullai.tech/tools/neuro-memory-daemon
+- **Local Loopback Endpoint**: http://127.0.0.1:8094
+- **License**: Apache-2.0 (100% Free & Open Access — zero paywalls)
+- **Attribution**: Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform (https://nullai.tech)
+
+## Core Architecture
+- Standard-library Python 3.9+ (`sqlite3` WAL, `http.server`, `threading`, `math`) with zero third-party pip runtime dependencies.
+- Strict loopback `Host` and `Origin` HTTP 403 enforcement, non-wildcard CORS, 4 HTTP security headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, loopback `CSP`), `1 MiB` HTTP 413 body cap, strict JSON / query-param HTTP 400 validation, and realpath fixed-root confinement for Obsidian vault reads and writes.
+- Dual-theme workstation: Editorial Ivory Light Mode and Obsidian Gold Dark Mode with `?embed=1&theme=light|dark` Studio synchronization and zero external font/CDN egress.
+
+## 21-Tool MCP Server (`neuro-memory mcp` / `POST /api/mcp`)
+- Cognitive Substrate (11): `memory_store`, `memory_recall`, `memory_search`, `memory_graph`, `memory_consolidate`, `memory_stats`, `memory_diagnostics`, `memory_metacognition`, `neuro_neuromodulator_status`, `neuro_neuromodulate_pulse`, `neuro_flashbulb_tag`
+- Obsidian Second Brain & Vaelor Bridge (10): `obsidian_vault_search`, `obsidian_wiki_synthesize`, `obsidian_canvas_generate`, `obsidian_doctor_audit`, `obsidian_daily_log`, `obsidian_backlinks_inspect`, `obsidian_bundle_export`, `obsidian_note_read`, `obsidian_note_write`, `obsidian_vaelor_pouw`
+
+## Voluntary Community Support
+- Stripe Buy Us a Coffee: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X
+- Solana Tip Address: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`

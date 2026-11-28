@@ -1,60 +1,145 @@
 #!/usr/bin/env python3
-"""⚡ Neuro Memory Daemon — Sovereign Unicode U+2800 Braille TUI & Benchmark Harness
-Engineered by 1nc0gn30 (@1nc0gn30) • NullAI Platform
-Paired Uncommon-Web Library: Canvas UI (canvasui-html-effects)
+"""Neuro-Memory Daemon v2.9.0 — Live Read-Only Braille Telemetry TUI
+Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+Queries strictly read-only loopback endpoints on http://127.0.0.1:8094
+(/health and /api/stats) with graceful offline reporting.
 """
-import argparse, json, math, os, sys, time
+from __future__ import annotations
 
+import argparse
+import json
+import sys
+import time
+import urllib.error
+import urllib.request
+from typing import Any, Dict, List, Tuple
+
+VERSION = "2.9.0"
 BRAILLE_BASE = 0x2800
-METRICS = ["AST/Engine Latency (ms)", "Throughput (ops/s)", "Memory Footprint (MB)", "Zero-Trust Audit Status"]
-SUMMARY = "Sovereign Neuro Memory Daemon engine with deterministic local execution and real-time telemetry."
-UW_SLUG = "canvasui-html-effects"
-UW_INSTALL = "npx shadcn@latest add https://canvasui.dev/r/liquid-react.json https://canvasui.dev/r/shatter-react.json https://canvasui.dev/r/peel-react.json https://canvasui.dev/r/ripple-react.json https://canvasui.dev/r/cloth-react.json https://canvasui.dev/r/vhs-react.json"
 
-def braille_sparkline(vals):
+
+def fetch_json_readonly(url: str, timeout: float = 1.5) -> Tuple[bool, Dict[str, Any]]:
+    """Perform a strictly read-only GET request to a loopback URL."""
+    req = urllib.request.Request(
+        url,
+        headers={"Accept": "application/json", "User-Agent": f"neuro-memory-daemon-tui/{VERSION}"},
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            if resp.status == 200:
+                data = json.loads(resp.read().decode("utf-8"))
+                return True, data if isinstance(data, dict) else {}
+    except Exception:
+        pass
+    return False, {}
+
+
+def braille_bars(values: List[float], width: int = 24) -> str:
+    """Encode real normalized numeric values [0..1] into U+2800 2x4 Braille glyphs."""
+    if not values:
+        return "⠀" * (width // 2)
+    padded = list(values[:width])
+    while len(padded) < width:
+        padded.append(0.0)
     out = []
-    for i in range(0, len(vals) - 1, 2):
-        v1 = max(0, min(3, int(vals[i] * 3.99)))
-        v2 = max(0, min(3, int(vals[i+1] * 3.99)))
-        dots1 = (0x40, 0x04, 0x02, 0x01)[v1]
-        dots2 = (0x80, 0x20, 0x10, 0x08)[v2]
-        out.append(chr(BRAILLE_BASE | dots1 | dots2))
+    levels_l = (0x40, 0x44, 0x46, 0x47)
+    levels_r = (0x80, 0xA0, 0xB0, 0xB8)
+    for i in range(0, len(padded) - 1, 2):
+        v1 = max(0, min(3, int(round(padded[i] * 3))))
+        v2 = max(0, min(3, int(round(padded[i + 1] * 3))))
+        glyph = BRAILLE_BASE | (levels_l[v1] if padded[i] > 0 else 0) | (levels_r[v2] if padded[i + 1] > 0 else 0)
+        out.append(chr(glyph))
     return "".join(out)
 
-def main():
-    ap = argparse.ArgumentParser(description="Neuro Memory Daemon Sovereign TUI & Benchmark")
-    ap.add_argument("--json", action="store_true", help="Output JSON telemetry and exit")
-    ap.add_argument("--benchmark", action="store_true", help="Run deterministic latency benchmark")
-    ap.add_argument("--frames", type=int, default=18, help="TUI frames to render")
+
+def collect_live_snapshot(base_url: str) -> Dict[str, Any]:
+    t0 = time.perf_counter()
+    ok_health, health = fetch_json_readonly(f"{base_url}/health")
+    ok_stats, stats = fetch_json_readonly(f"{base_url}/api/stats")
+    latency_ms = round((time.perf_counter() - t0) * 1000.0, 2)
+
+    categories = stats.get("categories") if isinstance(stats.get("categories"), dict) else {}
+    top_cats = sorted(categories.items(), key=lambda kv: kv[1], reverse=True)[:12]
+    max_cat = max((v for _, v in top_cats), default=1) or 1
+    cat_profile = [float(v) / float(max_cat) for _, v in top_cats]
+
+    return {
+        "tool": "neuro-memory-daemon-tui",
+        "service": "neuro-memory-daemon",
+        "version": VERSION,
+        "daemon_version": health.get("version") or ("offline" if not ok_health else "unknown"),
+        "base_url": base_url,
+        "online": bool(ok_health and ok_stats),
+        "probe_latency_ms": latency_ms,
+        "total_memories": int(stats.get("total_memories", 0) or 0),
+        "total_synapses": int(stats.get("total_synapses", 0) or 0),
+        "synaptic_density": float(stats.get("synaptic_density", 0.0) or 0.0),
+        "average_importance": float(stats.get("average_importance", 0.0) or 0.0),
+        "category_count": len(categories),
+        "top_categories": [{"name": k, "count": int(v)} for k, v in top_cats[:6]],
+        "braille_distribution": braille_bars(cat_profile, width=24),
+        "author": "Neal Frazier Tech (@1nc0gn30) • NullAI Platform",
+        "repository": "https://github.com/1nc0gn30/neuro-memory-daemon",
+    }
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(
+        prog="neuro-memory-daemon-tui",
+        description="Live read-only Unicode Braille telemetry TUI for Neuro-Memory Daemon (:8094).",
+    )
+    ap.add_argument("--url", default="http://127.0.0.1:8094", help="Loopback daemon base URL")
+    ap.add_argument("--json", action="store_true", help="Output live JSON telemetry and exit")
+    ap.add_argument("--status", action="store_true", help="Print compact one-line status and exit")
+    ap.add_argument("-v", "--version", action="version", version=f"neuro-memory-daemon-tui v{VERSION}")
     args = ap.parse_args()
 
-    t0 = time.perf_counter()
-    samples = [0.5 + 0.45 * math.sin(i * 0.35) for i in range(48)]
-    elapsed_ms = round((time.perf_counter() - t0) * 1000.0 + 0.42, 3)
+    snap = collect_live_snapshot(args.url.rstrip("/"))
 
     if args.json:
-        print(json.dumps({
-            "tool": "neuro-memory-daemon",
-            "title": "Neuro Memory Daemon",
-            "architect": "1nc0gn30 (@1nc0gn30) • NullAI Platform",
-            "summary": SUMMARY,
-            "uncommon_web": {"slug": UW_SLUG, "install": UW_INSTALL},
-            "audio_lufs": -14.0,
-            "benchmark_ms": elapsed_ms,
-            "metrics": METRICS,
-            "braille_signature": braille_sparkline(samples),
-        }, indent=2))
-        return
+        print(json.dumps(snap, indent=2))
+        return 0
 
+    if args.status:
+        state = "ONLINE" if snap["online"] else "OFFLINE"
+        print(
+            f"neuro-memory-daemon-tui v{VERSION} | {state} {snap['base_url']} | "
+            f"engrams={snap['total_memories']:,} synapses={snap['total_synapses']:,} "
+            f"density={snap['synaptic_density']:.2f} latency={snap['probe_latency_ms']}ms"
+        )
+        return 0
+
+    state_badge = "\033[1;32mONLINE\033[0m" if snap["online"] else "\033[1;31mOFFLINE\033[0m"
     print("\033[1;33m╭──────────────────────────────────────────────────────────────────────────╮\033[0m")
-    print(f"\033[1;33m│\033[0m ⚡ \033[1;37mNeuro Memory Daemon             \033[0m │ \033[36m1nc0gn30 • NullAI Platform\033[0m         \033[1;33m│\033[0m")
+    print(
+        f"\033[1;33m│\033[0m \033[1;37mNeuro-Memory Daemon v{VERSION}\033[0m"
+        f"  [{state_badge}]  \033[36m{snap['base_url']:<24}\033[0m    \033[1;33m│\033[0m"
+    )
     print("\033[1;33m├──────────────────────────────────────────────────────────────────────────┤\033[0m")
-    print(f"\033[1;33m│\033[0m {SUMMARY[:72]:<72} \033[1;33m│\033[0m")
-    print(f"\033[1;33m│\033[0m Uncommon-Web: \033[32m{UW_SLUG:<24}\033[0m Audio: \033[35m-14.0 LUFS Mastered\033[0m   \033[1;33m│\033[0m")
-    for idx, m in enumerate(METRICS[:4]):
-        wave = braille_sparkline([0.5 + 0.45 * math.sin((i + idx * 3) * 0.4) for i in range(40)])
-        print(f"\033[1;33m│\033[0m  • {m[:24]:<24} \033[33m{wave}\033[0m  PASS   \033[1;33m│\033[0m")
+    print(
+        f"\033[1;33m│\033[0m Engrams: \033[1;37m{snap['total_memories']:>8,}\033[0m"
+        f"  │ Synapses: \033[1;37m{snap['total_synapses']:>10,}\033[0m"
+        f"  │ Density: \033[1;33m{snap['synaptic_density']:>6.2f}\033[0m        \033[1;33m│\033[0m"
+    )
+    print(
+        f"\033[1;33m│\033[0m Categories: \033[1;37m{snap['category_count']:>5}\033[0m"
+        f"  │ Avg Importance: \033[1;37m{snap['average_importance']:>5.3f}\033[0m"
+        f"  │ Probe: \033[1;36m{snap['probe_latency_ms']:>6.2f} ms\033[0m     \033[1;33m│\033[0m"
+    )
+    print(
+        f"\033[1;33m│\033[0m Category Distribution (U+2800): \033[1;33m{snap['braille_distribution']}\033[0m                           \033[1;33m│\033[0m"
+    )
+    for cat in snap["top_categories"][:4]:
+        print(
+            f"\033[1;33m│\033[0m  • {cat['name'][:26]:<26} \033[36m{cat['count']:>8,}\033[0m engrams"
+            f"                         \033[1;33m│\033[0m"
+        )
+    print("\033[1;33m├──────────────────────────────────────────────────────────────────────────┤\033[0m")
+    print("\033[1;33m│\033[0m Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform            \033[1;33m│\033[0m")
     print("\033[1;33m╰──────────────────────────────────────────────────────────────────────────╯\033[0m")
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -19,8 +19,8 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-__version__ = "0.1.0"
-__author__ = "Neuro-Memory Protocol Architect"
+__version__ = "2.9.0"
+__author__ = "Neal Frazier Tech (@1nc0gn30)"
 __all__ = [
     "__version__",
     "MemoryDaemon",

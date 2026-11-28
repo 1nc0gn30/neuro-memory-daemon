@@ -4,26 +4,34 @@ const fs = require('fs');
 const http = require('http');
 const { spawn } = require('child_process');
 
-// Linux & VM GPU Safeguards
-app.commandLine.appendSwitch('no-sandbox');
-app.commandLine.appendSwitch('disable-dev-shm-usage');
-app.commandLine.appendSwitch('disable-gpu-sandbox');
-app.commandLine.appendSwitch('enable-features', 'UseOzonePlatform');
-app.commandLine.appendSwitch('ozone-platform', 'x11');
-
+// Chromium renderer and GPU sandboxing remain strictly enabled by default.
 const IS_SMOKE = process.argv.includes('--smoke-test');
-const TOOL_ID = "neuro-memory-daemon";
-const TOOL_NAME = "Neuro-Memory Daemon";
+const TOOL_ID = 'neuro-memory-daemon';
+const TOOL_NAME = 'Neuro-Memory Daemon';
 const BACKEND_PORT = Number(process.env.PORT || 8094);
 const BACKEND_URL = `http://127.0.0.1:${BACKEND_PORT}`;
+const ALLOWED_ORIGINS = new Set([
+  `http://127.0.0.1:${BACKEND_PORT}`,
+  `http://localhost:${BACKEND_PORT}`,
+]);
 
 let mainWindow = null;
 let backendProcess = null;
+let startedOwnedBackend = false;
 const consoleErrors = [];
+
+function isAllowedLoopbackUrl(rawUrl) {
+  try {
+    const parsed = new URL(rawUrl);
+    return parsed.protocol === 'http:' && ALLOWED_ORIGINS.has(parsed.origin);
+  } catch {
+    return false;
+  }
+}
 
 function isBackendRunning() {
   return new Promise((resolve) => {
-    const req = http.get(BACKEND_URL, (res) => {
+    const req = http.get(`${BACKEND_URL}/health`, (res) => {
       res.resume();
       resolve(res.statusCode >= 200 && res.statusCode < 500);
     });
@@ -37,35 +45,46 @@ function isBackendRunning() {
 
 function startBackend() {
   const rootDir = path.resolve(__dirname, '..');
-  const env = { ...process.env, PORT: String(BACKEND_PORT), PYTHONUNBUFFERED: '1' };
-  let cmd = 'python3';
-  let args = ['server.py', '--port', String(BACKEND_PORT)];
+  const srcDir = path.join(rootDir, 'src');
+  const env = {
+    ...process.env,
+    PORT: String(BACKEND_PORT),
+    PYTHONUNBUFFERED: '1',
+    PYTHONDONTWRITEBYTECODE: '1',
+    PYTHONPATH: process.env.PYTHONPATH ? `${srcDir}:${process.env.PYTHONPATH}` : srcDir,
+  };
 
-  if (fs.existsSync(path.join(rootDir, 'server.js'))) {
-    cmd = 'node';
-    args = ['server.js', '--port', String(BACKEND_PORT)];
-  } else if (fs.existsSync(path.join(rootDir, 'server.py'))) {
-    cmd = 'python3';
-    args = ['server.py', '--port', String(BACKEND_PORT)];
-  } else if (fs.existsSync(path.join(rootDir, 'zoth_relay', 'server.py'))) {
-    cmd = 'python3';
-    args = ['-m', 'zoth_relay.server', '--port', String(BACKEND_PORT)];
-  } else if (fs.existsSync(path.join(rootDir, 'src'))) {
-    const srcDir = path.join(rootDir, 'src');
-    const pkgs = fs.readdirSync(srcDir).filter((d) => fs.existsSync(path.join(srcDir, d, 'cli.py')));
-    if (pkgs.length > 0) {
-      env.PYTHONPATH = env.PYTHONPATH ? `${srcDir}:${env.PYTHONPATH}` : srcDir;
-      args = ['-m', `${pkgs[0]}.cli`, 'serve', '--port', String(BACKEND_PORT)];
+  const pythonBin = fs.existsSync('/opt/zothos-ai-env/bin/python3')
+    ? '/opt/zothos-ai-env/bin/python3'
+    : 'python3';
+
+  backendProcess = spawn(
+    pythonBin,
+    ['-m', 'neuro_memory_daemon.cli', 'serve', '--host', '127.0.0.1', '--port', String(BACKEND_PORT)],
+    {
+      cwd: rootDir,
+      stdio: 'ignore',
+      detached: false,
+      env,
     }
-  }
-
-  backendProcess = spawn(cmd, args, {
-    cwd: rootDir,
-    stdio: 'ignore',
-    detached: true,
-    env,
+  );
+  startedOwnedBackend = true;
+  backendProcess.on('exit', () => {
+    backendProcess = null;
+    startedOwnedBackend = false;
   });
-  backendProcess.unref();
+}
+
+function stopOwnedBackend() {
+  if (startedOwnedBackend && backendProcess && !backendProcess.killed) {
+    try {
+      backendProcess.kill('SIGTERM');
+    } catch {
+      // ignore teardown errors
+    }
+    backendProcess = null;
+    startedOwnedBackend = false;
+  }
 }
 
 async function waitForBackend(maxAttempts = 35, interval = 200) {
@@ -83,11 +102,13 @@ function createWindow() {
     minWidth: 1024,
     minHeight: 700,
     show: !IS_SMOKE,
-    backgroundColor: '#08080B',
-    title: `${TOOL_NAME} // ZothOS Sovereign Workstation (:${BACKEND_PORT})`,
+    backgroundColor: '#0A0A0D',
+    title: `${TOOL_NAME} v2.9.0 — Local Loopback Workstation (:${BACKEND_PORT})`,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
+      webSecurity: true,
+      sandbox: true,
     },
     autoHideMenuBar: true,
   });
@@ -98,10 +119,31 @@ function createWindow() {
     }
   });
 
+  // Strict loopback navigation lock
+  mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {
+    if (!isAllowedLoopbackUrl(navigationUrl)) {
+      event.preventDefault();
+    }
+  });
+
+  // Strict external window open lock
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    try {
+      const parsed = new URL(url);
+      if (parsed.protocol === 'https:' || parsed.protocol === 'http:' || parsed.protocol === 'solana:') {
+        shell.openExternal(url);
+      }
+    } catch {
+      // deny invalid URLs
+    }
+    return { action: 'deny' };
+  });
+
   if (IS_SMOKE) {
     const timer = setTimeout(() => {
       console.log(JSON.stringify({ tool: TOOL_ID, port: BACKEND_PORT, ok: false, error: 'timeout' }));
-      app.exit(1); process.exit(1);
+      stopOwnedBackend();
+      app.exit(1);
     }, 10000);
 
     mainWindow.webContents.once('dom-ready', async () => {
@@ -121,24 +163,19 @@ function createWindow() {
           url: BACKEND_URL,
           ok,
           ...metrics,
-          consoleErrors: consoleErrors.slice(0, 5)
+          consoleErrors: consoleErrors.slice(0, 5),
         }));
-        app.exit(ok ? 0 : 1); process.exit(ok ? 0 : 1);
+        stopOwnedBackend();
+        app.exit(ok ? 0 : 1);
       } catch (err) {
         console.log(JSON.stringify({ tool: TOOL_ID, port: BACKEND_PORT, ok: false, error: String(err) }));
-        app.exit(1); process.exit(1);
+        stopOwnedBackend();
+        app.exit(1);
       }
     });
   }
 
   mainWindow.loadURL(BACKEND_URL);
-
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('http:') || url.startsWith('https:')) {
-      shell.openExternal(url);
-    }
-    return { action: 'deny' };
-  });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -153,7 +190,12 @@ app.whenReady().then(async () => {
   createWindow();
 });
 
+app.on('before-quit', () => {
+  stopOwnedBackend();
+});
+
 app.on('window-all-closed', () => {
+  stopOwnedBackend();
   if (process.platform !== 'darwin') {
     app.quit();
   }

@@ -12,13 +12,13 @@
   <meta property="og:description" content="High-definition 3D Cosmic Nebula and biological-fidelity memory substrate for sovereign AI agents with STDP, spreading activation, and liquid plasma synapses.">
   <meta property="og:url" content="https://neuro-memory.nullai.tech/">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://nullai.tech/Banner.png">
+  <meta property="og:image" content="https://neuro-memory.nullai.tech/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@1nc0gn30">
   <meta name="twitter:creator" content="@1nc0gn30">
   <meta name="twitter:title" content="Neuro-Memory Studio — 3D Cosmic Neural Substrate">
   <meta name="twitter:description" content="High-definition 3D Cosmic Nebula and biological-fidelity memory substrate for sovereign AI agents with STDP, spreading activation, and liquid plasma synapses.">
-  <meta name="twitter:image" content="https://nullai.tech/Banner.png">
+  <meta name="twitter:image" content="https://neuro-memory.nullai.tech/og-image.png">
 
   <!-- AEO & SEO Schema.org Graph -->
   <script type="application/ld+json">
@@ -59,7 +59,7 @@
             "name": "How does Neuro-Memory simulate the human brain?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Neuro-Memory utilizes Spike-Timing-Dependent Plasticity (STDP), Hippocampal CA3 pattern completion, and spreading activation across 5 hyperfocused galaxy clusters with liquid plasma action potentials."
+              "text": "Neuro-Memory uses SQLite WAL persistence, 3-factor Spike-Timing-Dependent Plasticity (STDP), Hippocampal CA3/CA1 pattern completion, Ebbinghaus retention decay, and spreading activation across 6 semantic clusters with a 21-tool MCP server."
             }
           },
           {
@@ -84,10 +84,7 @@
   }
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;600&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+  <!-- Zero External Font/CDN Egress — System & Local Assets Only -->
   <!-- 3D WebGL Engine Vendors (Local Offline Assets) -->
   <script src="vendor/three.min.js"></script>
   <script src="vendor/OrbitControls.js"></script>
@@ -595,17 +592,6 @@
       .app-bar-actions {
         gap: 6px;
       }
-      .sales-funnel-banner {
-        padding: 12px 14px;
-        gap: 10px;
-      }
-      .funnel-content {
-        min-width: 100%;
-      }
-      .funnel-actions {
-        width: 100%;
-        justify-content: flex-start;
-      }
       .quick-action-potential-bar {
         padding: 10px;
         gap: 8px;
@@ -921,44 +907,9 @@
     }
 
     /* Sovereign Sales Funnel Banner */
-    .sales-funnel-banner {
-      display: none !important;
-    }
-    .funnel-badge {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      padding: 5px 12px;
-      border-radius: var(--radius-full);
-      background: linear-gradient(135deg, #D4AF37, #B8860B);
-      color: #08080B;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      animation: pulse-glow 2s infinite ease-in-out;
-    }
     @keyframes pulse-glow {
       0%, 100% { box-shadow: 0 0 8px rgba(212, 175, 55, 0.4); }
       50% { box-shadow: 0 0 18px rgba(212, 175, 55, 0.8); }
-    }
-    .funnel-content {
-      flex: 1;
-      min-width: 260px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-    .funnel-headline {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--zoth-text-2, #EDEFF2);
-    }
-    .funnel-pricing {
-      font-size: 13px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
     }
     .price-strikethrough {
       text-decoration: line-through;
@@ -974,48 +925,13 @@
       border-radius: 4px;
       border: 1px solid rgba(212, 175, 55, 0.3);
     }
-    .funnel-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .funnel-btn {
-      padding: 7px 16px;
-      border-radius: var(--radius-full);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-      text-decoration: none;
-    }
-    .funnel-btn-stripe {
-      background: linear-gradient(135deg, #635BFF, #4840D6);
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(99, 91, 255, 0.35);
-    }
     .funnel-btn-stripe:hover {
       box-shadow: 0 4px 14px rgba(99, 91, 255, 0.55);
       transform: translateY(-1px);
     }
-    .funnel-btn-solana {
-      background: linear-gradient(135deg, #14F195, #9945FF);
-      color: #08080B;
-      font-weight: 700;
-      box-shadow: 0 2px 8px rgba(20, 241, 149, 0.35);
-    }
     .funnel-btn-solana:hover {
       box-shadow: 0 4px 14px rgba(20, 241, 149, 0.55);
       transform: translateY(-1px);
-    }
-    .funnel-btn-key {
-      background: rgba(212, 175, 55, 0.15);
-      color: #F5E6AB;
-      border: 1px solid rgba(212, 175, 55, 0.35);
     }
     .funnel-btn-key:hover {
       background: rgba(212, 175, 55, 0.25);
@@ -1759,25 +1675,34 @@
   <link rel="stylesheet" href="wave-states.css">
 </head>
 <body data-theme="dark">
-
-<div id="zoth-coffee-support-bar" style="background: linear-gradient(90deg, rgba(16,185,129,0.12), rgba(212,175,55,0.14)); border-bottom: 1px solid rgba(212,175,55,0.35); padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; z-index: 9999;">
-  <span style="color: #10B981; font-weight: 800;">✦ 100% FREE &amp; OPEN ACCESS · ZERO PAYWALLS</span>
-  <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer" style="background: #D4AF37; color: #08080B; padding: 4px 12px; border-radius: 6px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">☕ Buy Us a Coffee (Stripe)</a>
-  <a href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK" onclick="if(navigator.clipboard){navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');this.textContent='✓ Copied GG2eQb...dXoK!';}" style="background: rgba(20,241,149,0.15); color: #14F195; border: 1px solid rgba(20,241,149,0.45); padding: 4px 12px; border-radius: 6px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">◎ Solana Tip (GG2e...dXoK)</a>
-</div>
+<script>
+  (function(){
+    try {
+      var p = new URLSearchParams(window.location.search || '');
+      if (p.get('embed') === '1' || p.get('embed') === 'true') {
+        document.documentElement.classList.add('embed-mode');
+        document.body.classList.add('embed-mode');
+      }
+      var ut = (p.get('theme') || '').toLowerCase();
+      var t = (ut === 'light' || ut === 'dark') ? ut : (localStorage.getItem('neuro_studio_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+      document.documentElement.setAttribute('data-theme', t);
+      document.body.setAttribute('data-theme', t);
+    } catch (_) {}
+  })();
+</script>
 
 <!-- Header -->
   <header class="google-app-bar">
     <div class="brand-section">
       <div class="brand-icon-wrapper">◈</div>
       <div class="brand-text">
-        <h1>Neuro-Memory Studio <span class="badge">v0.1.0</span></h1>
+        <h1>Neuro-Memory Studio <span class="badge">v2.9.0</span></h1>
         <p>Synaptic Plasticity (STDP) • CA3/CA1 Pattern Completion • Ebbinghaus Decay</p>
       </div>
     </div>
 
     <div class="app-bar-actions">
-      <span id="open-access-badge" class="badge-tag" style="background:rgba(16,185,129,0.15); color:#10B981; border:1px solid rgba(16,185,129,0.4); border-radius:9999px; padding:5px 12px; font-size:11px; font-weight:700;">✦ 100% OPEN ACCESS</span>
+      <span id="open-access-badge" class="badge-tag" style="border-radius:9999px; padding:5px 12px; font-size:11px; font-weight:700;">✦ 100% OPEN ACCESS</span>
 
       <div class="status-pill" id="daemon-status-pill">
         <span class="status-indicator-dot"></span>
@@ -1796,14 +1721,14 @@
         <span>⚡</span> MCP Config
       </button>
 
-      <button class="btn-icon" id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+      <button class="btn-icon" id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle Dark or Light Mode">
         ✦
       </button>
     </div>
   </header>
 
   <!-- Navigation Tabs -->
-  <nav class="google-nav-tabs">
+  <nav class="google-nav-tabs" aria-label="Neuro-Memory Studio Navigation">
     <button class="nav-tab" data-tab="everywhere" onclick="switchTab('everywhere')">
       Everywhere
     </button>
@@ -1832,20 +1757,6 @@
 
   <!-- Studio Content -->
   <main class="studio-content">
-
-    <!-- Sovereign Sales Funnel Banner -->
-    <div class="sales-funnel-banner">
-      <div class="funnel-badge">⚡ LIMITED FOUNDING ACCESS</div>
-      <div class="funnel-content">
-        <span class="funnel-headline">Unlock Sovereign 3D Neuro-Memory Pro: Real-time Spreading Activation & Infinite Engrams</span>
-        <div class="funnel-pricing"><span class="price-strikethrough">Free (100% Open Access)</span> <span class="price-deal">Free (100% Open Access)</span></div>
-      </div>
-      <div class="funnel-actions">
-        <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" class="funnel-btn funnel-btn-stripe" rel="noopener">★ Pay via Stripe</a>
-        <button class="funnel-btn funnel-btn-solana" onclick="openSolanaPay()">◎ Solana Tip</button>
-        <button class="funnel-btn funnel-btn-key" onclick="openLicenseModal()">✦ Activate Key</button>
-      </div>
-    </div>
 
     <!-- Metrics Row -->
     <section class="telemetry-grid">
@@ -1911,7 +1822,7 @@
           </p>
           <div class="filter-group">
             <label class="filter-label">Search</label>
-            <input type="text" id="everywhere-search" class="input-field" placeholder="Search across stores…" oninput="debounceEverywhereSearch()">
+            <input type="text" id="everywhere-search" class="input-field" placeholder="Search across stores…" oninput="debounceEverywhereSearch()" aria-label="Search across local memory stores">
           </div>
           <div class="filter-group">
             <label class="filter-label">Source</label>
@@ -1920,7 +1831,7 @@
             </div>
           </div>
           <label class="filter-label" style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:500;">
-            <input type="checkbox" id="everywhere-archive" onchange="fetchEverywhere()">
+            <input type="checkbox" id="everywhere-archive" onchange="fetchEverywhere()" aria-label="Include archived stores">
             Include Grok archive dumps
           </label>
         </aside>
@@ -1937,9 +1848,9 @@
       <!-- Quick Action Potential Trigger Bar -->
       <div class="quick-trigger-bar">
         <span style="font-weight:700; color:#D4AF37; font-size:13px; display:flex; align-items:center; gap:6px;">⚡ LIVE ACTION POTENTIAL</span>
-        <input type="text" id="quick-trigger-text" class="quick-input-text" placeholder="Stimulate neural substrate or trigger memory cascade (e.g. 'Antigravity subagent completed task')...">
-        <input type="text" id="quick-trigger-tags" class="quick-input-tags" placeholder="Tags: agent, stdp, kernel...">
-        <select id="quick-trigger-cat" class="quick-select-cat">
+        <input type="text" id="quick-trigger-text" class="quick-input-text" placeholder="Stimulate neural substrate or trigger memory cascade (e.g. 'Antigravity subagent completed task')..." aria-label="Memory engram text or neural trigger cue">
+        <input type="text" id="quick-trigger-tags" class="quick-input-tags" placeholder="Tags: agent, stdp, kernel..." aria-label="Comma-separated engram tags">
+        <select id="quick-trigger-cat" class="quick-select-cat" aria-label="Engram category">
           <option value="episodic">Episodic</option>
           <option value="semantic">Semantic</option>
           <option value="tool">Tool</option>
@@ -1999,20 +1910,20 @@
         <!-- 3D HUD Right (Interactive Controls) -->
         <div class="nebula-hud-right">
           <label style="font-size:11px; color:#9AA0A6; display:flex; align-items:center; gap:6px; cursor:pointer;">
-            <input type="checkbox" id="auto-rotate-check" checked onchange="toggleAutoRotate(this.checked)"> Auto-Orbit
+            <input type="checkbox" id="auto-rotate-check" checked onchange="toggleAutoRotate(this.checked)" aria-label="Toggle 3D nebula auto-rotation"> Auto-Orbit
           </label>
           <button class="btn-icon" id="btn-audio-toggle" style="width:26px; height:26px; font-size:12px;" onclick="toggleNebulaAudio()" title="Toggle Action Potential Audio">✦</button>
           
           <!-- Salience Filter Scrubber -->
           <div class="salience-slider-container" style="display:flex; align-items:center; gap:6px; background:rgba(8,10,18,0.75); border:1px solid rgba(0,229,255,0.3); border-radius:18px; padding:2px 8px; font-size:11px;">
             <span style="color:#A855F7; font-weight:700; font-size:10px; white-space:nowrap;">Salience Filter:</span>
-            <input type="range" id="salience-slider" min="0" max="0.95" step="0.05" value="0" style="width:65px; height:4px; accent-color:#00E5FF; cursor:pointer;" oninput="updateSalienceThreshold(this.value)">
+            <input type="range" id="salience-slider" min="0" max="0.95" step="0.05" value="0" style="width:65px; height:4px; accent-color:#00E5FF; cursor:pointer;" oninput="updateSalienceThreshold(this.value)" aria-label="Minimum salience threshold filter">
             <span id="salience-val-display" style="font-family:monospace; color:#00E5FF; font-weight:700; font-size:10px; min-width:24px;">0.00</span>
           </div>
 
           <!-- Compact 3D Star Search Input & Focus Button -->
           <div class="nebula-star-search-container" style="display:flex; align-items:center; gap:4px; background:rgba(8,10,18,0.75); border:1px solid rgba(212,175,55,0.35); border-radius:18px; padding:2px 8px; font-size:11px;">
-            <input type="text" id="nebula-node-search-input" placeholder="Find 3D star / topic..." style="background:transparent; border:none; color:#EDEFF2; font-size:11px; width:115px; outline:none; padding:2px 4px;" onkeydown="if(event.key==='Enter') triggerNebulaNodeFocus()">
+            <input type="text" id="nebula-node-search-input" placeholder="Find 3D star / topic..." style="background:transparent; border:none; color:#EDEFF2; font-size:11px; width:115px; outline:none; padding:2px 4px;" onkeydown="if(event.key==='Enter') triggerNebulaNodeFocus()" aria-label="Search 3D nebula nodes or topics">
             <button class="btn btn-outlined" id="btn-nebula-node-focus" style="padding:2px 8px; font-size:10px; border-color:#FFD700; color:#FFD700; border-radius:12px; font-weight:600; white-space:nowrap;" onclick="triggerNebulaNodeFocus()" title="Locate and fly camera to 3D star matching query">🎯 Locate Star</button>
           </div>
 
@@ -2040,12 +1951,12 @@
 
           <div class="filter-group">
             <label class="filter-label">Search Query</label>
-            <input type="text" id="stream-search-input" class="input-field" placeholder="Search keywords..." oninput="debounceStreamSearch()">
+            <input type="text" id="stream-search-input" class="input-field" placeholder="Search keywords..." oninput="debounceStreamSearch()" aria-label="Search memory stream keywords">
           </div>
 
           <div class="filter-group">
             <label class="filter-label">Category</label>
-            <select id="stream-category-select" class="select-field" onchange="applyStreamFilters()">
+            <select id="stream-category-select" class="select-field" onchange="applyStreamFilters()" aria-label="Filter memory stream by category">
               <option value="">All Categories</option>
               <option value="architecture">Architecture</option>
               <option value="debug">Debug</option>
@@ -2058,7 +1969,7 @@
 
           <div class="filter-group">
             <label class="filter-label">Origin Agent</label>
-            <select id="stream-agent-select" class="select-field" onchange="applyStreamFilters()">
+            <select id="stream-agent-select" class="select-field" onchange="applyStreamFilters()" aria-label="Filter memory stream by agent">
               <option value="">All Agents</option>
               <option value="azoth">Azoth</option>
               <option value="hermes">Hermes</option>
@@ -2071,7 +1982,7 @@
 
           <div class="filter-group">
             <label class="filter-label">Sort By</label>
-            <select id="stream-sort-select" class="select-field" onchange="applyStreamFilters()">
+            <select id="stream-sort-select" class="select-field" onchange="applyStreamFilters()" aria-label="Sort memory stream order">
               <option value="created_at">Creation Time (Newest)</option>
               <option value="last_accessed_at">Last Accessed</option>
               <option value="importance">Importance Weight</option>
@@ -2109,13 +2020,13 @@
         </p>
 
         <div style="display:flex; gap:10px;">
-          <input type="text" id="recall-cue-input" class="input-field" placeholder="e.g. 'sqlite transaction rollback' or 'mcp tool schema'..." onkeydown="if(event.key==='Enter') runRecallQuery()">
+          <input type="text" id="recall-cue-input" class="input-field" placeholder="e.g. 'sqlite transaction rollback' or 'mcp tool schema'..." onkeydown="if(event.key==='Enter') runRecallQuery()" aria-label="Associative recall query cue">
           <button class="btn btn-primary" onclick="runRecallQuery()">Recall Engrams</button>
         </div>
 
         <div style="display:flex; align-items:center; gap:20px; font-size:12px; color:var(--md-on-surface-variant);">
-          <label>Top K: <input type="number" id="recall-topk" value="5" min="1" max="20" style="width:50px; padding:4px;" class="input-field"></label>
-          <label>Min Score Threshold: <input type="number" id="recall-minscore" value="0.1" step="0.05" min="0" max="1" style="width:60px; padding:4px;" class="input-field"></label>
+          <label>Top K: <input type="number" id="recall-topk" value="5" min="1" max="20" style="width:50px; padding:4px;" class="input-field" aria-label="Top K recall results"></label>
+          <label>Min Score Threshold: <input type="number" id="recall-minscore" value="0.1" step="0.05" min="0" max="1" style="width:60px; padding:4px;" class="input-field" aria-label="Minimum recall similarity score"></label>
         </div>
 
         <!-- Recall Results Container -->
@@ -2307,7 +2218,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                 <label class="filter-label">Task Complexity:</label>
                 <span id="yd-complexity-display" style="font-family:var(--font-mono); font-weight:600;">0.50 (Moderate)</span>
               </div>
-              <input type="range" id="yd-complexity-slider" min="0.0" max="1.0" step="0.05" value="0.5" oninput="onComplexityChange(this.value)" style="width:100%;">
+              <input type="range" id="yd-complexity-slider" min="0.0" max="1.0" step="0.05" value="0.5" oninput="onComplexityChange(this.value)" style="width:100%;" aria-label="Yerkes-Dodson task complexity">
             </div>
 
             <div style="background:var(--md-surface-variant); padding:12px; border-radius:var(--radius-sm); margin-bottom:14px;">
@@ -2344,7 +2255,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
             <form onsubmit="handleFlashbulbSubmit(event)" style="display:flex; flex-direction:column; gap:12px;">
               <div class="filter-group">
                 <label class="filter-label">Target Memory ID *</label>
-                <input type="text" id="fb-memory-id" class="input-field" placeholder="e.g. 82c78b11-0c78-49d4-8cc0-1e20146fa1c9" required>
+                <input type="text" id="fb-memory-id" class="input-field" placeholder="e.g. 82c78b11-0c78-49d4-8cc0-1e20146fa1c9" required aria-label="Memory ID for flashbulb lock">
               </div>
 
               <div class="filter-group">
@@ -2352,12 +2263,12 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                   <label class="filter-label">Emotional / Cognitive Salience:</label>
                   <span id="fb-salience-val" style="font-family:var(--font-mono); font-weight:600;">1.00</span>
                 </div>
-                <input type="range" id="fb-salience-slider" min="0.1" max="2.0" step="0.05" value="1.0" oninput="document.getElementById('fb-salience-val').innerText = parseFloat(this.value).toFixed(2)" style="width:100%;">
+                <input type="range" id="fb-salience-slider" min="0.1" max="2.0" step="0.05" value="1.0" oninput="document.getElementById('fb-salience-val').innerText = parseFloat(this.value).toFixed(2)" style="width:100%;" aria-label="Flashbulb salience multiplier">
               </div>
 
               <div class="filter-group">
                 <label class="filter-label">Consolidation Reason / Justification</label>
-                <input type="text" id="fb-reason" class="input-field" placeholder="e.g. Critical security decision / fatal outage postmortem" value="High-salience cognitive anchor">
+                <input type="text" id="fb-reason" class="input-field" placeholder="e.g. Critical security decision / fatal outage postmortem" value="High-salience cognitive anchor" aria-label="Flashbulb consolidation reason">
               </div>
 
               <button type="submit" class="btn btn-primary" style="margin-top:6px; background:var(--md-yellow); color:#000;">
@@ -2387,7 +2298,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                   <label class="filter-label">Pre/Post &Delta;t (ms):</label>
                   <span id="stdp-dt-val" style="font-family:var(--font-mono);">15 ms</span>
                 </div>
-                <input type="range" id="stdp-dt-slider" min="-80" max="80" step="5" value="15" oninput="updateSTDPPreview()" style="width:100%;">
+                <input type="range" id="stdp-dt-slider" min="-80" max="80" step="5" value="15" oninput="updateSTDPPreview()" style="width:100%;" aria-label="STDP spike timing delta in milliseconds">
               </div>
 
               <div class="filter-group">
@@ -2395,7 +2306,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                   <label class="filter-label">Initial Weight:</label>
                   <span id="stdp-w-val" style="font-family:var(--font-mono);">0.40</span>
                 </div>
-                <input type="range" id="stdp-w-slider" min="0.05" max="0.95" step="0.05" value="0.40" oninput="updateSTDPPreview()" style="width:100%;">
+                <input type="range" id="stdp-w-slider" min="0.05" max="0.95" step="0.05" value="0.40" oninput="updateSTDPPreview()" style="width:100%;" aria-label="Initial synaptic weight">
               </div>
             </div>
 
@@ -2484,19 +2395,19 @@ curl -X POST http://127.0.0.1:8788/api/recall \
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:20px;">⚡</span>
               <div>
-                <div style="font-size:15px; font-weight:700; color:#38BDF8;">Unified Second Brain & STDP Cortex Search</div>
-                <div style="font-size:11.5px; color:var(--md-on-surface-variant);">Search across 1,721+ Obsidian Markdown notes, JSON Canvases, and Bases while simultaneously recalling biomorphic STDP memory engrams.</div>
+                <div style="font-size:15px; font-weight:700; color:var(--md-cyan);">Unified Second Brain &amp; STDP Cortex Search</div>
+                <div style="font-size:11.5px; color:var(--md-on-surface-variant);">Search across local Obsidian Markdown notes, JSON Canvases, and Bases while simultaneously recalling biomorphic STDP memory engrams.</div>
               </div>
             </div>
-            <div style="font-size:11px; font-family:var(--font-mono); color:#9AA0A6;" id="obsidian-search-stats">
-              Index: <span style="color:#38BDF8;">1,721+ Notes</span> · <span style="color:#A855F7;">41,750+ Engrams</span>
+            <div style="font-size:11px; font-family:var(--font-mono); color:var(--md-on-surface-variant);" id="obsidian-search-stats">
+              Index: <span id="obsidian-index-notes" style="color:var(--md-cyan);">-- Notes</span> · <span id="obsidian-index-engrams" style="color:var(--md-purple);">-- Engrams</span>
             </div>
           </div>
 
           <!-- Search Bar & Action -->
           <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
             <div style="flex:1; min-width:260px; position:relative;">
-              <input type="text" class="input-field" id="obsidian-search-input" placeholder="Search Obsidian vault notes, canvases, bases, or memory engrams (e.g. 'Vaelor', 'VirusTotal')..." onkeydown="if(event.key==='Enter') executeObsidianSearch()" style="width:100%; padding:9px 14px; background:#0F0F18; border:1px solid #2A2A38; border-radius:8px; color:#EDEFF2; font-size:13px;">
+              <input type="text" class="input-field" id="obsidian-search-input" placeholder="Search Obsidian vault notes, canvases, bases, or memory engrams (e.g. 'Vaelor', 'VirusTotal')..." onkeydown="if(event.key==='Enter') executeObsidianSearch()" style="width:100%; padding:9px 14px; background:#0F0F18; border:1px solid #2A2A38; border-radius:8px; color:#EDEFF2; font-size:13px;" aria-label="Search Obsidian vault notes and STDP engrams">
             </div>
             <button class="btn btn-primary" id="btn-obsidian-search" onclick="executeObsidianSearch()" style="background:linear-gradient(135deg,#38BDF8,#0284C7); color:#08080B; font-weight:700; border:none; padding:9px 18px; font-size:12.5px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px;">
               <span>🔍</span> Search Vault & Cortex
@@ -2524,7 +2435,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                 <span class="obs-badge" id="obs-search-vault-count" style="background:rgba(56,189,248,0.15); color:#38BDF8; font-size:10.5px; padding:2px 8px; border-radius:10px;">0 Matches</span>
               </div>
               <div id="obs-search-vault-list" style="display:flex; flex-direction:column; gap:8px; max-height:420px; overflow-y:auto; padding-right:4px;">
-                <div style="font-size:12px; color:#6B7280; font-style:italic; padding:16px 0; text-align:center;">Enter a query above or click a quick chip to search 1,721+ vault notes, canvases, and databases.</div>
+                <div style="font-size:12px; color:#6B7280; font-style:italic; padding:16px 0; text-align:center;">Enter a query above or click a quick chip to search local Obsidian vault notes, canvases, and databases.</div>
               </div>
             </div>
 
@@ -2560,7 +2471,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
 
           <!-- 1-Click Synthesis Input Bar -->
           <div class="wiki-synthesis-bar">
-            <input type="text" class="wiki-input" id="wiki-synthesize-input" placeholder="Enter topic to synthesize (e.g. 'Distributed Raft Consensus in ZothOS', 'Quantum STDP Synaptic Pruning')..." onkeydown="if(event.key==='Enter') synthesizeWikiArticle()">
+            <input type="text" class="wiki-input" id="wiki-synthesize-input" placeholder="Enter topic to synthesize (e.g. 'Distributed Raft Consensus in ZothOS', 'Quantum STDP Synaptic Pruning')..." onkeydown="if(event.key==='Enter') synthesizeWikiArticle()" aria-label="Karpathy LLM Wiki synthesis topic">
             <button class="wiki-synth-btn" id="wiki-synth-btn" onclick="synthesizeWikiArticle()">
               <span>✦</span> Synthesize New LLM Wiki Article
             </button>
@@ -2587,7 +2498,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                   <div style="display:flex; gap:6px; flex-wrap:wrap;" id="wiki-view-badges">
                     <span class="wiki-tag-pill" id="wiki-view-category" style="color:#E879F9; border-color:rgba(232,121,249,0.3);">LLM-Wiki</span>
                     <span class="wiki-tag-pill" id="wiki-view-confidence" style="color:#10B981; border-color:rgba(16,185,129,0.3);">99% Conf</span>
-                    <span class="wiki-tag-pill" id="wiki-view-engrams" style="color:#00E5FF; border-color:rgba(0,229,255,0.3);">41,740 Engrams</span>
+                    <span class="wiki-tag-pill" id="wiki-view-engrams" style="color:#00E5FF; border-color:rgba(0,229,255,0.3);">Live Engrams</span>
                     <span class="wiki-tag-pill" id="wiki-view-updated" style="color:#D4AF37; border-color:rgba(212,175,55,0.3);">2026-10-26</span>
                   </div>
                 </div>
@@ -2705,7 +2616,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
               <label for="mcp-tool-select" style="font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#9AA0A6;">
                 Select MCP Tool to Execute:
               </label>
-              <select id="mcp-tool-select" class="select-field" style="max-width:380px; width:100%; padding:6px 10px; font-size:12px; font-family:var(--font-mono); background:#13131F; color:#FCD34D; border:1px solid rgba(245,158,11,0.4); border-radius:6px;" onchange="onSelectMcpTool(this.value)">
+              <select id="mcp-tool-select" class="select-field" style="max-width:380px; width:100%; padding:6px 10px; font-size:12px; font-family:var(--font-mono); background:#13131F; color:#FCD34D; border:1px solid rgba(245,158,11,0.4); border-radius:6px;" onchange="onSelectMcpTool(this.value)" aria-label="Control mcp-tool-select">
                 <!-- Populated dynamically via fetchMcpTools() -->
               </select>
             </div>
@@ -2723,7 +2634,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                 </label>
                 <span style="font-size:10.5px; font-family:var(--font-mono); color:#9AA0A6;">Auto-filled with validated schema sample</span>
               </div>
-              <textarea id="mcp-tool-args-input" style="width:100%; min-height:85px; max-height:160px; background:#13131F; border:1px solid #232332; border-radius:6px; padding:8px 10px; font-family:var(--font-mono); font-size:11.5px; color:#E0E0E0; resize:vertical; outline:none;" placeholder='{"topic": "STDP Memory Cortex"}'></textarea>
+              <textarea id="mcp-tool-args-input" style="width:100%; min-height:85px; max-height:160px; background:#13131F; border:1px solid #232332; border-radius:6px; padding:8px 10px; font-family:var(--font-mono); font-size:11.5px; color:#E0E0E0; resize:vertical; outline:none;" placeholder='{"topic": "STDP Memory Cortex"}' aria-label="{"></textarea>
             </div>
 
             <!-- Execution Action Bar -->
@@ -2766,7 +2677,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
 
           <!-- Quick Append Action Bar -->
           <div style="display:flex; gap:8px; align-items:center; background:rgba(8,8,12,0.85); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:8px 12px; margin-bottom:12px;">
-            <input type="text" class="wiki-input" id="obsidian-daily-input" placeholder="Append engineering log entry to today's Daily Note (e.g. 'Completed Wave 19 daily note architecture')..." onkeydown="if(event.key==='Enter') appendDailyNoteEntry()" style="flex:1;">
+            <input type="text" class="wiki-input" id="obsidian-daily-input" placeholder="Append engineering log entry to today's Daily Note (e.g. 'Completed Wave 19 daily note architecture')..." onkeydown="if(event.key==='Enter') appendDailyNoteEntry()" style="flex:1;" aria-label="Daily Sovereign Note engineering log entry">
             <button class="btn btn-primary" id="btn-obsidian-daily-append" style="background:linear-gradient(135deg, #F59E0B, #D97706); color:#08080B; font-weight:700; border:none; padding:7px 16px; font-size:11.5px; border-radius:6px; white-space:nowrap; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" onclick="appendDailyNoteEntry()">
               <span>➕</span> Append Daily Log & STDP Engram
             </button>
@@ -2797,7 +2708,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
 
           <!-- Note Input & Quick Action Bar -->
           <div style="display:flex; gap:8px; align-items:center; background:rgba(8,8,12,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:8px; padding:8px 12px; margin-bottom:10px;">
-            <input type="text" class="wiki-input" id="backlinks-note-input" value="00 Home" placeholder="Note title or relative path (e.g. '00 Home', 'Zoth OS', 'Vaelor Network')..." onkeydown="if(event.key==='Enter') inspectObsidianBacklinks()" style="flex:1;">
+            <input type="text" class="wiki-input" id="backlinks-note-input" value="00 Home" placeholder="Note title or relative path (e.g. '00 Home', 'Zoth OS', 'Vaelor Network')..." onkeydown="if(event.key==='Enter') inspectObsidianBacklinks()" style="flex:1;" aria-label="Obsidian note title for backlinks inspection">
             <button class="btn btn-primary" id="btn-inspect-backlinks" style="background:linear-gradient(135deg, #00E5FF, #0284C7); color:#08080B; font-weight:700; border:none; padding:7px 16px; font-size:11.5px; border-radius:6px; white-space:nowrap; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" onclick="inspectObsidianBacklinks()">
               <span>🔗</span> Inspect Links
             </button>
@@ -2871,7 +2782,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
             </div>
             <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
               <div style="display:flex; align-items:center; gap:4px;">
-                <input type="text" class="input-field" id="ofm-note-path-input" placeholder="Note path or title (e.g. '00 Home', 'Zoth OS')..." value="00 Home.md" onkeydown="if(event.key==='Enter') loadOfmNote(this.value)" style="padding:5px 10px; font-size:11.5px; width:200px; background:#0F0F18; border:1px solid #28283C; border-radius:6px; color:#EDEFF2;">
+                <input type="text" class="input-field" id="ofm-note-path-input" placeholder="Note path or title (e.g. '00 Home', 'Zoth OS')..." value="00 Home.md" onkeydown="if(event.key==='Enter') loadOfmNote(this.value)" style="padding:5px 10px; font-size:11.5px; width:200px; background:#0F0F18; border:1px solid #28283C; border-radius:6px; color:#EDEFF2;" aria-label="Obsidian note relative path or title">
                 <button class="btn btn-outlined" onclick="loadOfmNote(document.getElementById('ofm-note-path-input').value)" style="padding:4px 10px; font-size:11px; border-color:rgba(0,229,255,0.4); color:#00E5FF; cursor:pointer;">Open Note</button>
               </div>
               <button class="btn btn-primary" id="btn-save-ofm-note" onclick="saveActiveOfmNote()" style="padding:5px 14px; font-size:11.5px; background:linear-gradient(135deg,#10B981,#059669); color:#08080B; font-weight:700; border:none; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:5px;">
@@ -2924,7 +2835,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                 <span style="font-size:9.5px; color:#94A3B8; font-weight:400;">YAML Frontmatter & Wikilinks</span>
               </div>
               <div style="background:#08080E; border:1px solid #1E1E2C; border-radius:8px; padding:10px; min-height:380px; flex:1; display:flex;">
-                <textarea id="ofm-editor-textarea" style="width:100%; height:100%; min-height:360px; background:transparent; border:none; color:#EDEFF2; font-family:var(--font-mono); font-size:12px; line-height:1.55; resize:vertical; outline:none;" placeholder="Write or edit Obsidian Flavored Markdown with [[wikilinks]], YAML frontmatter, and > [!callouts]..." oninput="onOfmEditorInput()"></textarea>
+                <textarea id="ofm-editor-textarea" style="width:100%; height:100%; min-height:360px; background:transparent; border:none; color:#EDEFF2; font-family:var(--font-mono); font-size:12px; line-height:1.55; resize:vertical; outline:none;" placeholder="Write or edit Obsidian Flavored Markdown with [[wikilinks]], YAML frontmatter, and  aria-label="Obsidian Flavored Markdown note editor"> [!callouts]..." oninput="onOfmEditorInput()"></textarea>
               </div>
             </div>
           </div>
@@ -2954,7 +2865,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                 </div>
               </div>
               <div style="display:flex; align-items:center; gap:8px;">
-                <select id="canvas-select" class="select-field" style="max-width:240px; padding:5px 8px; font-size:12px; font-family:var(--font-mono); background:#0F0F18; color:#00E5FF; border-color:rgba(0,229,255,0.4);" onchange="onSelectCanvas(this.value)">
+                <select id="canvas-select" class="select-field" style="max-width:240px; padding:5px 8px; font-size:12px; font-family:var(--font-mono); background:#0F0F18; color:#00E5FF; border-color:rgba(0,229,255,0.4);" onchange="onSelectCanvas(this.value)" aria-label="Select Obsidian JSON Canvas file">
                   <!-- Options populated dynamically from /api/obsidian/canvases -->
                 </select>
                 <button class="btn btn-outlined" style="padding:5px 9px; font-size:11px;" onclick="copyActiveCanvasJson()">📋 Copy JSON</button>
@@ -2963,7 +2874,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
 
             <!-- 1-Click Procedural Canvas Generator Bar -->
             <div style="display:flex; gap:8px; align-items:center; background:rgba(8,8,12,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:8px; padding:6px 10px; margin-bottom:12px;">
-              <input type="text" class="wiki-input" id="canvas-topic-input" placeholder="Topic to map (e.g. 'Byzantine Fault Tolerance', 'STDP Memory Cortex')..." onkeydown="if(event.key==='Enter') generateObsidianCanvas()">
+              <input type="text" class="wiki-input" id="canvas-topic-input" placeholder="Topic to map (e.g. 'Byzantine Fault Tolerance', 'STDP Memory Cortex')..." onkeydown="if(event.key==='Enter') generateObsidianCanvas()" aria-label="Topic for procedural JSON Canvas generation">
               <button class="btn btn-primary" id="btn-gen-obsidian-canvas" style="background:linear-gradient(135deg, #00E5FF, #0284C7); color:#08080B; font-weight:700; border:none; padding:6px 14px; font-size:11.5px; border-radius:6px; white-space:nowrap; cursor:pointer;" onclick="generateObsidianCanvas()">
                 <span>✦</span> Generate Canvas
               </button>
@@ -3003,7 +2914,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
                 </div>
               </div>
               <div style="display:flex; align-items:center; gap:8px;">
-                <select id="base-select" class="select-field" style="max-width:240px; padding:5px 8px; font-size:12px; font-family:var(--font-mono); background:#0F0F18; color:#10B981; border-color:rgba(16,185,129,0.4);" onchange="onSelectBase(this.value)">
+                <select id="base-select" class="select-field" style="max-width:240px; padding:5px 8px; font-size:12px; font-family:var(--font-mono); background:#0F0F18; color:#10B981; border-color:rgba(16,185,129,0.4);" onchange="onSelectBase(this.value)" aria-label="Select Obsidian Base YAML database">
                   <!-- Options populated dynamically from /api/obsidian/bases -->
                 </select>
                 <button class="btn btn-outlined" style="padding:5px 9px; font-size:11px;" onclick="copyActiveBaseYaml()">📋 Copy YAML</button>
@@ -3061,24 +2972,24 @@ curl -X POST http://127.0.0.1:8788/api/recall \
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
               <div>
                 <label style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#9AA0A6; font-weight:700; display:block; margin-bottom:4px;">Note Title *</label>
-                <input type="text" class="input-field" id="obsidian-ingest-title" required placeholder="e.g. Distributed Consensus in Preempt-RT Linux" style="width:100%; padding:8px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px;">
+                <input type="text" class="input-field" id="obsidian-ingest-title" required placeholder="e.g. Distributed Consensus in Preempt-RT Linux" style="width:100%; padding:8px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px;" aria-label="Obsidian note title to ingest">
               </div>
               <div>
                 <label style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#9AA0A6; font-weight:700; display:block; margin-bottom:4px;">Source URL / Provenance</label>
-                <input type="text" class="input-field" id="obsidian-ingest-source" placeholder="e.g. https://kernel.org or internal-research" style="width:100%; padding:8px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px;">
+                <input type="text" class="input-field" id="obsidian-ingest-source" placeholder="e.g. https://kernel.org or internal-research" style="width:100%; padding:8px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px;" aria-label="Obsidian note provenance source">
               </div>
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr; gap:12px;">
               <div>
                 <label style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#9AA0A6; font-weight:700; display:block; margin-bottom:4px;">Tags (comma or space separated)</label>
-                <input type="text" class="input-field" id="obsidian-ingest-tags" placeholder="e.g. linux, kernel, preempt-rt, architecture" style="width:100%; padding:8px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px;">
+                <input type="text" class="input-field" id="obsidian-ingest-tags" placeholder="e.g. linux, kernel, preempt-rt, architecture" style="width:100%; padding:8px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px;" aria-label="Obsidian note tags">
               </div>
             </div>
 
             <div>
               <label style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#9AA0A6; font-weight:700; display:block; margin-bottom:4px;">Markdown Content & Findings *</label>
-              <textarea class="textarea-field" id="obsidian-ingest-content" rows="4" required placeholder="Write or paste markdown content with [[wikilinks]], findings, benchmarks, or architectural specifications..." style="width:100%; padding:10px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px; font-family:var(--font-mono); resize:vertical;"></textarea>
+              <textarea class="textarea-field" id="obsidian-ingest-content" rows="4" required placeholder="Write or paste markdown content with [[wikilinks]], findings, benchmarks, or architectural specifications..." style="width:100%; padding:10px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px; font-family:var(--font-mono); resize:vertical;" aria-label="Obsidian markdown note content"></textarea>
             </div>
 
             <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:4px;">
@@ -3110,7 +3021,7 @@ curl -X POST http://127.0.0.1:8788/api/recall \
           <!-- Command Palette Filter Bar -->
           <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
             <div style="flex:1; min-width:240px; position:relative;">
-              <input type="text" class="input-field" id="cli-palette-filter" placeholder="Filter CLI subcommands (e.g. 'audit', 'canvas', 'sync', 'bundle', 'wiki')..." oninput="filterCliCommands(this.value)" style="width:100%; padding:8px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px;">
+              <input type="text" class="input-field" id="cli-palette-filter" placeholder="Filter CLI subcommands (e.g. 'audit', 'canvas', 'sync', 'bundle', 'wiki')..." oninput="filterCliCommands(this.value)" style="width:100%; padding:8px 12px; background:#0F0F18; border:1px solid #2A2A38; border-radius:6px; color:#EDEFF2; font-size:12.5px;" aria-label="Filter ZothOS CLI subcommands">
             </div>
             <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
               <button type="button" class="btn btn-outlined" onclick="filterCliCommandsTag('all')" style="padding:3px 9px; font-size:10.5px; border-radius:10px; border-color:rgba(245,158,11,0.4); color:#FCD34D;">All (12)</button>
@@ -3381,13 +3292,13 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       <form onsubmit="handleIngestSubmit(event)" style="display:flex; flex-direction:column; gap:16px;">
         <div class="filter-group">
           <label class="filter-label">Memory Text / Narrative Trace *</label>
-          <textarea id="ingest-text" class="textarea-field" rows="4" required placeholder="Describe the insight, decision, bug fix, or pattern to encode..."></textarea>
+          <textarea id="ingest-text" class="textarea-field" rows="4" required placeholder="Describe the insight, decision, bug fix, or pattern to encode..." aria-label="Memory engram content to encode"></textarea>
         </div>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
           <div class="filter-group">
             <label class="filter-label">Category</label>
-            <select id="ingest-category" class="select-field">
+            <select id="ingest-category" class="select-field" aria-label="Memory engram category">
               <option value="general">General</option>
               <option value="architecture" selected>Architecture</option>
               <option value="debug">Debug</option>
@@ -3399,22 +3310,22 @@ curl -X POST http://127.0.0.1:8788/api/recall \
 
           <div class="filter-group">
             <label class="filter-label">Origin Agent</label>
-            <input type="text" id="ingest-agent" class="input-field" value="operator" placeholder="azoth, hermes, operator...">
+            <input type="text" id="ingest-agent" class="input-field" value="operator" placeholder="azoth, hermes, operator..." aria-label="Agent identifier">
           </div>
         </div>
 
         <div class="filter-group">
           <label class="filter-label">Semantic Tags (comma or space separated)</label>
-          <input type="text" id="ingest-tags" class="input-field" placeholder="e.g. database, indexing, sqlite, performance">
+          <input type="text" id="ingest-tags" class="input-field" placeholder="e.g. database, indexing, sqlite, performance" aria-label="Comma-separated memory tags">
         </div>
 
         <div class="filter-group">
           <label class="filter-label">Base Importance: <span id="importance-val" style="font-weight:700;">1.0</span></label>
-          <input type="range" id="ingest-importance" min="0.1" max="2.0" step="0.1" value="1.0" oninput="document.getElementById('importance-val').innerText = this.value">
+          <input type="range" id="ingest-importance" min="0.1" max="2.0" step="0.1" value="1.0" oninput="document.getElementById('importance-val').innerText = this.value" aria-label="Memory importance weight">
         </div>
 
         <div style="display:flex; align-items:center; gap:8px;">
-          <input type="checkbox" id="ingest-immutable">
+          <input type="checkbox" id="ingest-immutable" aria-label="Control ingest-immutable">
           <label for="ingest-immutable" style="font-size:13px;">★ Immutable (Immune to Ebbinghaus decay & pruning)</label>
         </div>
 
@@ -3498,7 +3409,9 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       fetchMemories();
       fetchGraphData();
       fetchNeuromodulators();
-      fetchObsidianVault();
+      if ((location.hash || '').replace(/^#/, '').trim() === 'obsidian') {
+        fetchObsidianVault();
+      }
       window.addEventListener('hashchange', () => {
         const tab = (location.hash || '').replace(/^#/, '').trim();
         if (tab) switchTab(tab, { skipHash: true });
@@ -3515,20 +3428,61 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       bootStudio();
     }
 
-    // Theme Management
+    // Theme & Studio Embed Management
+    function applyThemeMode(mode) {
+      const normalized = mode === 'light' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', normalized);
+      document.body.setAttribute('data-theme', normalized);
+      const toggleBtn = document.getElementById('theme-toggle');
+      if (toggleBtn) {
+        toggleBtn.textContent = normalized === 'dark' ? '☀️' : '🌙';
+        toggleBtn.setAttribute('aria-label', normalized === 'dark' ? 'Switch to Editorial Ivory Light Mode' : 'Switch to Obsidian Gold Dark Mode');
+      }
+      if (window.nebulaEngine && typeof window.nebulaEngine.setTheme === 'function') {
+        try { window.nebulaEngine.setTheme(normalized); } catch (_) {}
+      }
+    }
+
     function initTheme() {
-      const saved = localStorage.getItem('neuro_studio_theme') || 'light';
-      document.body.setAttribute('data-theme', saved);
-      document.getElementById('theme-toggle').innerText = saved === 'dark' ? '☀️' : '✦';
+      const params = new URLSearchParams(window.location.search || '');
+      const embedParam = params.get('embed');
+      if (embedParam === '1' || embedParam === 'true') {
+        document.documentElement.classList.add('embed-mode');
+        document.body.classList.add('embed-mode');
+      }
+      const urlTheme = (params.get('theme') || '').toLowerCase();
+      let resolved = 'dark';
+      if (urlTheme === 'light' || urlTheme === 'dark') {
+        resolved = urlTheme;
+      } else {
+        const saved = localStorage.getItem('neuro_studio_theme');
+        if (saved === 'light' || saved === 'dark') {
+          resolved = saved;
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+          resolved = 'light';
+        }
+      }
+      applyThemeMode(resolved);
     }
 
     function toggleTheme() {
-      const current = document.body.getAttribute('data-theme') || 'light';
+      const current = document.body.getAttribute('data-theme') || 'dark';
       const next = current === 'dark' ? 'light' : 'dark';
-      document.body.setAttribute('data-theme', next);
       localStorage.setItem('neuro_studio_theme', next);
-      document.getElementById('theme-toggle').innerText = next === 'dark' ? '☀️' : '✦';
+      applyThemeMode(next);
     }
+
+    window.addEventListener('message', (event) => {
+      try {
+        const origin = event.origin || '';
+        const isLoopbackOrigin = /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin);
+        if (!isLoopbackOrigin) return;
+        const msg = event.data;
+        if (msg && (msg.type === 'zoth-theme' || msg.type === 'theme-change') && (msg.theme === 'light' || msg.theme === 'dark')) {
+          applyThemeMode(msg.theme);
+        }
+      } catch (_) {}
+    });
 
     // Tab Navigation
     function switchTab(tabId, opts) {
@@ -3567,13 +3521,19 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       }
     }
 
-    // Toast Utility
+    // Toast Utility (DOM-safe textContent — zero XSS sink)
     function showToast(msg, type = 'info') {
       const c = document.getElementById('toast-container');
+      if (!c) return;
       const t = document.createElement('div');
       t.className = 'toast-msg';
-      const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
-      t.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
+      const iconSpan = document.createElement('span');
+      iconSpan.textContent = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
+      const msgSpan = document.createElement('span');
+      msgSpan.textContent = String(msg ?? '');
+      t.appendChild(iconSpan);
+      t.appendChild(document.createTextNode(' '));
+      t.appendChild(msgSpan);
       c.appendChild(t);
       setTimeout(() => {
         t.style.opacity = '0';
@@ -3639,6 +3599,11 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       
       const catCount = Object.keys(s.categories || {}).length || 4;
       document.getElementById('stat-category-count').innerText = `${catCount} categories`;
+      const obsEngramsEl = document.getElementById('obsidian-index-engrams');
+      if (obsEngramsEl && (s.total_memories != null || s.memory_count != null)) {
+        const countVal = Number(s.total_memories ?? s.memory_count ?? 0);
+        obsEngramsEl.textContent = `${countVal.toLocaleString()} Live Engrams`;
+      }
     }
 
     async function fetchMemories() {
@@ -3712,23 +3677,29 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       }
 
       container.innerHTML = list.map(m => {
+        const safeId = escapeHtml(String(m.id || ''));
+        const safeAgent = escapeHtml(String(m.agent_id || 'system'));
+        const safeCat = escapeHtml(String(m.category || 'general'));
         const entropyPct = Math.min(100, Math.round((m.entropy_score || 0.7) * 100));
-        const tagsHtml = (m.tags || []).map(t => `<span class="tag-badge" onclick="filterByTag('${t}')">#${t}</span>`).join(' ');
-        const dateStr = new Date((m.created_at || Date.now()/1000) * 1000).toLocaleString();
+        const tagsHtml = (m.tags || []).map(t => {
+          const safeTag = escapeHtml(String(t ?? ''));
+          return `<button type="button" class="tag-badge" data-filter-tag="${safeTag}">#${safeTag}</button>`;
+        }).join(' ');
+        const dateStr = escapeHtml(new Date((m.created_at || Date.now()/1000) * 1000).toLocaleString());
         const immutableBadge = m.immutable ? '<span class="chip-accent" style="background:var(--md-yellow-container); color:var(--md-yellow);">★ Immutable</span>' : '';
 
         return `
-          <div class="memory-card" id="card-${m.id}">
+          <div class="memory-card" id="card-${safeId}">
             <div class="card-top">
               <span class="agent-tag">
-                <span>◈</span> @${m.agent_id || 'system'}
-                <span class="chip-accent" style="background:var(--md-primary-container); color:var(--md-on-primary-container); text-transform:uppercase;">${m.category || 'general'}</span>
+                <span>◈</span> @${safeAgent}
+                <span class="chip-accent" style="background:var(--md-primary-container); color:var(--md-on-primary-container); text-transform:uppercase;">${safeCat}</span>
                 ${immutableBadge}
               </span>
               <div style="display:flex; align-items:center; gap:8px;">
-                <button class="btn btn-outlined" style="padding:3px 10px; font-size:11px; color:#F5E6AB;" onclick="spotlightEngramIn3D('${m.id}')">✦ 3D Spotlight</button>
-                <button class="btn btn-outlined" style="padding:3px 10px; font-size:11px;" onclick="triggerRehearsal('${m.id}')">⚡ Rehearse</button>
-                <button class="btn btn-outlined" style="padding:3px 8px; font-size:11px; color:var(--md-red);" onclick="deleteMemory('${m.id}')">✕</button>
+                <button type="button" class="btn btn-outlined" style="padding:3px 10px; font-size:11px;" data-mem-action="spotlight" data-mem-id="${safeId}">✦ 3D Spotlight</button>
+                <button type="button" class="btn btn-outlined" style="padding:3px 10px; font-size:11px;" data-mem-action="rehearse" data-mem-id="${safeId}">⚡ Rehearse</button>
+                <button type="button" class="btn btn-outlined" style="padding:3px 8px; font-size:11px; color:var(--md-red);" data-mem-action="delete" data-mem-id="${safeId}" aria-label="Delete memory ${safeId}">✕</button>
               </div>
             </div>
 
@@ -3738,14 +3709,14 @@ curl -X POST http://127.0.0.1:8788/api/recall \
 
             <div class="memory-meta-row">
               <div style="display:flex; align-items:center; gap:12px;">
-                <span>Importance: <b>${(m.importance || 1.0).toFixed(1)}</b></span>
-                <span>Recalled: <b>${m.access_count || 0}x</b></span>
+                <span>Importance: <b>${Number(m.importance || 1.0).toFixed(1)}</b></span>
+                <span>Recalled: <b>${Number(m.access_count || 0)}x</b></span>
               </div>
 
-              <div class="entropy-bar-container" title="Shannon Entropy: ${(m.entropy_score || 0).toFixed(3)}">
+              <div class="entropy-bar-container" title="Shannon Entropy: ${Number(m.entropy_score || 0).toFixed(3)}">
                 <span>Density:</span>
                 <div class="entropy-bar"><div class="entropy-fill" style="width:${entropyPct}%;"></div></div>
-                <span>${(m.entropy_score || 0).toFixed(2)}</span>
+                <span>${Number(m.entropy_score || 0).toFixed(2)}</span>
               </div>
 
               <span style="font-size:11px;">${dateStr}</span>
@@ -3765,9 +3736,27 @@ curl -X POST http://127.0.0.1:8788/api/recall \
       const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
       container.innerHTML = sorted.map(([tag, count]) => {
         const isSel = appState.selectedTag === tag ? 'selected' : '';
-        return `<span class="filter-chip ${isSel}" onclick="filterByTag('${tag}')">#${tag} (${count})</span>`;
+        const safeTag = escapeHtml(String(tag ?? ''));
+        return `<button type="button" class="filter-chip ${isSel}" data-filter-tag="${safeTag}">#${safeTag} (${Number(count)})</button>`;
       }).join('');
     }
+
+    // Delegated click handler for memory tags & actions (eliminates inline JS XSS sinks)
+    document.addEventListener('click', (ev) => {
+      const tagEl = ev.target.closest('[data-filter-tag]');
+      if (tagEl) {
+        filterByTag(tagEl.getAttribute('data-filter-tag') || '');
+        return;
+      }
+      const actEl = ev.target.closest('[data-mem-action]');
+      if (actEl) {
+        const action = actEl.getAttribute('data-mem-action');
+        const memId = actEl.getAttribute('data-mem-id') || '';
+        if (action === 'spotlight') spotlightEngramIn3D(memId);
+        else if (action === 'rehearse') triggerRehearsal(memId);
+        else if (action === 'delete') deleteMemory(memId);
+      }
+    });
 
     function filterByTag(tag) {
       if (appState.selectedTag === tag) {
@@ -7155,15 +7144,15 @@ curl -X POST http://127.0.0.1:8788/api/recall \
     </div>
   </div>
 
-  <footer class="zoth-brand-footer" style="padding:24px; text-align:center; font-size:12px; color:var(--zoth-muted, #9AA0A6); border-top:1px solid var(--zoth-border, #2A2A33); background:var(--zoth-void, #08080B);">
-    <div>Engineered by Neal Frazier Tech (<a href="https://github.com/1nc0gn30/neuro-memory-daemon" target="_blank" rel="noopener" style="color:var(--zoth-gold, #D4AF37); text-decoration:none;">@1nc0gn30</a>) &bull; <a href="https://nullai.tech" target="_blank" rel="noopener" style="color:var(--zoth-gold, #D4AF37); text-decoration:none;">NullAI Platform</a> &bull; <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer" style="color:var(--zoth-gold, #D4AF37); text-decoration:none;">☕ Buy Us a Coffee</a> &bull; Solana: <code style="color:#14F195; word-break:break-all;">GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK</code></div>
+  <footer class="zoth-brand-footer">
+    <div>Engineered by Neal Frazier Tech (<a href="https://github.com/1nc0gn30/neuro-memory-daemon" target="_blank" rel="noopener noreferrer">@1nc0gn30</a>) &bull; <a href="https://nullai.tech" target="_blank" rel="noopener noreferrer">NullAI Platform</a> &bull; <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ Buy Us a Coffee</a> &bull; Solana: <code>GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK</code></div>
   </footer>
   
 
   <script src="/sovereign_tutorial.js"></script>
   <script>
     window.addEventListener("DOMContentLoaded", function() {
-      if (window.createSovereignTutorial) {
+      if (window.createSovereignTutorial && !document.body.classList.contains("embed-mode")) {
         window.createSovereignTutorial({
           toolId: "neuro-memory-daemon",
           toolName: "Neuro-Memory Daemon",

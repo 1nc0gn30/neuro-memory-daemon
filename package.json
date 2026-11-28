@@ -1,6 +1,6 @@
 {
   "name": "neuro-memory-daemon",
-  "version": "2.0.0",
+  "version": "2.9.0",
   "description": "Zero-Dependency Cognitive Synaptic Memory Engine, Hippocampal Indexing & Metacognitive Daemon — Desktop Workstation",
   "main": "electron/main.cjs",
   "bin": {
@@ -26,8 +26,8 @@
     "electron",
     "zoth"
   ],
-  "author": "NullAI Tech / Zoth Team",
-  "license": "MIT",
+  "author": "Neal Frazier Tech (@1nc0gn30) • NullAI Platform",
+  "license": "Apache-2.0",
   "devDependencies": {
     "electron": "^34.5.8"
   }
